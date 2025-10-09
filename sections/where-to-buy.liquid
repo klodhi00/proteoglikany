@@ -1,0 +1,164 @@
+{% comment %}
+  Sekcja: Gdzie kupić nasze produkty
+  Wyświetla tag, tytuł (H2) oraz grid/slider z logotypami partnerów handlowych
+  Mobile: Swiper slider
+  Desktop: Grid layout
+{% endcomment %}
+
+<section class="where-to-buy">
+  <div class="where-to-buy__outer-wrapper">
+    <div class="where-to-buy__inner-wrapper">
+      
+      {%- if section.settings.tag != blank or section.settings.title != blank -%}
+        <div class="where-to-buy__header">
+          {%- if section.settings.tag != blank -%}
+            <span class="where-to-buy__tag">{{ section.settings.tag }}</span>
+          {%- endif -%}
+          
+          {%- if section.settings.title != blank -%}
+            <h2 class="where-to-buy__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="where-to-buy__content">
+          
+          {%- comment -%} Desktop Grid {%- endcomment -%}
+          <div class="where-to-buy__grid">
+            {%- for block in section.blocks -%}
+              <div class="where-to-buy__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.logo != blank -%}
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}" class="where-to-buy__link" aria-label="{{ block.settings.alt_text | default: 'Partner handlowy' }}">
+                      {{ block.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings.alt_text, class: 'where-to-buy__image' }}
+                    </a>
+                  {%- else -%}
+                    {{ block.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings.alt_text, class: 'where-to-buy__image' }}
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Mobile Slider {%- endcomment -%}
+          <div class="where-to-buy__slider-wrapper">
+            <div class="where-to-buy__slider swiper">
+              <div class="swiper-wrapper">
+                {%- for block in section.blocks -%}
+                  <div class="swiper-slide">
+                    <div class="where-to-buy__item" {{ block.shopify_attributes }}>
+                      {%- if block.settings.logo != blank -%}
+                        {%- if block.settings.link != blank -%}
+                          <a href="{{ block.settings.link }}" class="where-to-buy__link" aria-label="{{ block.settings.alt_text | default: 'Partner handlowy' }}">
+                            {{ block.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings.alt_text, class: 'where-to-buy__image' }}
+                          </a>
+                        {%- else -%}
+                          {{ block.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings.alt_text, class: 'where-to-buy__image' }}
+                        {%- endif -%}
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const swiperElement = document.querySelector('.where-to-buy__slider');
+    
+    if (swiperElement && typeof Swiper !== 'undefined') {
+      new Swiper(swiperElement, {
+        slidesPerView: 1.5,
+        spaceBetween: 24,
+        loop: false,
+        breakpoints: {
+          480: {
+            slidesPerView: 2.5,
+            spaceBetween: 24
+          },
+          640: {
+            slidesPerView: 3.5,
+            spaceBetween: 32
+          }
+        }
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Gdzie kupić",
+  "tag": "section",
+  "class": "section-where-to-buy",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "Nasze produkty"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł (H2)",
+      "default": "Produkty do nabycia znajdziesz również:"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "partner",
+      "name": "Partner handlowy",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo partnera"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Tekst alternatywny (ALT)",
+          "info": "Opis obrazu dla dostępności i SEO"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link do sklepu partnera (opcjonalny)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gdzie kupić",
+      "blocks": [
+        {
+          "type": "partner"
+        },
+        {
+          "type": "partner"
+        },
+        {
+          "type": "partner"
+        },
+        {
+          "type": "partner"
+        },
+        {
+          "type": "partner"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

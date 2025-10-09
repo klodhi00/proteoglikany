@@ -1,0 +1,740 @@
+{% comment %}
+  Sekcja: Header
+  Opis: Nagłówek strony z topbarem i dolnym paskiem nawigacyjnym
+  Breakpoints: Desktop od 1024px, tablet 768px
+  Funkcje: Predictive search, sticky header, mobile menu z animacją
+{% endcomment %}
+
+<header class="header" role="banner" data-header-section>
+  {%- comment -%} Topbar - zawsze widoczny {%- endcomment -%}
+  <div class="header__topbar">
+    <div class="header__topbar-outer-wrapper">
+      <div class="header__topbar-inner-wrapper">
+        
+        {%- comment -%} Topbar - Desktop: statyczne, Mobile: Swiper {%- endcomment -%}
+        <div class="header__topbar-content">
+          {%- comment -%} Desktop - statyczne teksty {%- endcomment -%}
+          <div class="header__topbar-texts header__topbar-texts--desktop">
+            {%- if section.settings.topbar_text_1 != blank -%}
+              <span class="header__topbar-text">{{ section.settings.topbar_text_1 }}</span>
+            {%- endif -%}
+            {%- if section.settings.topbar_text_2 != blank -%}
+              <span class="header__topbar-dot" aria-hidden="true"></span>
+              <span class="header__topbar-text">{{ section.settings.topbar_text_2 }}</span>
+            {%- endif -%}
+            {%- if section.settings.topbar_text_3 != blank -%}
+              <span class="header__topbar-dot" aria-hidden="true"></span>
+              <span class="header__topbar-text">{{ section.settings.topbar_text_3 }}</span>
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Mobile - Swiper slider {%- endcomment -%}
+          <div class="header__topbar-texts header__topbar-texts--mobile">
+            <div class="swiper header__topbar-swiper">
+              <div class="swiper-wrapper">
+                {%- if section.settings.topbar_text_1 != blank -%}
+                  <div class="swiper-slide">
+                    <span class="header__topbar-text">{{ section.settings.topbar_text_1 }}</span>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.topbar_text_2 != blank -%}
+                  <div class="swiper-slide">
+                    <span class="header__topbar-text">{{ section.settings.topbar_text_2 }}</span>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.topbar_text_3 != blank -%}
+                  <div class="swiper-slide">
+                    <span class="header__topbar-text">{{ section.settings.topbar_text_3 }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} Topbar - Prawa strona - Ikonki social media (tylko desktop) {%- endcomment -%}
+        <div class="header__topbar-right">
+          {%- if section.settings.facebook_url != blank -%}
+            <a 
+              href="{{ section.settings.facebook_url }}" 
+              class="header__social-icon"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              {%- if section.settings.facebook_icon != blank -%}
+                {{ section.settings.facebook_icon | image_url: width: 16 | image_tag: loading: 'lazy', width: 16, height: 16, alt: 'Facebook' }}
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.instagram_url != blank -%}
+            <a 
+              href="{{ section.settings.instagram_url }}" 
+              class="header__social-icon"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              {%- if section.settings.instagram_icon != blank -%}
+                {{ section.settings.instagram_icon | image_url: width: 16 | image_tag: loading: 'lazy', width: 16, height: 16, alt: 'Instagram' }}
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Bottombar - Główna nawigacja {%- endcomment -%}
+  <div class="header__bottombar">
+    <div class="header__bottombar-outer-wrapper">
+      <div class="header__bottombar-inner-wrapper">
+
+        {%- comment -%} Mobile - Hamburger menu z animacją {%- endcomment -%}
+        <div class="header__hamburger-wrapper">
+          <button 
+            class="header__hamburger" 
+            aria-label="Otwórz menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            id="mobile-menu-open"
+          >
+            <span class="header__hamburger-line"></span>
+            <span class="header__hamburger-line"></span>
+            <span class="header__hamburger-line"></span>
+          </button>
+        </div>
+
+        {%- comment -%} Logo {%- endcomment -%}
+        <div class="header__logo">
+          <a href="{{ routes.root_url }}" aria-label="Strona główna">
+            {%- if section.settings.logo != blank -%}
+              {{ section.settings.logo | image_url: width: 250 | image_tag: loading: 'eager', alt: shop.name, class: 'header__logo-image' }}
+            {%- else -%}
+              <span class="header__logo-text">{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+        </div>
+
+        {%- comment -%} Desktop - Menu nawigacyjne {%- endcomment -%}
+        <nav class="header__nav" aria-label="Nawigacja główna">
+          {%- if section.settings.menu != blank -%}
+            <ul class="header__menu">
+              {%- for link in section.settings.menu.links -%}
+                <li class="header__menu-item">
+                  <a 
+                    href="{{ link.url }}" 
+                    class="header__menu-link"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </nav>
+
+        {%- comment -%} Ikonki - Wyszukiwarka, Koszyk, Konto {%- endcomment -%}
+        <div class="header__icons">
+          {%- comment -%} Wyszukiwarka {%- endcomment -%}
+          <button 
+            class="header__icon header__icon--search" 
+            aria-label="Otwórz wyszukiwarkę"
+            aria-expanded="false"
+            aria-controls="search-overlay"
+            id="search-open-btn"
+          >
+            {%- if section.settings.search_icon != blank -%}
+              {{ section.settings.search_icon | image_url: width: 16 | image_tag: loading: 'lazy', width: 16, height: 16, alt: '' }}
+            {%- else -%}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M11 11L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            {%- endif -%}
+          </button>
+
+          {%- comment -%} Koszyk {%- endcomment -%}
+          <a 
+            href="{{ routes.cart_url }}" 
+            class="header__icon header__icon--cart"
+            aria-label="Koszyk ({{ cart.item_count }})"
+          >
+            {%- if section.settings.cart_icon != blank -%}
+              {{ section.settings.cart_icon | image_url: width: 16 | image_tag: loading: 'lazy', width: 16, height: 16, alt: '' }}
+            {%- else -%}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2H3L3.5 5M3.5 5L4.5 12H13.5L15 5H3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="6" cy="14" r="1" fill="currentColor"/>
+                <circle cx="12" cy="14" r="1" fill="currentColor"/>
+              </svg>
+            {%- endif -%}
+            {%- if cart.item_count > 0 -%}
+              <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+            {%- endif -%}
+          </a>
+
+          {%- comment -%} Konto - Desktop tylko {%- endcomment -%}
+          <a 
+            href="{{ routes.account_url }}" 
+            class="header__icon header__icon--account"
+            aria-label="Konto"
+          >
+            {%- if section.settings.account_icon != blank -%}
+              {{ section.settings.account_icon | image_url: width: 16 | image_tag: loading: 'lazy', width: 16, height: 16, alt: '' }}
+            {%- else -%}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M2 14C2 11.7909 4.68629 10 8 10C11.3137 10 14 11.7909 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            {%- endif -%}
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile Menu Overlay - pełna szerokość {%- endcomment -%}
+<div class="header__mobile-overlay" id="mobile-menu" aria-hidden="true">
+  <div class="header__mobile-menu">
+    <div class="header__mobile-menu-header">
+      <div class="header__logo">
+        <a href="{{ routes.root_url }}" aria-label="Strona główna">
+          {%- if section.settings.logo != blank -%}
+            {{ section.settings.logo | image_url: width: 250 | image_tag: loading: 'eager', alt: shop.name, class: 'header__logo-image' }}
+          {%- else -%}
+            <span class="header__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+      <button 
+        class="header__mobile-close" 
+        aria-label="Zamknij menu"
+        id="mobile-menu-close"
+      >
+        <span class="header__mobile-close-line"></span>
+        <span class="header__mobile-close-line"></span>
+      </button>
+    </div>
+    
+    <nav class="header__mobile-nav" aria-label="Nawigacja mobilna">
+      {%- if section.settings.menu != blank -%}
+        <ul class="header__mobile-menu-list">
+          {%- for link in section.settings.menu.links -%}
+            <li class="header__mobile-menu-item">
+              <a 
+                href="{{ link.url }}" 
+                class="header__mobile-menu-link"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </nav>
+
+    {%- comment -%} Mobile Menu Footer - Search + Icons w jednej linii {%- endcomment -%}
+    <div class="header__mobile-menu-footer">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="header__mobile-search">
+        <input type="hidden" name="type" value="product">
+        <input 
+          type="search" 
+          name="q" 
+          placeholder="{{ section.settings.search_placeholder | default: 'Szukaj produktów...' }}" 
+          class="header__mobile-search-input"
+          aria-label="Wyszukaj produkty"
+        >
+        <button type="submit" class="header__mobile-search-submit" aria-label="Szukaj">
+          {%- if section.settings.search_icon != blank -%}
+            {{ section.settings.search_icon | image_url: width: 16 | image_tag: loading: 'lazy', width: 16, height: 16, alt: '' }}
+          {%- else -%}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M11 11L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          {%- endif -%}
+        </button>
+      </form>
+
+      <div class="header__mobile-menu-icons">
+        <a href="{{ routes.account_url }}" class="header__mobile-menu-icon" aria-label="Konto">
+          {%- if section.settings.account_icon != blank -%}
+            {{ section.settings.account_icon | image_url: width: 20 | image_tag: loading: 'lazy', width: 20, height: 20, alt: '' }}
+          {%- else -%}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="6.5" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M3 17C3 14.2386 6.13401 12 10 12C13.866 12 17 14.2386 17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          {%- endif -%}
+        </a>
+
+        <a href="{{ routes.cart_url }}" class="header__mobile-menu-icon header__mobile-menu-icon--cart" aria-label="Koszyk ({{ cart.item_count }})">
+          {%- if section.settings.cart_icon != blank -%}
+            {{ section.settings.cart_icon | image_url: width: 20 | image_tag: loading: 'lazy', width: 20, height: 20, alt: '' }}
+          {%- else -%}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 2.5H3.75L4.375 6.25M4.375 6.25L5.625 15H16.875L18.75 6.25H4.375Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="7.5" cy="17.5" r="1.25" fill="currentColor"/>
+              <circle cx="15" cy="17.5" r="1.25" fill="currentColor"/>
+            </svg>
+          {%- endif -%}
+          {%- if cart.item_count > 0 -%}
+            <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Search Overlay - input na górze {%- endcomment -%}
+<div class="header__search-overlay" id="search-overlay" aria-hidden="true">
+  <div class="header__search-wrapper">
+    <div class="header__search-content" id="search-content">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="header__search-form" id="search-form">
+        <input type="hidden" name="type" value="product">
+        <input 
+          type="search" 
+          name="q" 
+          placeholder="{{ section.settings.search_placeholder | default: 'Szukaj produktów...' }}" 
+          class="header__search-input"
+          aria-label="Wyszukaj produkty"
+          id="search-input"
+          autocomplete="off"
+        >
+        <button type="submit" class="header__search-submit" aria-label="Szukaj">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8.5" cy="8.5" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M13.5 13.5L17.5 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+      
+      <div class="header__search-results" id="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const body = document.body;
+    const header = document.querySelector('.header');
+
+    // ============================================================
+    // TOPBAR SWIPER - tylko na mobile
+    // ============================================================
+// ============================================================
+// TOPBAR SWIPER - zawsze inicjalizuj na mobile
+// ============================================================
+function initTopbarSwiper() {
+  const topbarSwiperEl = document.querySelector('.header__topbar-swiper');
+  if (topbarSwiperEl && typeof Swiper !== 'undefined') {
+    // Sprawdź czy Swiper już nie jest zainicjalizowany
+    if (!topbarSwiperEl.swiper) {
+      new Swiper('.header__topbar-swiper', {
+        loop: true,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        speed: 500,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        centeredSlides: true,
+      });
+    }
+  }
+}
+
+// Inicjalizuj Swiper
+initTopbarSwiper();
+
+// Reinicjalizuj przy resize jeśli potrzeba
+window.addEventListener('resize', function() {
+  const topbarSwiperEl = document.querySelector('.header__topbar-swiper');
+  if (topbarSwiperEl && window.innerWidth < 1024 && !topbarSwiperEl.swiper) {
+    initTopbarSwiper();
+  }
+});
+    // ============================================================
+    // STICKY HEADER
+    // ============================================================
+    let headerIsSticky = false;
+    let headerHeight = header ? header.offsetHeight : 0;
+
+    function updateHeaderHeight() {
+      headerHeight = header ? header.offsetHeight : 0;
+    }
+
+    window.addEventListener('resize', updateHeaderHeight);
+    window.addEventListener('load', updateHeaderHeight);
+
+    window.addEventListener('scroll', function() {
+      if (!header) return;
+      
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop > 0) {
+        if (!headerIsSticky) {
+          header.classList.add('is-sticky');
+          headerIsSticky = true;
+          body.style.paddingTop = headerHeight + 'px';
+        }
+      } else {
+        if (headerIsSticky) {
+          header.classList.remove('is-sticky');
+          headerIsSticky = false;
+          body.style.paddingTop = '0';
+        }
+      }
+    });
+
+    // ============================================================
+    // MOBILE MENU
+    // ============================================================
+    const hamburger = document.getElementById('mobile-menu-open');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+    const mobileOverlay = document.getElementById('mobile-menu');
+
+    function openMobileMenu() {
+      if (!mobileOverlay) return;
+      mobileOverlay.classList.add('header__mobile-overlay--active');
+      mobileOverlay.setAttribute('aria-hidden', 'false');
+      hamburger.setAttribute('aria-expanded', 'true');
+      hamburger.classList.add('is-active');
+      body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      if (!mobileOverlay) return;
+      mobileOverlay.classList.remove('header__mobile-overlay--active');
+      mobileOverlay.setAttribute('aria-hidden', 'true');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.classList.remove('is-active');
+      body.style.overflow = '';
+    }
+
+    if (hamburger) {
+      hamburger.addEventListener('click', openMobileMenu);
+    }
+
+    if (mobileMenuClose) {
+      mobileMenuClose.addEventListener('click', closeMobileMenu);
+    }
+
+    if (mobileOverlay) {
+      mobileOverlay.addEventListener('click', function(e) {
+        if (e.target === mobileOverlay) {
+          closeMobileMenu();
+        }
+      });
+    }
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth >= 1024 && mobileOverlay && mobileOverlay.classList.contains('header__mobile-overlay--active')) {
+        closeMobileMenu();
+      }
+    });
+
+    // ============================================================
+    // SEARCH OVERLAY
+    // ============================================================
+    const searchOpenBtn = document.getElementById('search-open-btn');
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    const searchForm = document.getElementById('search-form');
+    const searchContent = document.getElementById('search-content');
+
+    function openSearch() {
+      if (!searchOverlay || !searchInput) return;
+      searchOverlay.classList.add('header__search-overlay--active');
+      searchOverlay.setAttribute('aria-hidden', 'false');
+      searchOpenBtn.setAttribute('aria-expanded', 'true');
+      body.style.overflow = 'hidden';
+      
+      setTimeout(() => {
+        searchInput.focus();
+      }, 100);
+    }
+
+    function closeSearch() {
+      if (!searchOverlay) return;
+      searchOverlay.classList.remove('header__search-overlay--active');
+      searchOverlay.setAttribute('aria-hidden', 'true');
+      searchOpenBtn.setAttribute('aria-expanded', 'false');
+      body.style.overflow = '';
+      
+      if (searchResults) {
+        searchResults.innerHTML = '';
+        searchResults.classList.remove('header__search-results--active');
+      }
+      if (searchInput) {
+        searchInput.value = '';
+      }
+    }
+
+    if (searchOpenBtn) {
+      searchOpenBtn.addEventListener('click', openSearch);
+    }
+
+    // Kliknięcie poza search contentem zamyka overlay
+    if (searchOverlay) {
+      searchOverlay.addEventListener('click', function(e) {
+        // Jeśli kliknięcie jest poza search content
+        if (!searchContent.contains(e.target)) {
+          closeSearch();
+        }
+      });
+    }
+
+    // ============================================================
+    // PREDICTIVE SEARCH
+    // ============================================================
+    let searchTimeout;
+    const minChars = 2;
+
+    if (searchInput && searchResults && searchForm) {
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        clearTimeout(searchTimeout);
+        
+        if (query.length < minChars) {
+          searchResults.innerHTML = '';
+          searchResults.classList.remove('header__search-results--active');
+          return;
+        }
+        
+        searchTimeout = setTimeout(function() {
+          fetchPredictiveResults(query, searchResults);
+        }, 300);
+      });
+
+      searchInput.addEventListener('keydown', function(event) {
+        if (!searchResults.classList.contains('header__search-results--active')) return;
+        
+        const links = searchResults.querySelectorAll('a');
+        if (links.length === 0) return;
+        
+        const currentFocused = document.activeElement;
+        let currentIndex = -1;
+        
+        for (let i = 0; i < links.length; i++) {
+          if (links[i] === currentFocused) {
+            currentIndex = i;
+            break;
+          }
+        }
+        
+        switch (event.key) {
+          case 'ArrowDown':
+            event.preventDefault();
+            if (currentIndex < links.length - 1) {
+              links[currentIndex + 1].focus();
+            } else {
+              links[0].focus();
+            }
+            break;
+            
+          case 'ArrowUp':
+            event.preventDefault();
+            if (currentIndex > 0) {
+              links[currentIndex - 1].focus();
+            } else {
+              links[links.length - 1].focus();
+            }
+            break;
+            
+          case 'Escape':
+            event.preventDefault();
+            closeSearch();
+            break;
+            
+          case 'Enter':
+            if (currentIndex >= 0) {
+              event.preventDefault();
+              window.location.href = links[currentIndex].href;
+            }
+            break;
+        }
+      });
+    }
+
+    function fetchPredictiveResults(query, resultsContainer) {
+      const url = `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`;
+      
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.resources.results.products && data.resources.results.products.length > 0) {
+            displayPredictiveResults(data.resources.results.products, query, resultsContainer);
+          } else {
+            resultsContainer.innerHTML = `<div class="header__search-no-results">Brak wyników</div>`;
+            resultsContainer.classList.add('header__search-results--active');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching search results:', error);
+          resultsContainer.classList.remove('header__search-results--active');
+        });
+    }
+
+    function displayPredictiveResults(products, query, resultsContainer) {
+      let resultsHtml = '<ul class="header__search-results-list">';
+      
+      products.forEach(product => {
+        const imageUrl = product.image || '';
+        const price = product.price ? formatMoney(product.price) : '';
+        
+        resultsHtml += `
+          <li class="header__search-results-item">
+            <a href="${product.url}" class="header__search-results-link">
+              ${imageUrl ? `
+                <div class="header__search-results-image">
+                  <img src="${imageUrl}" alt="${product.title}" loading="lazy">
+                </div>
+              ` : ''}
+              <div class="header__search-results-content">
+                <div class="header__search-results-title">${product.title}</div>
+                ${price ? `<div class="header__search-results-price">${price}</div>` : ''}
+              </div>
+            </a>
+          </li>
+        `;
+      });
+      
+      resultsHtml += '</ul>';
+      resultsHtml += `<div class="header__search-viewall"><a href="/search?q=${encodeURIComponent(query)}&type=product" class="header__search-viewall-link">Zobacz wszystkie wyniki (${products.length})</a></div>`;
+      
+      resultsContainer.innerHTML = resultsHtml;
+      resultsContainer.classList.add('header__search-results--active');
+    }
+
+    function formatMoney(cents) {
+      const value = (cents / 100).toFixed(2);
+      return value.replace('.', ',') + ' zł';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeMobileMenu();
+        closeSearch();
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Nagłówek",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "header",
+      "content": "Topbar - Teksty"
+    },
+    {
+      "type": "text",
+      "id": "topbar_text_1",
+      "label": "Tekst 1",
+      "default": "Opatentowana formuła"
+    },
+    {
+      "type": "text",
+      "id": "topbar_text_2",
+      "label": "Tekst 2",
+      "default": "Ponad 100 badań przez 30 lat"
+    },
+    {
+      "type": "text",
+      "id": "topbar_text_3",
+      "label": "Tekst 3",
+      "default": "Światowy bestseller"
+    },
+    {
+      "type": "header",
+      "content": "Nawigacja"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu nawigacyjne",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Wyszukiwarka"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Placeholder wyszukiwarki",
+      "default": "Szukaj produktów..."
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Link do Facebook"
+    },
+    {
+      "type": "image_picker",
+      "id": "facebook_icon",
+      "label": "Ikona Facebook"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Link do Instagram"
+    },
+    {
+      "type": "image_picker",
+      "id": "instagram_icon",
+      "label": "Ikona Instagram"
+    },
+    {
+      "type": "header",
+      "content": "Ikonki"
+    },
+    {
+      "type": "image_picker",
+      "id": "search_icon",
+      "label": "Ikona wyszukiwarki"
+    },
+    {
+      "type": "image_picker",
+      "id": "cart_icon",
+      "label": "Ikona koszyka"
+    },
+    {
+      "type": "image_picker",
+      "id": "account_icon",
+      "label": "Ikona konta"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nagłówek"
+    }
+  ]
+}
+{% endschema %}

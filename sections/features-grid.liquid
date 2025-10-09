@@ -1,0 +1,140 @@
+{% comment %}
+  Sekcja: Siatka cech produktu
+  Wyświetla tag, tytuł oraz 4 boxy z ikonami, podtytułami i opisami
+  Mobile-first, WCAG compliant, Online Store 2.0
+{% endcomment %}
+
+<section class="features-grid">
+  <div class="features-grid__outer-wrapper">
+    <div class="features-grid__inner-wrapper">
+      
+      <div class="features-grid__header">
+        {%- if section.settings.tag != blank -%}
+          <div class="features-grid__tag">
+            {{ section.settings.tag }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="features-grid__title">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="features-grid__grid">
+          {%- for block in section.blocks -%}
+            <div class="features-grid__box" {{ block.shopify_attributes }}>
+              
+              {%- if block.settings.icon != blank -%}
+                <div class="features-grid__icon">
+                  {{ block.settings.icon | image_url: width: 72 | image_tag: 
+                    loading: 'lazy',
+                    alt: block.settings.subtitle,
+                    width: 36,
+                    height: 36
+                  }}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.subtitle != blank -%}
+                <h5 class="features-grid__subtitle">
+                  {{ block.settings.subtitle }}
+                </h5>
+              {%- endif -%}
+
+              {%- if block.settings.description != blank -%}
+                <p class="features-grid__description">
+                  {{ block.settings.description }}
+                </p>
+              {%- endif -%}
+
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Siatka cech produktu",
+  "tag": "section",
+  "class": "section-features-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "ZALETY"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Dlaczego Nourkrin?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Cecha produktu",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Ikona"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Podtytuł"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Opis"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Siatka cech produktu",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "subtitle": "Innowacyjna formuła",
+            "description": "Opatentowane składniki gwarantujące skuteczność."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "subtitle": "Potwierdzona skuteczność",
+            "description": "Ponad 100 badań potwierdzających efektywność działania produktu."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "subtitle": "Wieloletnie badania naukowe",
+            "description": "Ponad 30 lat badań nad skutecznością działania produktów."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "subtitle": "Popularność na całym świecie",
+            "description": "Lider w swojej kategorii na rynku europejskim i światowym."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

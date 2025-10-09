@@ -1,0 +1,281 @@
+{% comment %}
+  Sekcja: Opinie klientów
+  Wyświetla opinie w układzie grid (desktop) lub slider (mobile)
+  Zgodność: Shopify Online Store 2.0, WCAG 2.1 AA
+{% endcomment %}
+
+<section class="customer-reviews">
+  <div class="customer-reviews__outer-wrapper">
+    <div class="customer-reviews__inner-wrapper">
+      
+      {% comment %} Nagłówek sekcji {% endcomment %}
+      <div class="customer-reviews__header">
+        {% if section.settings.tag_text != blank %}
+          <span class="customer-reviews__tag">{{ section.settings.tag_text }}</span>
+        {% endif %}
+        
+        {% if section.settings.title != blank %}
+          <h2 class="customer-reviews__title">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+
+      {% comment %} Grid dla tablet i desktop {% endcomment %}
+      <div class="customer-reviews__grid">
+        {% for block in section.blocks %}
+          <div class="customer-reviews__card customer-reviews__card--grid-item" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <div class="customer-reviews__image">
+                {{
+                  block.settings.image
+                  | image_url: width: 600
+                  | image_tag:
+                    loading: 'lazy',
+                    alt: block.settings.author_name,
+                    widths: '300, 400, 500, 600'
+                }}
+              </div>
+            {% endif %}
+
+            {% comment %} Gwiazdki - widoczne tylko na desktop {% endcomment %}
+            {% if block.settings.stars_image != blank %}
+              <div class="customer-reviews__stars">
+                {{
+                  block.settings.stars_image
+                  | image_url: width: 200
+                  | image_tag:
+                    loading: 'lazy',
+                    alt: 'Ocena 5 gwiazdek'
+                }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.review_text != blank %}
+              <p class="customer-reviews__text">{{ block.settings.review_text }}</p>
+            {% endif %}
+
+            {% if block.settings.author_name != blank or block.settings.author_avatar != blank %}
+              <div class="customer-reviews__author">
+                {% if block.settings.author_avatar != blank %}
+                  <div class="customer-reviews__avatar">
+                    {{
+                      block.settings.author_avatar
+                      | image_url: width: 80
+                      | image_tag:
+                        loading: 'lazy',
+                        alt: block.settings.author_name
+                    }}
+                  </div>
+                {% endif %}
+                
+                {% if block.settings.author_name != blank %}
+                  <span class="customer-reviews__name">{{ block.settings.author_name }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% comment %} Slider dla mobile {% endcomment %}
+      <div class="customer-reviews__slider-wrapper">
+        <div class="customer-reviews__slider swiper">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              <div class="swiper-slide">
+                <div class="customer-reviews__card" {{ block.shopify_attributes }}>
+                  {% if block.settings.image != blank %}
+                    <div class="customer-reviews__image">
+                      {{
+                        block.settings.image
+                        | image_url: width: 600
+                        | image_tag:
+                          loading: 'lazy',
+                          alt: block.settings.author_name,
+                          widths: '300, 400, 500, 600'
+                      }}
+                    </div>
+                  {% endif %}
+
+                  {% if block.settings.review_text != blank %}
+                    <p class="customer-reviews__text">{{ block.settings.review_text }}</p>
+                  {% endif %}
+
+                  {% if block.settings.author_name != blank or block.settings.author_avatar != blank %}
+                    <div class="customer-reviews__author">
+                      {% if block.settings.author_avatar != blank %}
+                        <div class="customer-reviews__avatar">
+                          {{
+                            block.settings.author_avatar
+                            | image_url: width: 80
+                            | image_tag:
+                              loading: 'lazy',
+                              alt: block.settings.author_name
+                          }}
+                        </div>
+                      {% endif %}
+                      
+                      {% if block.settings.author_name != blank %}
+                        <span class="customer-reviews__name">{{ block.settings.author_name }}</span>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% comment %} Nawigacja slidera - tylko mobile {% endcomment %}
+        <div class="customer-reviews__navigation">
+          <button 
+            class="customer-reviews__nav-button customer-reviews__nav-button--prev"
+            aria-label="Poprzednia opinia"
+            type="button"
+          >
+            {% if section.settings.arrow_prev != blank %}
+              {{
+                section.settings.arrow_prev
+                | image_url: width: 48
+                | image_tag:
+                  alt: ''
+              }}
+            {% endif %}
+          </button>
+          
+          <button 
+            class="customer-reviews__nav-button customer-reviews__nav-button--next"
+            aria-label="Następna opinia"
+            type="button"
+          >
+            {% if section.settings.arrow_next != blank %}
+              {{
+                section.settings.arrow_next
+                | image_url: width: 48
+                | image_tag:
+                  alt: ''
+              }}
+            {% endif %}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  {% comment %} Inicjalizacja Swiper dla mobile {% endcomment %}
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Swiper !== 'undefined') {
+      const customerReviewsSwiper = new Swiper('.customer-reviews__slider', {
+        slidesPerView: 'auto',
+        spaceBetween: 32,
+        navigation: {
+          nextEl: '.customer-reviews__nav-button--next',
+          prevEl: '.customer-reviews__nav-button--prev',
+        },
+        breakpoints: {
+          768: {
+            enabled: false
+          }
+        }
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Opinie klientów",
+  "tag": "section",
+  "class": "section-customer-reviews",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag",
+      "default": "OPINIE KLIENTÓW"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Opinie o produktach"
+    },
+    {
+      "type": "image_picker",
+      "id": "arrow_prev",
+      "label": "Strzałka w lewo (mobile)"
+    },
+    {
+      "type": "image_picker",
+      "id": "arrow_next",
+      "label": "Strzałka w prawo (mobile)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Opinia",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Zdjęcie produktu"
+        },
+        {
+          "type": "image_picker",
+          "id": "stars_image",
+          "label": "Gwiazdki (SVG)"
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Tekst opinii",
+          "default": "Po kilku tygodniach stosowania tych produktów zauważyłam, że moja włosy zaczęły rosnąć szybciej, a nowe włoski zaczynają się pojawiać!"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_avatar",
+          "label": "Avatar autora"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Imię autora",
+          "default": "Karolina"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Opinie klientów",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "review_text": "Po kilku tygodniach stosowania tych produktów zauważyłam, że moja włosy zaczęły rosnąć szybciej, a nowe włoski zaczynają się pojawiać!",
+            "author_name": "Karolina"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "review_text": "Po kilku tygodniach stosowania tych produktów zauważyłam, że moja włosy zaczęły rosnąć szybciej, a nowe włoski zaczynają się pojawiać!",
+            "author_name": "Karolina"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "review_text": "Po kilku tygodniach stosowania tych produktów zauważyłam, że moja włosy zaczęły rosnąć szybciej, a nowe włoski zaczynają się pojawiać!",
+            "author_name": "Karolina"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

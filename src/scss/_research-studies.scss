@@ -1,0 +1,253 @@
+// ------------------------------------------------------------
+// research-studies.scss
+// Sekcja z badaniami naukowymi - grid desktop / slider mobile
+// ------------------------------------------------------------
+
+.research-studies {
+  
+  // Zewnętrzny wrapper - wyśrodkowanie
+  &__outer-wrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  // Wewnętrzny wrapper - max-width, padding, wyśrodkowanie
+  &__inner-wrapper {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+
+    @include respond-to(tablet) {
+      padding: 100px 80px;
+    }
+  }
+
+  // Nagłówek sekcji
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 64px;
+
+    @include respond-to(desktop) {
+      margin-bottom: 80px;
+    }
+  }
+
+  // Tag
+  &__tag {
+    display: inline-block;
+    width: fit-content;
+    font-size: $font-size-tiny;
+    font-weight: 500;
+    color: $blue;
+    background-color: rgba($blue, 0.1);
+    border: 1px solid $blue;
+    border-radius: 100px;
+    padding: 4px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  // Tytuł sekcji
+  &__title {
+    font-size: $font-size-h2;
+    color: $black;
+    line-height: $line-height-tight;
+  }
+
+  // Kontener główny
+  &__container {
+    position: relative;
+  }
+
+  // Grid container
+  &__grid {
+    overflow: hidden;
+
+    @include respond-to(tablet) {
+      display: block;
+      overflow: visible;
+    }
+  }
+
+  // Wrapper dla itemów
+  &__wrapper {
+    display: flex;
+
+    @include respond-to(tablet) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    @include respond-to(desktop) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  // Pojedyncze badanie
+  &__item {
+    display: flex;
+    flex-direction: column;
+
+    &.swiper-slide {
+      width: 60%;
+      min-width: 280px;
+    }
+
+    @include respond-to(tablet) {
+      width: auto;
+      min-width: auto;
+    }
+
+    // Ukryj 3. i kolejne elementy poniżej breakpointu desktop
+    &:nth-child(n+3) {
+      @include respond-to(tablet) {
+        display: none;
+      }
+
+      @include respond-to(desktop) {
+        display: flex;
+      }
+    }
+  }
+
+  // Link wrapper
+  &__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      opacity: 0.9;
+
+      .research-studies__image {
+        transform: scale(1.02);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $blue;
+      outline-offset: 4px;
+      border-radius: 16px;
+    }
+  }
+
+  // Wrapper miniaturki
+  &__image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    margin-bottom: 32px;
+  }
+
+  // Miniaturka
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  // Placeholder
+  &__image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+  }
+
+  &__placeholder-svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  // Treść badania
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // Tytuł badania
+  &__item-title {
+    font-size: $font-size-regular;
+    font-weight: 500;
+    color: $black;
+    line-height: $line-height-base;
+  }
+
+  // Opis badania
+  &__description {
+    font-size: $font-size-regular;
+    color: $black-text;
+    line-height: $line-height-base;
+  }
+
+  // Nawigacja slidera (tylko mobile)
+  &__navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+    margin-top: 64px;
+
+    @include respond-to(tablet) {
+      display: none;
+    }
+  }
+
+  // Przyciski nawigacji
+  &__nav-button {
+    width: 48px !important;
+    height: 48px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $stroke;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    padding: 0;
+    flex-shrink: 0;
+
+    svg {
+      width: 24px !important;
+      height: 24px !important;
+      color: $black;
+      transition: color 0.3s ease;
+    }
+
+    &:not(.swiper-button-disabled) {
+      border-color: $blue;
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: $blue;
+      outline: none;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+  // Ikona nawigacji (gdy używany jest custom image)
+  &__nav-icon {
+    width: 24px !important;
+    height: 24px !important;
+    object-fit: contain;
+  }
+}

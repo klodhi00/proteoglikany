@@ -1,0 +1,270 @@
+{% comment %}
+  Sekcja: Badania naukowe
+  Wyświetla grid z badaniami naukowymi na desktop
+  Slider Swiper tylko na mobile (<768px)
+{% endcomment %}
+
+<section class="research-studies">
+  <div class="research-studies__outer-wrapper">
+    <div class="research-studies__inner-wrapper">
+      
+      {% comment %} Nagłówek sekcji {% endcomment %}
+      <div class="research-studies__header">
+        {% if section.settings.tag != blank %}
+          <span class="research-studies__tag">{{ section.settings.tag }}</span>
+        {% endif %}
+        
+        {% if section.settings.title != blank %}
+          <h2 class="research-studies__title">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+
+      {% comment %} Kontener z badaniami - desktop grid / mobile swiper {% endcomment %}
+      <div class="research-studies__container">
+        <div class="research-studies__grid">
+          <div class="research-studies__wrapper">
+            {% for block in section.blocks %}
+              <div class="research-studies__item" {{ block.shopify_attributes }}>
+                {% if block.settings.link != blank %}
+                  <a 
+                    href="{{ block.settings.link }}" 
+                    class="research-studies__link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="{{ block.settings.title | escape }}"
+                  >
+                {% endif %}
+                
+                  {% comment %} Miniaturka badania {% endcomment %}
+                  <div class="research-studies__image-wrapper">
+                    {% if block.settings.image != blank %}
+                      {{
+                        block.settings.image
+                        | image_url: width: 600
+                        | image_tag:
+                          class: 'research-studies__image',
+                          loading: 'lazy',
+                          alt: block.settings.image.alt | escape
+                      }}
+                    {% else %}
+                      <div class="research-studies__image-placeholder">
+                        {{ 'image' | placeholder_svg_tag: 'research-studies__placeholder-svg' }}
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  {% comment %} Treść badania {% endcomment %}
+                  <div class="research-studies__content">
+                    {% if block.settings.title != blank %}
+                      <h3 class="research-studies__item-title">{{ block.settings.title }}</h3>
+                    {% endif %}
+                    
+                    {% if block.settings.description != blank %}
+                      <p class="research-studies__description">{{ block.settings.description }}</p>
+                    {% endif %}
+                  </div>
+
+                {% if block.settings.link != blank %}
+                  </a>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% comment %} Nawigacja dla mobile slidera {% endcomment %}
+        <div class="research-studies__navigation">
+          <button 
+            class="research-studies__nav-button research-studies__nav-button--prev"
+            aria-label="Poprzednie badanie"
+          >
+            {% if section.settings.arrow_left != blank %}
+              {{
+                section.settings.arrow_left
+                | image_url: width: 48
+                | image_tag:
+                  class: 'research-studies__nav-icon',
+                  alt: 'Poprzednie'
+              }}
+            {% else %}
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {% endif %}
+          </button>
+
+          <button 
+            class="research-studies__nav-button research-studies__nav-button--next"
+            aria-label="Następne badanie"
+          >
+            {% if section.settings.arrow_right != blank %}
+              {{
+                section.settings.arrow_right
+                | image_url: width: 48
+                | image_tag:
+                  class: 'research-studies__nav-icon',
+                  alt: 'Następne'
+              }}
+            {% else %}
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {% endif %}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('.research-studies');
+    if (!section) return;
+
+    const grid = section.querySelector('.research-studies__grid');
+    const wrapper = section.querySelector('.research-studies__wrapper');
+    let swiperInstance = null;
+
+    function initSwiper() {
+      const isMobile = window.innerWidth < 768;
+      
+      if (isMobile && !swiperInstance) {
+        // Dodaj klasy Swiper tylko na mobile (<768px)
+        grid.classList.add('swiper');
+        wrapper.classList.add('swiper-wrapper');
+        
+        const items = wrapper.querySelectorAll('.research-studies__item');
+        items.forEach(item => {
+          item.classList.add('swiper-slide');
+        });
+
+        // Inicjalizacja Swipera
+        swiperInstance = new Swiper('.research-studies__grid', {
+          slidesPerView: 'auto',
+          spaceBetween: 32,
+          navigation: {
+            nextEl: '.research-studies__nav-button--next',
+            prevEl: '.research-studies__nav-button--prev',
+          },
+          breakpoints: {
+            480: {
+              spaceBetween: 32,
+            }
+          }
+        });
+      } else if (!isMobile && swiperInstance) {
+        // Usuń klasy Swiper na tablet/desktop (≥768px)
+        swiperInstance.destroy(true, true);
+        swiperInstance = null;
+        
+        grid.classList.remove('swiper', 'swiper-initialized', 'swiper-horizontal');
+        wrapper.classList.remove('swiper-wrapper');
+        
+        const items = wrapper.querySelectorAll('.research-studies__item');
+        items.forEach(item => {
+          item.classList.remove('swiper-slide', 'swiper-slide-active');
+          item.removeAttribute('style');
+        });
+        
+        wrapper.removeAttribute('style');
+      }
+    }
+
+    // Inicjalizacja przy załadowaniu
+    initSwiper();
+
+    // Reinicjalizacja przy zmianie rozmiaru okna
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+        initSwiper();
+      }, 250);
+    });
+  });
+</script>
+{% schema %}
+{
+  "name": "Badania naukowe",
+  "tag": "section",
+  "class": "section-research-studies",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "NAJWAŻNIEJSZE BADANIA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Skuteczność potwierdzona badaniami"
+    },
+    {
+      "type": "header",
+      "content": "Nawigacja slidera (Mobile)"
+    },
+    {
+      "type": "image_picker",
+      "id": "arrow_left",
+      "label": "Strzałka w lewo",
+      "info": "Ikona strzałki lewo (48x48px)"
+    },
+    {
+      "type": "image_picker",
+      "id": "arrow_right",
+      "label": "Strzałka w prawo",
+      "info": "Ikona strzałki prawo (48x48px)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "research_item",
+      "name": "Badanie",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Miniaturka badania"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tytuł",
+          "default": "35,7% wzrost gęstości włosów po 6 miesiącach kuracji Nourkin® z Marilex® – bez skutków ubocznych."
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Opis",
+          "default": "Nourkin®: Objective and Subjective Effects and Tolerability in Persons with Hair Loss"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link do badania"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Badania naukowe",
+      "blocks": [
+        {
+          "type": "research_item"
+        },
+        {
+          "type": "research_item"
+        },
+        {
+          "type": "research_item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

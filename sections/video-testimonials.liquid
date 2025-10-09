@@ -1,0 +1,337 @@
+{% comment %}
+  Sekcja: Video Testimonials
+  Wyświetla 3 filmy z miniaturkami i odtwarzaniem w modalu
+  Desktop: 3 kolumny obok siebie
+  Mobile: Swiper slider
+{% endcomment %}
+
+<section class="video-testimonials">
+  <div class="video-testimonials__outer-wrapper">
+    <div class="video-testimonials__inner-wrapper">
+      
+      {% comment %} Header z tagiem i tytułem {% endcomment %}
+      <div class="video-testimonials__header">
+        {% if section.settings.tag != blank %}
+          <span class="video-testimonials__tag">{{ section.settings.tag }}</span>
+        {% endif %}
+        {% if section.settings.title != blank %}
+          <h2 class="video-testimonials__title">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+
+      {% comment %} Container z filmami - desktop grid {% endcomment %}
+      <div class="video-testimonials__videos video-testimonials__videos--desktop">
+        {% if section.settings.video_url_1 != blank %}
+          <div class="video-testimonials__video-item" data-video-url="{{ section.settings.video_url_1 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 1">
+            <div class="video-testimonials__video-thumbnail">
+              {% if section.settings.video_thumbnail_1 != blank %}
+                {{ section.settings.video_thumbnail_1 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-testimonials__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-testimonials__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-testimonials__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.video_url_2 != blank %}
+          <div class="video-testimonials__video-item" data-video-url="{{ section.settings.video_url_2 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 2">
+            <div class="video-testimonials__video-thumbnail">
+              {% if section.settings.video_thumbnail_2 != blank %}
+                {{ section.settings.video_thumbnail_2 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-testimonials__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-testimonials__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-testimonials__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.video_url_3 != blank %}
+          <div class="video-testimonials__video-item" data-video-url="{{ section.settings.video_url_3 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 3">
+            <div class="video-testimonials__video-thumbnail">
+              {% if section.settings.video_thumbnail_3 != blank %}
+                {{ section.settings.video_thumbnail_3 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-testimonials__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-testimonials__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-testimonials__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {% comment %} Swiper slider - mobile {% endcomment %}
+      <div class="video-testimonials__videos video-testimonials__videos--mobile">
+        <div class="swiper video-testimonials__swiper">
+          <div class="swiper-wrapper">
+            {% if section.settings.video_url_1 != blank %}
+              <div class="swiper-slide">
+                <div class="video-testimonials__video-item" data-video-url="{{ section.settings.video_url_1 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 1">
+                  <div class="video-testimonials__video-thumbnail">
+                    {% if section.settings.video_thumbnail_1 != blank %}
+                      {{ section.settings.video_thumbnail_1 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-testimonials__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-testimonials__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-testimonials__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.video_url_2 != blank %}
+              <div class="swiper-slide">
+                <div class="video-testimonials__video-item" data-video-url="{{ section.settings.video_url_2 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 2">
+                  <div class="video-testimonials__video-thumbnail">
+                    {% if section.settings.video_thumbnail_2 != blank %}
+                      {{ section.settings.video_thumbnail_2 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-testimonials__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-testimonials__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-testimonials__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.video_url_3 != blank %}
+              <div class="swiper-slide">
+                <div class="video-testimonials__video-item" data-video-url="{{ section.settings.video_url_3 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 3">
+                  <div class="video-testimonials__video-thumbnail">
+                    {% if section.settings.video_thumbnail_3 != blank %}
+                      {{ section.settings.video_thumbnail_3 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-testimonials__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-testimonials__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-testimonials__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {% comment %} Modal do odtwarzania wideo {% endcomment %}
+  <div class="video-testimonials__modal" id="videoModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="video-testimonials__modal-overlay"></div>
+    <div class="video-testimonials__modal-content">
+      <button class="video-testimonials__modal-close" aria-label="Zamknij modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="video-testimonials__modal-video-wrapper">
+        <video class="video-testimonials__modal-video" controls playsinline controlsList="nodownload">
+          <source src="" type="video/mp4">
+          Twoja przeglądarka nie obsługuje odtwarzania wideo.
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    {% comment %} Inicjalizacja Swiper dla mobile {% endcomment %}
+    const swiperElement = document.querySelector('.video-testimonials__swiper');
+    if (swiperElement && typeof Swiper !== 'undefined') {
+      new Swiper('.video-testimonials__swiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 32,
+        centeredSlides: false,
+        grabCursor: true,
+      });
+    }
+
+    {% comment %} Obsługa modalu {% endcomment %}
+    const modal = document.getElementById('videoModal');
+    const modalVideo = modal.querySelector('.video-testimonials__modal-video');
+    const modalVideoSource = modalVideo.querySelector('source');
+    const closeButton = modal.querySelector('.video-testimonials__modal-close');
+    const overlay = modal.querySelector('.video-testimonials__modal-overlay');
+    const videoItems = document.querySelectorAll('.video-testimonials__video-item');
+
+    function openModal(videoUrl) {
+      modalVideoSource.src = videoUrl;
+      modalVideo.load();
+      modal.classList.add('is-active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modalVideo.play();
+      closeButton.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      modalVideo.pause();
+      modalVideoSource.src = '';
+    }
+
+    videoItems.forEach(item => {
+      item.addEventListener('click', function() {
+        const videoUrl = this.getAttribute('data-video-url');
+        if (videoUrl) {
+          openModal(videoUrl);
+        }
+      });
+
+      item.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const videoUrl = this.getAttribute('data-video-url');
+          if (videoUrl) {
+            openModal(videoUrl);
+          }
+        }
+      });
+    });
+
+    closeButton.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+        closeModal();
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Opinie wideo",
+  "tag": "section",
+  "class": "section-video-testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "REKOMENDACJE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Opinie zadowolonych klientek"
+    },
+    {
+      "type": "header",
+      "content": "Ikona przycisku play"
+    },
+    {
+      "type": "image_picker",
+      "id": "play_icon",
+      "label": "Ikona play"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 1"
+    },
+    {
+      "type": "url",
+      "id": "video_url_1",
+      "label": "URL wideo 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_1",
+      "label": "Miniaturka wideo 1"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 2"
+    },
+    {
+      "type": "url",
+      "id": "video_url_2",
+      "label": "URL wideo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_2",
+      "label": "Miniaturka wideo 2"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 3"
+    },
+    {
+      "type": "url",
+      "id": "video_url_3",
+      "label": "URL wideo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_3",
+      "label": "Miniaturka wideo 3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Opinie wideo"
+    }
+  ]
+}
+{% endschema %}

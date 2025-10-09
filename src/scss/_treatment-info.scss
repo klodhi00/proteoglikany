@@ -1,0 +1,138 @@
+// ------------------------------------------------------------
+// Sekcja: Informacja o kuracji
+// Wyświetla obrazek/SVG z contentem (tag, tytuł, richtext)
+// ------------------------------------------------------------
+
+.treatment-info {
+  
+  // Outer wrapper - tylko wyśrodkowanie
+  &__outer-wrapper {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  // Inner wrapper - max-width i paddingi
+  &__inner-wrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 32px 24px;
+
+    @include respond-to(tablet) {
+      padding: 50px 80px;
+    }
+  }
+
+  // Content wrapper - układ desktop (poziomy)
+  &__content-wrapper {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 64px;
+
+    @include respond-to(desktop) {
+      flex-direction: row;
+      gap: 100px;
+    }
+  }
+
+  // Kontener obrazka/SVG
+  &__image-container {
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+    order: 2;
+
+    @include respond-to(desktop) {
+      order: 0;
+    }
+  }
+
+  &__svg {
+    width: 100%;
+    height: auto;
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  // Kontener tekstowy
+  &__text-container {
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+    order: 1;
+
+    @include respond-to(desktop) {
+      order: 0;
+    }
+  }
+
+  // Header (tag + tytuł)
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  // Tag
+  &__tag {
+    display: inline-block;
+    font-size: $font-size-tiny;
+    font-weight: 500;
+    color: $blue;
+    background-color: rgba($blue, 0.1);
+    border: 1px solid $blue;
+    border-radius: 100px;
+    padding: 4px 16px;
+    width: fit-content;
+  }
+
+  // Nagłówek
+  &__heading {
+    font-size: $font-size-h2;
+    font-weight: 400;
+    line-height: $line-height-tight;
+    color: $black;
+    margin: 0;
+  }
+
+  // Richtext
+  &__richtext {
+    font-size: $font-size-regular;
+    line-height: $line-height-base;
+    color: $black-text;
+
+    p {
+      margin: 0 0 16px 0;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    strong {
+      font-weight: 600;
+      color: $black;
+    }
+
+    ul, ol {
+      margin: 16px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+  }
+}

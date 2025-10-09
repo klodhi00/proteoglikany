@@ -1,0 +1,134 @@
+{% comment %}
+  Sekcja: Dlaczego Nourkrin?
+  Wyświetla obraz produktu oraz listę korzyści w formie 3 boxów
+  Responsywny layout: desktop (obraz po lewej, treść po prawej) | mobile (pionowy)
+{% endcomment %}
+
+<section class="why-nourkrin">
+  <div class="why-nourkrin__outer-wrapper">
+    <div class="why-nourkrin__inner-wrapper">
+      
+      {% comment %} Obraz produktu {% endcomment %}
+      <div class="why-nourkrin__image">
+        {% if section.settings.image != blank %}
+          {{
+            section.settings.image
+            | image_url: width: 800
+            | image_tag: loading: 'lazy', alt: section.settings.image.alt | default: section.settings.title
+          }}
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+
+      {% comment %} Treść (tag, tytuł, boxy) {% endcomment %}
+      <div class="why-nourkrin__content">
+        
+        {% comment %} Tag i tytuł {% endcomment %}
+        <div class="why-nourkrin__header">
+          {% if section.settings.tag != blank %}
+            <span class="why-nourkrin__tag">{{ section.settings.tag }}</span>
+          {% endif %}
+          
+          {% if section.settings.title != blank %}
+            <h2 class="why-nourkrin__title">{{ section.settings.title }}</h2>
+          {% endif %}
+        </div>
+
+        {% comment %} Boxy z korzyściami {% endcomment %}
+        {% if section.blocks.size > 0 %}
+          <div class="why-nourkrin__benefits">
+            {% for block in section.blocks %}
+              <div class="why-nourkrin__benefit-box" {{ block.shopify_attributes }}>
+                {% if block.settings.benefit_title != blank %}
+                  <h5 class="why-nourkrin__benefit-title">{{ block.settings.benefit_title }}</h5>
+                {% endif %}
+                
+                {% if block.settings.benefit_description != blank %}
+                  <p class="why-nourkrin__benefit-description">{{ block.settings.benefit_description }}</p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Dlaczego Nourkrin?",
+  "tag": "section",
+  "class": "section-why-nourkrin",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "CECHOWANA SUPLEMENTACJA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł sekcji",
+      "default": "Dlaczego Nourkrin?"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Obraz produktu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Korzyść",
+      "settings": [
+        {
+          "type": "text",
+          "id": "benefit_title",
+          "label": "Tytuł korzyści",
+          "default": "100%"
+        },
+        {
+          "type": "textarea",
+          "id": "benefit_description",
+          "label": "Opis korzyści",
+          "default": "Naturalnych składników bez sztucnych dodatków."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dlaczego Nourkrin?",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "benefit_title": "100% naturalnych składników",
+            "benefit_description": "W skład produktu wchodzą wyłącznie naturalne substancje, starannie dobrane i pozbawione sztucznie dodatków, barwników czy konserwantów."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "benefit_title": "Uznany przez lekarzy",
+            "benefit_description": "Produkt został zatwierdzony do otrzymania nagrody Perły Dermatologii Estetycznej, co potwierdza jej skuteczność i zaufanie wśród ekspertów."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "benefit_title": "Ponad 30 lat",
+            "benefit_description": "Nasza opieka powstała w wyniku ponad trzech dekad intensywnych badań i analiz, skutecznych prowadzonych przez specjalistów z całego świata."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

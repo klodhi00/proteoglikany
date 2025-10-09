@@ -1,0 +1,93 @@
+{% comment %}
+  Sekcja: Informacja o kuracji
+  Wyświetla obrazek/SVG z contentem (tag, tytuł, richtext)
+  Responsywna: desktop (poziomy) / mobile (pionowy)
+{% endcomment %}
+
+<div class="treatment-info__outer-wrapper">
+  <div class="treatment-info__inner-wrapper">
+    <div class="treatment-info__content-wrapper">
+      
+      {%- if section.settings.image != blank or section.settings.svg_code != blank -%}
+        <div class="treatment-info__image-container">
+          {%- if section.settings.svg_code != blank -%}
+            <div class="treatment-info__svg">
+              {{ section.settings.svg_code }}
+            </div>
+          {%- elsif section.settings.image != blank -%}
+            <img 
+              src="{{ section.settings.image | image_url: width: 800 }}"
+              alt="{{ section.settings.image.alt | escape }}"
+              width="{{ section.settings.image.width }}"
+              height="{{ section.settings.image.height }}"
+              loading="lazy"
+              class="treatment-info__image"
+            >
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="treatment-info__text-container">
+        <div class="treatment-info__header">
+          {%- if section.settings.tag_text != blank -%}
+            <span class="treatment-info__tag">{{ section.settings.tag_text }}</span>
+          {%- endif -%}
+          
+          {%- if section.settings.heading != blank -%}
+            <h2 class="treatment-info__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.richtext != blank -%}
+          <div class="treatment-info__richtext">
+            {{ section.settings.richtext }}
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Informacja o kuracji",
+  "tag": "section",
+  "class": "treatment-info",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tekst tagu",
+      "default": "DZIAŁANIE PRODUKTU"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Nagłówek",
+      "default": "Dlaczego kuracja powinna trwać minimum 6 miesięcy?"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Treść opisowa"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Obrazek"
+    },
+    {
+      "type": "html",
+      "id": "svg_code",
+      "label": "Kod SVG",
+      "info": "Jeśli wypełnisz to pole, kod SVG zostanie użyty zamiast obrazka"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Informacja o kuracji"
+    }
+  ]
+}
+{% endschema %}

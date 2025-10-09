@@ -1,0 +1,183 @@
+// ------------------------------------------------------------
+// product-selection.scss
+// Sekcja wyboru kuracji z tagiem, tytułem i kartami produktów
+// ------------------------------------------------------------
+
+.product-selection {
+  
+    // Zewnętrzny wrapper - wyśrodkowanie
+    &__outer-wrapper {
+      margin: 0 auto;
+      width: 100%;
+    }
+  
+    // Wewnętrzny wrapper - max-width i paddingi
+    &__inner-wrapper {
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 64px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 100px 80px;
+      }
+    }
+  
+    // Kontener główny - układ mobilny domyślnie
+    &__container {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+  
+      @include respond-to(desktop-lg) {
+        flex-direction: row;
+        align-items: center;
+        gap: 100px;
+      }
+    }
+  
+    // Lewa kolumna - treść tekstowa
+    &__content {
+      display: flex;
+      flex-direction: column;
+  
+      @include respond-to(desktop-lg) {
+        flex: 0 0 auto;
+        max-width: 450px;
+      }
+    }
+  
+    // Tag
+    &__tag {
+      display: inline-block;
+      width: fit-content;
+      padding: 4px 16px;
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $blue;
+      background-color: rgba($blue, 0.1);
+      border: 1px solid $blue;
+      border-radius: 100px;
+      text-transform: uppercase;
+    }
+  
+    // Tytuł
+    &__title {
+      margin-top: 16px;
+      font-size: $font-size-h2;
+      font-weight: 400;
+      line-height: $line-height-tight;
+      color: $black;
+    }
+  
+    // Opis
+    &__description {
+      margin-top: 32px;
+      font-size: $font-size-regular;
+      line-height: $line-height-base;
+      color: $black-text;
+    }
+  
+    // Prawa kolumna - karty produktów
+    &__products {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+      width: 100%;
+  
+      @include respond-to(tablet) {
+        flex-direction: row;
+        gap: 32px;
+      }
+  
+      @include respond-to(desktop-lg) {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  
+    // Pojedyncza karta produktu
+    &__product-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+  
+      @include respond-to(tablet) {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  
+    // Obrazek produktu
+    &__product-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+  
+    // Wrapper dla treści karty
+    &__product-content {
+      padding-top: 32px;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    // Nazwa produktu
+    &__product-name {
+      font-size: $font-size-regular;
+      line-height: $line-height-base;
+      color: $black-text;
+      font-weight: 400;
+    }
+  
+    // Wrapper dla ceny
+    &__product-price-wrapper {
+      margin-top: 16px;
+    }
+  
+    // Cena produktu
+    &__product-price {
+      font-size: $font-size-h4;
+      font-weight: 500;
+      color: $black;
+      line-height: $line-height-tight;
+    }
+  
+    // Tekst pod ceną
+    &__product-subtext {
+      margin-top: 6px;
+      font-size: $font-size-small;
+      color: $light-grey;
+      line-height: $line-height-base;
+    }
+  
+    // Przycisk produktu
+    &__product-button {
+      margin-top: 24px;
+      padding: 12px 32px;
+      font-size: $font-size-regular;
+      font-weight: 400;
+      color: $black-text;
+      background-color: transparent;
+      border: 1px solid $blue;
+      border-radius: 100px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      width: fit-content;
+  
+      &:hover {
+        background-color: $blue;
+        color: $white;
+      }
+  
+      &:focus-visible {
+        outline: 2px solid $blue;
+        outline-offset: 2px;
+      }
+    }
+  }

@@ -1,0 +1,130 @@
+{% comment %}
+  Sekcja - Działanie potwierdzają badania
+  Sekcja z tekstem, tagiem, opisem i obrazem. Opcjonalnie drugie zdjęcie poniżej.
+{% endcomment %}
+
+<section class="research-proof">
+  <div class="research-proof__outer-wrapper">
+    <div class="research-proof__inner-wrapper">
+      
+      {%- comment -%} Główna treść sekcji - tekst po lewej, obraz po prawej {%- endcomment -%}
+      <div class="research-proof__content">
+        
+        {%- comment -%} Sekcja tekstowa {%- endcomment -%}
+        <div class="research-proof__text-section">
+          
+          {%- comment -%} Header z tagiem i tytułem {%- endcomment -%}
+          <div class="research-proof__header">
+            {%- if section.settings.tag != blank -%}
+              <span class="research-proof__tag">{{ section.settings.tag }}</span>
+            {%- endif -%}
+            {%- if section.settings.title != blank -%}
+              <h2 class="research-proof__title">{{ section.settings.title }}</h2>
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Body z opisem i buttonem {%- endcomment -%}
+          <div class="research-proof__body">
+            {%- if section.settings.description != blank -%}
+              <div class="research-proof__description">{{ section.settings.description }}</div>
+            {%- endif -%}
+            {%- if section.settings.button_text != blank and section.settings.button_link != blank -%}
+              <a href="{{ section.settings.button_link }}" class="button button--primary research-proof__button">
+                {{ section.settings.button_text }}
+              </a>
+            {%- endif -%}
+          </div>
+
+        </div>
+
+        {%- comment -%} Sekcja z obrazem {%- endcomment -%}
+        <div class="research-proof__image-section">
+          {%- if section.settings.image != blank -%}
+            {{
+              section.settings.image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                alt: section.settings.image.alt | default: section.settings.title,
+                class: 'research-proof__image'
+            }}
+          {%- else -%}
+            <div class="research-proof__image-placeholder">
+              {{ 'image' | placeholder_svg_tag: 'research-proof__image' }}
+            </div>
+          {%- endif -%}
+        </div>
+
+      </div>
+
+      {%- comment -%} Opcjonalny drugi obraz poniżej {%- endcomment -%}
+      {%- if section.settings.second_image != blank -%}
+        <div class="research-proof__second-image">
+          {{
+            section.settings.second_image
+            | image_url: width: 800
+            | image_tag:
+              loading: 'lazy',
+              alt: section.settings.second_image.alt | default: 'Dodatkowy obraz',
+              class: 'research-proof__second-image-img'
+          }}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Potwierdzenie badań",
+  "tag": "section",
+  "class": "research-proof-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "NAUKOWO PODSUMANY KOBECER"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł sekcji",
+      "default": "Działanie Nourkrin® potwierdzają badania"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Opis",
+      "default": "<p>Naturalny cykl wzrostu włosa wg badań może zostać zaburzony przez wyskalowane, stresu czy zaburzeń hormonalnych, ale też na skutek niedoboru kluczowych składników odżywczych.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Tekst przycisku",
+      "default": "Zobacz produkty"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link przycisku"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Obraz główny"
+    },
+    {
+      "type": "image_picker",
+      "id": "second_image",
+      "label": "Drugi obraz (opcjonalny)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Działanie potwierdzają badania"
+    }
+  ]
+}
+{% endschema %}

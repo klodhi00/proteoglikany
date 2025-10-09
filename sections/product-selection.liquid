@@ -1,0 +1,180 @@
+{% comment %}
+  Sekcja: Wybierz kurację dla siebie
+  Wyświetla tag, tytuł, opis oraz dwie karty produktów z możliwością edycji w theme editor
+{% endcomment %}
+
+<section class="product-selection" aria-labelledby="product-selection-title">
+  <div class="product-selection__outer-wrapper">
+    <div class="product-selection__inner-wrapper">
+      <div class="product-selection__container">
+        
+        {% comment %} Lewa kolumna - treść tekstowa {% endcomment %}
+        <div class="product-selection__content">
+          {% if section.settings.tag != blank %}
+            <span class="product-selection__tag">
+              {{ section.settings.tag }}
+            </span>
+          {% endif %}
+
+          {% if section.settings.title != blank %}
+            <h2 id="product-selection-title" class="product-selection__title">
+              {{ section.settings.title }}
+            </h2>
+          {% endif %}
+
+          {% if section.settings.description != blank %}
+            <div class="product-selection__description">
+              {{ section.settings.description }}
+            </div>
+          {% endif %}
+        </div>
+
+        {% comment %} Prawa kolumna - karty produktów {% endcomment %}
+        <div class="product-selection__products">
+          {% for block in section.blocks %}
+            {% if block.type == 'product' %}
+              <article class="product-selection__product-card" {{ block.shopify_attributes }}>
+                
+                {% comment %} Obrazek produktu {% endcomment %}
+                {% if block.settings.product_image != blank %}
+                  <img 
+                    src="{{ block.settings.product_image | image_url: width: 600 }}"
+                    srcset="{{ block.settings.product_image | image_url: width: 300 }} 300w,
+                            {{ block.settings.product_image | image_url: width: 600 }} 600w,
+                            {{ block.settings.product_image | image_url: width: 900 }} 900w"
+                    sizes="(min-width: 1024px) 400px, 100vw"
+                    alt="{{ block.settings.product_name | escape }}"
+                    class="product-selection__product-image"
+                    loading="lazy"
+                    width="600"
+                    height="600"
+                  >
+                {% endif %}
+
+                {% comment %} Treść karty produktu {% endcomment %}
+                <div class="product-selection__product-content">
+                  
+                  {% if block.settings.product_name != blank %}
+                    <h3 class="product-selection__product-name">
+                      {{ block.settings.product_name }}
+                    </h3>
+                  {% endif %}
+
+                  <div class="product-selection__product-price-wrapper">
+                    {% if block.settings.product_price != blank %}
+                      <p class="product-selection__product-price">
+                        {{ block.settings.product_price }}
+                      </p>
+                    {% endif %}
+
+                    {% if block.settings.product_subtext != blank %}
+                      <p class="product-selection__product-subtext">
+                        {{ block.settings.product_subtext }}
+                      </p>
+                    {% endif %}
+                  </div>
+
+                  {% if block.settings.product_link != blank and block.settings.button_text != blank %}
+                    <a 
+                      href="{{ block.settings.product_link }}" 
+                      class="product-selection__product-button"
+                      aria-label="{{ block.settings.button_text }} - {{ block.settings.product_name }}"
+                    >
+                      {{ block.settings.button_text }}
+                    </a>
+                  {% endif %}
+
+                </div>
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wybierz kurację",
+  "tag": "section",
+  "class": "section-product-selection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "PRODUKTY"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Wybierz kurację dla siebie!"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Opis",
+      "default": "<p>Odkryj ofertę produktów, które skutecznie wspierają wzrost, regenerację i ochronę włosów. Nasze suplementy zawierają naturalne, wyselekcjonowane pod kątem najlepszej kondycji włosów proteoglikany pochodzenia morskiego.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Produkt",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Zdjęcie produktu"
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Nazwa produktu",
+          "default": "Suplement diety Nourkrin Women z bioaktywnymi proteoglikanami"
+        },
+        {
+          "type": "text",
+          "id": "product_price",
+          "label": "Cena",
+          "default": "239.00 PLN"
+        },
+        {
+          "type": "text",
+          "id": "product_subtext",
+          "label": "Tekst pod ceną",
+          "default": "lub 199 PLN w modelu subskrypcyjnym"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Link do produktu"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Tekst przycisku",
+          "default": "Zobacz produkt"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wybierz kurację",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

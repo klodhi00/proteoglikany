@@ -1,0 +1,190 @@
+{% comment %}
+  Footer Section - Proteoglikany Theme
+  Sekcja stopki z logo, nawigacją, mediami społecznościowymi i informacjami prawnymi
+  WCAG 2.1 AA compliant
+{% endcomment %}
+
+<footer class="footer" role="contentinfo" aria-label="Stopka strony">
+  <div class="footer__outer-wrapper">
+    <div class="footer__inner-wrapper">
+      
+      {% comment %} Górna część footera - logo, nawigacja, sociale {% endcomment %}
+      <div class="footer__top">
+        
+        {% comment %} Logo {% endcomment %}
+        <div class="footer__logo-wrapper">
+          {% if section.settings.logo != blank %}
+            <a href="{{ routes.root_url }}" class="footer__logo-link" aria-label="Strona główna">
+              {{
+                section.settings.logo
+                | image_url: width: 200
+                | image_tag: loading: 'lazy', alt: section.settings.logo.alt | default: shop.name
+              }}
+            </a>
+          {% endif %}
+        </div>
+
+        {% comment %} Menu główne {% endcomment %}
+        {% if section.settings.main_menu != blank %}
+          <nav class="footer__nav" aria-label="Menu stopki">
+            <ul class="footer__nav-list">
+              {% for link in linklists[section.settings.main_menu].links %}
+                <li class="footer__nav-item">
+                  <a 
+                    href="{{ link.url }}" 
+                    class="footer__nav-link"
+                    {% if link.active %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        {% endif %}
+
+        {% comment %} Media społecznościowe {% endcomment %}
+        <div class="footer__social-wrapper">
+          <ul class="footer__social-list">
+            {% for block in section.blocks %}
+              {% if block.type == 'social_link' %}
+                <li class="footer__social-item">
+                  <a 
+                    href="{{ block.settings.social_url }}" 
+                    class="footer__social-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="{{ block.settings.social_platform }}"
+                  >
+                    {% if block.settings.social_icon != blank %}
+                      {{
+                        block.settings.social_icon
+                        | image_url: width: 24
+                        | image_tag: loading: 'lazy', alt: block.settings.social_platform
+                      }}
+                    {% endif %}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+
+      </div>
+
+      {% comment %} Divider {% endcomment %}
+      <div class="footer__divider" aria-hidden="true"></div>
+
+      {% comment %} Dolna część footera - copyright i menu pomocnicze {% endcomment %}
+      <div class="footer__bottom">
+        
+        {% comment %} Tekst copyright {% endcomment %}
+        <div class="footer__copyright">
+          {{ section.settings.copyright_text }}
+        </div>
+
+        {% comment %} Menu pomocnicze {% endcomment %}
+        {% if section.settings.secondary_menu != blank %}
+          <nav class="footer__secondary-nav" aria-label="Menu pomocnicze">
+            <ul class="footer__secondary-nav-list">
+              {% for link in linklists[section.settings.secondary_menu].links %}
+                <li class="footer__secondary-nav-item">
+                  <a 
+                    href="{{ link.url }}" 
+                    class="footer__secondary-nav-link"
+                    {% if link.active %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Stopka",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Menu główne",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Menu pomocnicze",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Tekst praw autorskich",
+      "default": "© 2025 Nourkrin. Wszelkie prawa zastrzeżone."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social_link",
+      "name": "Media społecznościowe",
+      "settings": [
+        {
+          "type": "text",
+          "id": "social_platform",
+          "label": "Nazwa platformy",
+          "default": "Facebook",
+          "info": "Używana jako aria-label dla dostępności"
+        },
+        {
+          "type": "image_picker",
+          "id": "social_icon",
+          "label": "Ikona"
+        },
+        {
+          "type": "url",
+          "id": "social_url",
+          "label": "URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stopka",
+      "blocks": [
+        {
+          "type": "social_link",
+          "settings": {
+            "social_platform": "Facebook"
+          }
+        },
+        {
+          "type": "social_link",
+          "settings": {
+            "social_platform": "Instagram"
+          }
+        },
+        {
+          "type": "social_link",
+          "settings": {
+            "social_platform": "YouTube"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

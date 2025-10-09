@@ -1,0 +1,154 @@
+// ------------------------------------------------------------
+// Where to Buy Section
+// Sekcja "Gdzie kupić" - partnerzy handlowi
+// Mobile: Swiper slider | Desktop: Grid layout
+// ------------------------------------------------------------
+
+.where-to-buy {
+  
+    // Outer wrapper - tylko wyśrodkowanie
+    &__outer-wrapper {
+      margin: 0 auto;
+      width: 100%;
+    }
+  
+    // Inner wrapper - max-width, wyśrodkowanie i paddingi
+    &__inner-wrapper {
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 64px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 100px 80px;
+      }
+    }
+  
+    // Header - tag i tytuł
+    &__header {
+      margin-bottom: 64px;
+  
+      @include respond-to(tablet) {
+        margin-bottom: 80px;
+      }
+    }
+  
+    // Tag (badge)
+    &__tag {
+      display: inline-block;
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $blue;
+      background-color: rgba($blue, 0.1);
+      border: 1px solid $blue;
+      border-radius: 100px;
+      padding: 4px 16px;
+      line-height: 1.5;
+    }
+  
+    // Tytuł
+    &__title {
+      font-size: $font-size-h2;
+      font-weight: 400;
+      line-height: $line-height-tight;
+      color: $black;
+      margin: 16px 0 0 0;
+    }
+  
+    // Content wrapper
+    &__content {
+      position: relative;
+    }
+  
+    // Desktop Grid - ukryty na mobile
+    &__grid {
+      display: none;
+  
+      @include respond-to(tablet) {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 50px;
+        align-items: center;
+        justify-items: center;
+      }
+  
+      @include respond-to(desktop) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 80px;
+      }
+    }
+  
+    // Mobile Slider Wrapper - ukryty na desktop
+    &__slider-wrapper {
+      display: block;
+  
+      @include respond-to(tablet) {
+        display: none;
+      }
+    }
+  
+    // Slider Swiper
+    &__slider {
+      overflow: visible;
+      
+      .swiper-wrapper {
+        align-items: center;
+      }
+  
+      .swiper-slide {
+        height: auto;
+      }
+    }
+  
+    // Logo item
+    &__item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-width: 120px;
+    }
+  
+    // Link wrapper
+    &__link {
+      display: block;
+      width: 100%;
+      transition: opacity 0.3s ease;
+  
+      &:hover {
+        opacity: 0.7;
+      }
+  
+      &:focus-visible {
+        outline: 2px solid $blue;
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
+    }
+  
+    // Logo image
+    &__image {
+      width: 100%;
+      height: auto;
+      max-height: 140px;
+      min-height: 60px;
+      object-fit: contain;
+      filter: grayscale(100%);
+      opacity: 0.6;
+      transition: all 0.3s ease;
+  
+      @include respond-to(tablet) {
+        max-height: 100px;
+      }
+  
+      @include respond-to(desktop) {
+        max-height: 120px;
+      }
+  
+      &:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+      }
+    }
+  }
