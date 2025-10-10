@@ -1,0 +1,240 @@
+{% comment %}
+  Newsletter Section
+  Sekcja formularza zapisu do newslettera z opcją obrazka lub koloru tła
+{% endcomment %}
+
+<section class="newsletter" style="--newsletter-bg-color: {{ section.settings.box_background_color }};">
+  <div class="newsletter__outer-wrapper">
+    <div class="newsletter__inner-wrapper">
+      <div class="newsletter__box{% if section.settings.background_image %} newsletter__box--has-image{% endif %}">
+        
+        {% comment %} Obrazek tła (opcjonalny - ZAMIAST koloru) {% endcomment %}
+        {% if section.settings.background_image != blank %}
+          <div class="newsletter__background-image">
+            {{
+              section.settings.background_image
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'lazy',
+                widths: '400, 600, 800, 1000, 1200, 1400, 1600',
+                sizes: '100vw',
+                alt: section.settings.background_image.alt | default: 'Newsletter background'
+            }}
+          </div>
+        {% endif %}
+
+        <div class="newsletter__content">
+          
+          {% comment %} Lewa strona - Tag, Tytuł, Opis {% endcomment %}
+          <div class="newsletter__text-content">
+            <div class="newsletter__shortened-content">
+              {% if section.settings.tag_text != blank %}
+                <span class="newsletter__tag">
+                  {{ section.settings.tag_text }}
+                </span>
+              {% endif %}
+              
+              {% if section.settings.title != blank %}
+                <h2 class="newsletter__title">
+                  {{ section.settings.title }}
+                </h2>
+              {% endif %}
+              
+              {% if section.settings.description != blank %}
+                <p class="newsletter__description">
+                  {{ section.settings.description }}
+                </p>
+              {% endif %}
+            </div>
+          </div>
+
+          {% comment %} Prawa strona - Formularz {% endcomment %}
+          <div class="newsletter__form-wrapper">
+            <div class="newsletter__form-box">
+              {% form 'customer', class: 'newsletter__form', id: 'newsletter-form-{{ section.id }}', novalidate: 'novalidate' %}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <input type="hidden" name="contact[context]" value="newsletter">
+                
+                {% comment %} Pole Imię {% endcomment %}
+                <div class="newsletter__field">
+                  <label for="newsletter-name-{{ section.id }}" class="newsletter__label">
+                    {{ section.settings.form_name_label }}
+                  </label>
+                  <input 
+                    type="text" 
+                    id="newsletter-name-{{ section.id }}"
+                    name="contact[first_name]" 
+                    class="newsletter__input"
+                    placeholder="{{ section.settings.form_name_placeholder }}"
+                    autocomplete="given-name"
+                  >
+                </div>
+
+                {% comment %} Pole E-mail {% endcomment %}
+                <div class="newsletter__field">
+                  <label for="newsletter-email-{{ section.id }}" class="newsletter__label">
+                    {{ section.settings.form_email_label }}
+                  </label>
+                  <input 
+                    type="email" 
+                    id="newsletter-email-{{ section.id }}"
+                    name="contact[email]" 
+                    class="newsletter__input"
+                    placeholder="{{ section.settings.form_email_placeholder }}"
+                    required
+                    autocomplete="email"
+                    aria-required="true"
+                  >
+                </div>
+
+                {% comment %} Tekst zgody {% endcomment %}
+                {% if section.settings.consent_text != blank %}
+                  <p class="newsletter__consent">
+                    {{ section.settings.consent_text }}
+                  </p>
+                {% endif %}
+
+                {% comment %} Komunikat sukcesu {% endcomment %}
+                {% if form.posted_successfully? %}
+                  <div class="newsletter__success" role="status" aria-live="polite">
+                    <p>{{ section.settings.success_message | default: 'Dziękujemy za zapisanie się do newslettera!' }}</p>
+                  </div>
+                {% endif %}
+
+                {% comment %} Komunikaty błędów {% endcomment %}
+                {% if form.errors %}
+                  <div class="newsletter__errors" role="alert" aria-live="assertive">
+                    <h3 class="newsletter__error-title visually-hidden">Formularz zawiera błędy</h3>
+                    <ul class="newsletter__error-list">
+                      {% for field in form.errors %}
+                        <li class="newsletter__error-item">
+                          {% if field == 'form' %}
+                            {{ form.errors.messages[field] }}
+                          {% else %}
+                            <a href="#newsletter-{{ field }}-{{ section.id }}" class="newsletter__error-link">
+                              {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                            </a>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+
+                {% comment %} Przycisk wysyłania {% endcomment %}
+                <button type="submit" class="button button--outline newsletter__button" name="commit">
+                  {{ section.settings.button_text }}
+                </button>
+              {% endform %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Tło sekcji"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Obrazek tła (opcjonalny)",
+      "info": "Jeśli dodasz obrazek, będzie on wyświetlany ZAMIAST koloru tła."
+    },
+    {
+      "type": "color",
+      "id": "box_background_color",
+      "label": "Kolor tła (gdy brak obrazka)",
+      "default": "#16B4EF",
+      "info": "Ten kolor będzie widoczny tylko gdy nie dodasz obrazka tła."
+    },
+    {
+      "type": "header",
+      "content": "Tag"
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tekst tagu",
+      "default": "NEWSLETTER"
+    },
+    {
+      "type": "header",
+      "content": "Treść"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Dołącz do naszego newslettera i bądź na bieżąco!"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Opis",
+      "default": "Zyskaj dostęp do treści edukacyjnych i porad na temat zdrowia włosów oraz skóry głowy. Otrzymuj informacje o promocjach i ofertach specjalnych."
+    },
+    {
+      "type": "header",
+      "content": "Formularz - Pola"
+    },
+    {
+      "type": "text",
+      "id": "form_name_label",
+      "label": "Etykieta pola imienia",
+      "default": "Imię"
+    },
+    {
+      "type": "text",
+      "id": "form_name_placeholder",
+      "label": "Placeholder pola imienia",
+      "default": "Wpisz imię"
+    },
+    {
+      "type": "text",
+      "id": "form_email_label",
+      "label": "Etykieta pola e-mail",
+      "default": "Adres e-mail"
+    },
+    {
+      "type": "text",
+      "id": "form_email_placeholder",
+      "label": "Placeholder pola e-mail",
+      "default": "Wpisz e-mail"
+    },
+    {
+      "type": "textarea",
+      "id": "consent_text",
+      "label": "Tekst zgody (poniżej formularza)",
+      "default": "Klikając Zapisz się, potwierdzasz akceptację naszych warunków korzystania zapisanych w Polityce Prywatności."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Tekst przycisku",
+      "default": "Wyślij wiadomość"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Wiadomość po pomyślnym zapisie",
+      "default": "Dziękujemy za zapisanie się do newslettera!"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

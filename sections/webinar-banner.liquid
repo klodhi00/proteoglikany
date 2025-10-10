@@ -1,0 +1,124 @@
+{% comment %}
+  Sekcja Webinar Banner
+  Sekcja z boxem zawierającym tag, tytuł, tekst, przycisk i obrazek osoby
+  Desktop: układ dwukolumnowy (content po lewej, obrazek po prawej)
+  Obrazek widoczny tylko na desktop-lg (1366px+)
+{% endcomment %}
+
+<div class="webinar-banner">
+  <div class="webinar-banner__outer-wrapper">
+    <div class="webinar-banner__inner-wrapper">
+      <div 
+        class="webinar-banner__box"
+        style="
+          {% if section.settings.background_color %}
+            background-color: {{ section.settings.background_color }};
+          {% endif %}
+          {% if section.settings.background_image %}
+            background-image: url('{{ section.settings.background_image | img_url: '2000x' }}');
+          {% endif %}
+        "
+      >
+        <div class="webinar-banner__content">
+          <div class="webinar-banner__tag-title">
+            {% if section.settings.tag != blank %}
+              <span class="webinar-banner__tag">{{ section.settings.tag }}</span>
+            {% endif %}
+            {% if section.settings.title != blank %}
+              <h2 class="webinar-banner__title">{{ section.settings.title }}</h2>
+            {% endif %}
+          </div>
+          {% if section.settings.text != blank %}
+            <div class="webinar-banner__text">{{ section.settings.text }}</div>
+          {% endif %}
+          {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+            <a href="{{ section.settings.button_link }}" class="button button--outline" aria-label="{{ section.settings.button_text }}">
+              {{ section.settings.button_text }}
+            </a>
+          {% endif %}
+        </div>
+        {% if section.settings.person_image %}
+          <div class="webinar-banner__image">
+            <img 
+              src="{{ section.settings.person_image | img_url: '800x' }}"
+              alt="{{ section.settings.person_image.alt | default: section.settings.title | escape }}"
+              loading="lazy"
+              width="{{ section.settings.person_image.width }}"
+              height="{{ section.settings.person_image.height }}"
+            >
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Baner webinar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Treść sekcji"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "WEBINAR"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Dołącz do bezpłatnego webinaru!"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Tekst",
+      "default": "<p>Webinar \"Cicha sygnały organizmu – co włosy mówią o tarczycy, emocjach i równowadze wewnętrznej\" Trab cerveny trak do lepszego samopoczucia i zdrowych włosów – zapisz się i zrozum, co naprawdę mówi Twoje ciało.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Tekst przycisku",
+      "default": "Zapisz się do webinaru"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link przycisku"
+    },
+    {
+      "type": "header",
+      "content": "Tło sekcji"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Kolor tła",
+      "default": "#16B4EF"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Obrazek tła (opcjonalnie)"
+    },
+    {
+      "type": "header",
+      "content": "Obrazek osoby"
+    },
+    {
+      "type": "image_picker",
+      "id": "person_image",
+      "label": "Obrazek osoby (widoczny tylko na dużych ekranach)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Baner webinar"
+    }
+  ]
+}
+{% endschema %}

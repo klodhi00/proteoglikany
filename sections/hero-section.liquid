@@ -1,0 +1,189 @@
+{% comment %}
+  Sekcja: Hero z tagiem, tytułem, tekstem, przyciskami i obrazkiem produktu
+  Plik: sections/hero-section.liquid
+{% endcomment %}
+
+<section class="hero-section">
+  <div class="hero-section__outer-wrapper">
+    <div class="hero-section__inner-wrapper">
+      <div class="hero-section__content-box" 
+        {% if section.settings.background_image != blank %}
+          style="background-image: url('{{ section.settings.background_image | image_url: width: 1600 }}');"
+        {% elsif section.settings.background_color %}
+          style="background-color: {{ section.settings.background_color }};"
+        {% endif %}
+      >
+        
+        {%- comment -%} Lewa strona - treść {%- endcomment -%}
+        <div class="hero-section__text-content">
+          
+          {%- if section.settings.tag_text != blank -%}
+            <span class="hero-section__tag">{{ section.settings.tag_text }}</span>
+          {%- endif -%}
+          
+          {%- if section.settings.title != blank -%}
+            <h1 class="hero-section__title">{{ section.settings.title }}</h1>
+          {%- endif -%}
+          
+          {%- if section.settings.description != blank -%}
+            <p class="hero-section__description">{{ section.settings.description }}</p>
+          {%- endif -%}
+          
+          {%- if section.blocks.size > 0 -%}
+            <div class="hero-section__buttons">
+              {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                  {%- when 'button' -%}
+                    {%- if block.settings.button_label != blank -%}
+                      <a 
+                        href="{{ block.settings.button_link }}" 
+                        class="button button--outline hero-section__button"
+                        {% if block.settings.button_link == blank %}aria-disabled="true"{% endif %}
+                        {{ block.shopify_attributes }}
+                      >
+                        {{ block.settings.button_label }}
+                      </a>
+                    {%- endif -%}
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+        
+        {%- comment -%} Prawa strona - obrazek {%- endcomment -%}
+        {%- if section.settings.image_desktop != blank or section.settings.image_mobile != blank -%}
+          <div class="hero-section__image-wrapper">
+            {%- if section.settings.image_mobile != blank -%}
+              <img 
+                src="{{ section.settings.image_mobile | image_url: width: 800 }}"
+                alt="{{ section.settings.image_alt | escape }}"
+                class="hero-section__image hero-section__image--mobile"
+                loading="lazy"
+                width="{{ section.settings.image_mobile.width }}"
+                height="{{ section.settings.image_mobile.height }}"
+              >
+            {%- endif -%}
+            {%- if section.settings.image_desktop != blank -%}
+              <img 
+                src="{{ section.settings.image_desktop | image_url: width: 1200 }}"
+                alt="{{ section.settings.image_alt | escape }}"
+                class="hero-section__image hero-section__image--desktop"
+                loading="lazy"
+                width="{{ section.settings.image_desktop.width }}"
+                height="{{ section.settings.image_desktop.height }}"
+              >
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero z produktem",
+  "tag": "section",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag",
+      "default": "WYPRÓBUJ ROZMOWĘ WSTĘPNĄ"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Naukowo opracowana celowana suplementacja"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Opis",
+      "default": "Celowana suplementacja diety aminokwasami oraz nukleotydami NourKrin™ i MarinEx® to jedyny na rynku produkt o przewidywalnych korzyściach terapeutycznych. Więcej niż witaminy, a łatwiej niż lekarstwo."
+    },
+    {
+      "type": "header",
+      "content": "Ustawienia tła"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Obrazek tła",
+      "info": "Jeśli wybierzesz obrazek, kolor tła zostanie zignorowany"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Kolor tła",
+      "default": "#16B4EF",
+      "info": "Używany gdy nie wybrano obrazka tła"
+    },
+    {
+      "type": "header",
+      "content": "Obrazki produktu"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Obrazek produktu (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Obrazek produktu (mobile)"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Tekst alternatywny obrazka produktu",
+      "info": "Opis obrazka dla dostępności (WCAG)",
+      "default": "Opakowanie produktu Nourkrin"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Przycisk",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Etykieta przycisku",
+          "default": "Dla klientek"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Link przycisku"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero z produktem",
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "button_label": "Dla klientek",
+            "button_link": ""
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_label": "Dla mężczyzn",
+            "button_link": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

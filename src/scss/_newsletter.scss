@@ -1,0 +1,276 @@
+// ------------------------------------------------------------
+// Newsletter Section
+// Sekcja formularza zapisu do newslettera
+// ------------------------------------------------------------
+
+.newsletter {
+  
+    // Outer wrapper - wyśrodkowanie bez max-width
+    &__outer-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+  
+    // Inner wrapper - max-width, paddingi i wyśrodkowanie
+    &__inner-wrapper {
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 80px 40px;
+      }
+    }
+  
+    // Box z tłem wewnątrz inner wrapper
+    &__box {
+      position: relative;
+      background-color: var(--newsletter-bg-color, $blue);
+      padding: 32px;
+      border-radius: 32px;
+      overflow: hidden;
+  
+      @include respond-to(tablet) {
+        padding: 100px 80px;
+      }
+  
+      // Gdy jest obrazek, usuń kolor tła
+      &--has-image {
+        background-color: transparent;
+      }
+    }
+  
+    // Obrazek tła (ZAMIAST koloru)
+    &__background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+  
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+  
+    // Kontener na content (lewa i prawa strona)
+    &__content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+  
+      // Od 1024px (desktop) układ horyzontalny
+      @include respond-to(desktop) {
+        flex-direction: row;
+        gap: 100px;
+        align-items: flex-start;
+      }
+    }
+  
+    // Lewa strona - treść tekstowa
+    &__text-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+  
+      // Na desktopie max-width 450px i 50% szerokości
+      @include respond-to(desktop) {
+        flex: 1;
+      }
+    }
+  
+    &__shortened-content {
+      max-width: unset;
+  
+      @include respond-to(desktop) {
+        max-width: 450px;
+      }
+    }
+  
+    // Tag
+    &__tag {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $white;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid $white;
+      border-radius: 100px;
+      padding: 4px 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+  
+    // Tytuł
+    &__title {
+      font-size: $font-size-h2;
+      font-weight: 400;
+      color: $white;
+      line-height: $line-height-tight;
+      margin: 0;
+    }
+  
+    // Opis
+    &__description {
+      font-size: $font-size-regular;
+      color: $white-text;
+      line-height: $line-height-base;
+      margin-top: 32px;
+  
+      @include respond-to(desktop) {
+        margin-top: 64px;
+      }
+    }
+  
+    // Prawa strona - wrapper formularza
+    &__form-wrapper {
+      // Na desktopie 50% szerokości
+      @include respond-to(desktop) {
+        flex: 1;
+      }
+    }
+  
+    // Box formularza z tłem
+    &__form-box {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 16px;
+  
+      @include respond-to(tablet) {
+        padding: 32px;
+      }
+    }
+  
+    // Formularz
+    &__form {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    // Pojedyncze pole formularza
+    &__field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+  
+    // Label pola
+    &__label {
+      font-size: $font-size-regular;
+      font-weight: 400;
+      color: $white;
+      line-height: $line-height-base;
+    }
+  
+    // Input
+    &__input {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: $font-size-regular;
+      color: $black-text;
+      background-color: $white;
+      border: none;
+      border-radius: 100px;
+      outline: none;
+      transition: all 0.3s ease;
+  
+      &::placeholder {
+        color: $light-grey;
+      }
+  
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+      }
+    }
+  
+    // Tekst zgody
+    &__consent {
+      font-size: $font-size-small;
+      color: $white-text;
+      line-height: $line-height-base;
+      margin: 0 0 24px 0;
+    }
+  
+    // Komunikat sukcesu - wyświetlany NAD przyciskiem
+    &__success {
+      padding: 12px 16px;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+  
+      p {
+        font-size: $font-size-small;
+        color: $white;
+        margin: 0;
+        font-weight: 500;
+      }
+    }
+  
+    // Komunikaty błędów - wyświetlane NAD przyciskiem
+    &__errors {
+      padding: 12px 16px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+  
+    &__error-title {
+      margin: 0 0 8px 0;
+    }
+  
+    &__error-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    &__error-item {
+      font-size: $font-size-small;
+      color: $white;
+      margin-bottom: 4px;
+  
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  
+    &__error-link {
+      color: $white;
+      text-decoration: underline;
+      transition: opacity 0.3s ease;
+  
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  
+    // Przycisk
+    &__button {
+      align-self: flex-start;
+    }
+  }
+  
+  // Klasa visually-hidden dla dostępności (WCAG)
+  .visually-hidden {
+    position: absolute !important;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    word-wrap: normal !important;
+  }

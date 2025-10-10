@@ -1,0 +1,102 @@
+// ------------------------------------------------------------
+// science-proven.scss
+// Sekcja: Efekty potwierdzone naukowo
+// ------------------------------------------------------------
+
+.science-proven {
+  
+    // Outer wrapper - tylko wyśrodkowanie
+    &__outer-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+  
+    // Inner wrapper - max-width + paddingi sekcji
+    &__inner-wrapper {
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 50px 40px;
+      }
+    }
+  
+    // Content box - tło + własne paddingi
+    &__content-box {
+      background-color: $blue;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 32px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+  
+      @include respond-to(tablet) {
+        padding: 80px 150px;
+        align-items: center;
+        text-align: center;
+      }
+  
+      @include respond-to(desktop-lg) {
+        padding: 80px 200px;
+      }
+    }
+  
+    // Header - zawiera tag i tytuł
+    &__header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+  
+      @include respond-to(tablet) {
+        align-items: center;
+        margin-bottom: 32px;
+      }
+    }
+  
+    // Tag
+    &__tag {
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $white;
+      background-color: rgba($white, 0.1);
+      border: 1px solid $white;
+      border-radius: 100px;
+      padding: 4px 16px;
+      display: inline-block;
+    }
+  
+    // Tytuł
+    &__heading {
+      font-size: $font-size-h2;
+      color: $white;
+      margin: 0;
+    }
+  
+    // Opis
+    &__description {
+      font-size: $font-size-regular;
+      color: $white-text;
+      margin: 0 0 32px 0;
+      max-width: 900px;
+  
+      @include respond-to(desktop) {
+        margin-bottom: 64px;
+      }
+    }
+  
+    // Przycisk
+    &__button {
+      align-self: flex-start;
+  
+      @include respond-to(tablet) {
+        align-self: center;
+      }
+    }
+  }

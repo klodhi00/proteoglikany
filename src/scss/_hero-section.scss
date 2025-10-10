@@ -1,0 +1,159 @@
+// ------------------------------------------------------------
+// hero-section.scss
+// Sekcja hero z tagiem, tytułem, opisem, przyciskami i obrazkiem produktu
+// ------------------------------------------------------------
+
+.hero-section {
+  width: 100%;
+  
+  // Zewnętrzny wrapper - tylko wyśrodkowanie
+  &__outer-wrapper {
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  // Wewnętrzny wrapper - max-width i paddingi
+  &__inner-wrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 24px;
+    
+    @include respond-to(tablet) {
+      padding: 0 40px;
+    }
+  }
+  
+  // Box z tłem
+  &__content-box {
+    width: 100%;
+    border-radius: 24px;
+    padding: 24px 24px 300px 24px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    
+    @include respond-to(desktop) {
+      padding: 80px 80px 350px 80px;
+      min-height: 640px;
+    }
+    
+    @include respond-to(desktop-lg) {
+      padding: 80px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  
+  // Lewa strona - treść
+  &__text-content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+    
+    @include respond-to(desktop-lg) {
+      max-width: 650px;
+    }
+  }
+  
+  // Tag
+  &__tag {
+    display: inline-block;
+    font-size: $font-size-tiny;
+    color: $white;
+    border: 1px solid $white;
+    background: rgba($white, 0.1);
+    font-weight: 500;
+    padding: 4px 16px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+  
+  // Tytuł
+  &__title {
+    font-size: $font-size-h1;
+    line-height: $line-height-tight;
+    color: $white;
+    margin-bottom: 16px;
+  }
+  
+  // Opis
+  &__description {
+    font-size: $font-size-regular;
+    line-height: $line-height-base;
+    color: $white-text;
+    margin-bottom: 32px;
+    
+    @include respond-to(desktop) {
+      margin-bottom: 64px;
+    }
+  }
+  
+  // Przyciski
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    @include respond-to(mobile) {
+      flex-direction: row;
+      gap: 16px;
+    }
+  }
+  
+  &__button {
+    width: 100%;
+    
+    @include respond-to(mobile) {
+      width: auto;
+    }
+  }
+  
+  // Prawa strona - obrazek
+  &__image-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 400px;
+    z-index: 1;
+    
+    @include respond-to(desktop) {
+      max-width: 600px;
+    }
+    
+    @include respond-to(desktop-lg) {
+      right: -20px;
+      left: auto;
+      transform: none;
+      max-width: 1000px;
+    }
+  }
+  
+  &__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    
+    &--mobile {
+      display: block;
+      
+      @include respond-to(desktop-lg) {
+        display: none;
+      }
+    }
+    
+    &--desktop {
+      display: none;
+      
+      @include respond-to(desktop-lg) {
+        display: block;
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+// ------------------------------------------------------------
+// supplement-banner.scss
+// Sekcja informacyjna z tłem, tagiem, tytułem, opisem i przyciskiem
+// ------------------------------------------------------------
+
+.supplement-banner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .supplement-banner__outer-wrapper {
+    position: relative;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  
+    @media (max-width: 1023px) {
+      background-attachment: scroll;
+    }
+  }
+  
+  // Napis w tle - scrolluje się razem ze stroną
+  .supplement-banner__text-background {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1600px;
+    height: auto;
+    z-index: 1;
+    display: none;
+    pointer-events: none;
+
+    @include respond-to(desktop) {
+        display: block;
+      }
+  }
+  
+  .supplement-banner__text-background-image {
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    height: auto;
+    max-width: 90%;
+    opacity: 0.8;
+  }
+  
+  .supplement-banner__inner-wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 64px 24px;
+  
+    @include respond-to(tablet) {
+      padding: 160px 80px;
+    }
+  
+    @include respond-to(desktop) {
+      padding: 160px 80px;
+    }
+  }
+  
+  .supplement-banner__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+  
+    @include respond-to(desktop) {
+      align-items: center;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  }
+  
+  .supplement-banner__tag {
+    display: inline-block;
+    font-size: $font-size-tiny;
+    font-weight: 500;
+    color: $blue;
+    background-color: rgba($blue, 0.1);
+    border: 1px solid $blue;
+    border-radius: 100px;
+    padding: 4px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  
+  .supplement-banner__title {
+    margin-bottom: 64px;
+  }
+  
+  .supplement-banner__text {
+    font-size: $font-size-regular;
+    color: $black-text;
+    margin-bottom: 32px;
+  }
+  
+  .supplement-banner__button {
+    // Przycisk używa stylów globalnych z .button.button--primary
+  }

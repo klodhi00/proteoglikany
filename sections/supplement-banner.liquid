@@ -1,0 +1,129 @@
+{% comment %}
+  Sekcja: Supplement Banner z tłem
+  Opis: Sekcja informacyjna z tłem, tagiem, tytułem, opisem i przyciskiem CTA
+  Autor: Theme Proteoglikany
+{% endcomment %}
+
+<section class="supplement-banner">
+  {%- if section.settings.background_image -%}
+    <style>
+      .supplement-banner--{{ section.id }} {
+        background-image: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+      }
+    </style>
+  {%- endif -%}
+
+  <div class="supplement-banner__outer-wrapper supplement-banner--{{ section.id }}">
+
+    {%- if section.settings.background_text_image -%}
+      <div class="supplement-banner__text-background">
+        <img 
+          src="{{ section.settings.background_text_image | image_url: width: 1920 }}" 
+          alt="" 
+          loading="lazy"
+          class="supplement-banner__text-background-image"
+        >
+      </div>
+    {%- endif -%}
+
+    <div class="supplement-banner__inner-wrapper">
+      <div class="supplement-banner__content">
+
+        {%- if section.settings.tag != blank -%}
+          <span class="supplement-banner__tag">
+            {{ section.settings.tag }}
+          </span>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="supplement-banner__title">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <p class="supplement-banner__text">
+            {{ section.settings.description }}
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.button_text != blank and section.settings.button_link != blank -%}
+          <a 
+            href="{{ section.settings.button_link }}" 
+            class="supplement-banner__button button button--primary"
+            aria-label="{{ section.settings.button_text }}"
+          >
+            {{ section.settings.button_text }}
+          </a>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Baner suplementacyjny",
+  "tag": "section",
+  "class": "section-supplement-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Tła sekcji"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Tło sekcji"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_text_image",
+      "label": "Napis w tle (widoczny tylko na desktop)"
+    },
+    {
+      "type": "header",
+      "content": "Treść sekcji"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "ŚWIATOWY BESTSELLER"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Suplementacja diety opracowana przez naukowców"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Opis",
+      "default": "Efekt ponad 30 lat badań i przedmiot ponad 100 publikacji naukowych. Nourkrin® to suplement diety wspierający wzrost włosów, oparty o działanie proteoglikanów. Zawiera kompleks Marilex®, który jest otrzymywany na drodze opatentowanego procesu enzymatycznego frakcjonowania ekstraktu rybnego."
+    },
+    {
+      "type": "header",
+      "content": "Przycisk CTA"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Tekst przycisku",
+      "default": "Zobacz rekomendacje"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link przycisku"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Baner suplementacyjny"
+    }
+  ]
+}
+{% endschema %}

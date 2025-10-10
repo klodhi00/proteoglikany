@@ -1,0 +1,92 @@
+{% comment %}
+  Sekcja: Efekty potwierdzone naukowo
+  Sekcja z tłem zawierająca tag, tytuł, opis i przycisk
+  
+  Struktura:
+  - Outer wrapper (wyśrodkowanie)
+  - Inner wrapper (max-width + paddingi sekcji)
+  - Content box (tło + własne paddingi)
+{% endcomment %}
+
+<section class="science-proven">
+  <div class="science-proven__outer-wrapper">
+    <div class="science-proven__inner-wrapper">
+      <div 
+        class="science-proven__content-box"
+        {% if section.settings.background_image %}
+          style="background-image: url('{{ section.settings.background_image | image_url: width: 1600 }}');"
+        {% endif %}
+      >
+        <div class="science-proven__header">
+          {% if section.settings.tag_text != blank %}
+            <span class="science-proven__tag">{{ section.settings.tag_text }}</span>
+          {% endif %}
+          
+          {% if section.settings.heading != blank %}
+            <h2 class="science-proven__heading">{{ section.settings.heading }}</h2>
+          {% endif %}
+        </div>
+
+        {% if section.settings.description != blank %}
+          <div class="science-proven__description">{{ section.settings.description }}</div>
+        {% endif %}
+
+        {% if section.settings.button_text != blank %}
+          <a 
+            href="{{ section.settings.button_link }}" 
+            class="button button--outline science-proven__button"
+          >
+            {{ section.settings.button_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Efekty naukowe",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Obraz tła"
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tekst tagu",
+      "default": "EFEKTY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Tytuł",
+      "default": "Efekty potwierdzone naukowo"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Opis",
+      "default": "<p>Nourkrin® z Marilex® wspiera naturalny cykl wzrostu włosów, dostarczając organizmowi wyselekcjonowane proteoglikany kluczowe dla optymalizacji fazy wzrostu włosa. Marilex® naukowo potwierdził znaczący wzrost gęstości włosów już po 6 miesiącach regularnego stosowania kuracji.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Tekst przycisku",
+      "default": "Sprawdź efekty"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link przycisku"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Efekty naukowe"
+    }
+  ]
+}
+{% endschema %}

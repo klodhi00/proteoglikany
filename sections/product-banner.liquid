@@ -1,0 +1,124 @@
+{% comment %}
+  Sekcja Product Hero
+  Sekcja z boxem zawierającym tag, tytuł, tekst, przycisk i obrazek produktu
+  Desktop: układ dwukolumnowy (content po lewej, obrazek po prawej)
+  Mobile: układ pionowy z obrazkiem na dole
+{% endcomment %}
+
+<div class="product-banner">
+  <div class="product-banner__outer-wrapper">
+    <div class="product-banner__inner-wrapper">
+      <div 
+        class="product-banner__box"
+        style="
+          {% if section.settings.background_color %}
+            background-color: {{ section.settings.background_color }};
+          {% endif %}
+          {% if section.settings.background_image %}
+            background-image: url('{{ section.settings.background_image | img_url: '2000x' }}');
+          {% endif %}
+        "
+      >
+        <div class="product-banner__content">
+          <div class="product-banner__tag-title">
+            {% if section.settings.tag != blank %}
+              <span class="product-banner__tag">{{ section.settings.tag }}</span>
+            {% endif %}
+            {% if section.settings.title != blank %}
+              <h2 class="product-banner__title">{{ section.settings.title }}</h2>
+            {% endif %}
+          </div>
+          {% if section.settings.text != blank %}
+            <div class="product-banner__text">{{ section.settings.text }}</div>
+          {% endif %}
+          {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+            <a href="{{ section.settings.button_link }}" class="button button--outline" aria-label="{{ section.settings.button_text }}">
+              {{ section.settings.button_text }}
+            </a>
+          {% endif %}
+        </div>
+        {% if section.settings.product_image %}
+          <div class="product-banner__image">
+            <img 
+              src="{{ section.settings.product_image | img_url: '800x' }}"
+              alt="{{ section.settings.product_image.alt | default: section.settings.title | escape }}"
+              loading="lazy"
+              width="{{ section.settings.product_image.width }}"
+              height="{{ section.settings.product_image.height }}"
+            >
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Baner produktowy",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Treść sekcji"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "ZADBAJ O WŁOSY"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Odzyskaj gęstość i zdrowie włosów"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Tekst",
+      "default": "<p>Dzięki unikalnemu kompleksowi Marilex® widoczne efekty już po kilku miesiącach stosowania. Bezpieczna terapia wsparta naukowymi badaniami zapewnia naturalną regenerację włosów.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Tekst przycisku",
+      "default": "Dowiedz się więcej"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link przycisku"
+    },
+    {
+      "type": "header",
+      "content": "Tło sekcji"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Kolor tła",
+      "default": "#16B4EF"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Obrazek tła (opcjonalnie)"
+    },
+    {
+      "type": "header",
+      "content": "Obrazek produktu"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Obrazek produktu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Baner produktowy"
+    }
+  ]
+}
+{% endschema %}
