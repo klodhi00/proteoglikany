@@ -1,0 +1,74 @@
+{% comment %}
+  Sekcja: Jak stosować produkt
+  Wyświetla informacje o sposobie użycia produktu z tagiem, tytułem, opisem i obrazem
+{% endcomment %}
+
+<section class="how-to-use">
+  <div class="how-to-use__outer-wrapper">
+    <div class="how-to-use__inner-wrapper">
+      
+      <div class="how-to-use__content">
+        {% if section.settings.tag != blank %}
+          <span class="how-to-use__tag">{{ section.settings.tag }}</span>
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="how-to-use__title">{{ section.settings.title }}</h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="how-to-use__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.image != blank %}
+        <div class="how-to-use__image">
+          {{
+            section.settings.image
+            | image_url: width: 1000
+            | image_tag: loading: 'lazy', alt: section.settings.image.alt | default: section.settings.title
+          }}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Jak stosować produkt",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "STOSOWANIE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Jak stosować Nourkrin® Woman?"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Opis",
+      "default": "<p>Aby osiągnąć pełne efekty, zaleca się przyjmowanie 2 tabletek dziennie przez minimum 6 miesięcy.</p><p>Dzięcięki kuracji po pewnym czasie od rokuz Ponieważ to czas, który odpowiedzikologicznemu cyklowi wzrostu włosa i powrała na jego regenerację od zakad. Systematyczność i cierpliwość to klucz do sukcesu.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Obraz produktu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Jak stosować produkt"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,85 @@
+{% comment %}
+  Sekcja: Baner rekomendacji
+  Wyświetla box z tagiem, tytułem i opisem na kolorowym tle z opcjonalnym obrazkiem
+{% endcomment %}
+
+<section class="recommendation-banner">
+  <div class="recommendation-banner__outer-wrapper">
+    <div class="recommendation-banner__inner-wrapper">
+      <div 
+        class="recommendation-banner__content-box"
+        style="
+          {% if section.settings.box_background_color != blank %}
+            background-color: {{ section.settings.box_background_color }};
+          {% endif %}
+          {% if section.settings.background_image != blank %}
+            background-image: url('{{ section.settings.background_image | image_url: width: 1600 }}');
+          {% endif %}
+        "
+      >
+        <div class="recommendation-banner__text-content">
+          {% if section.settings.tag_text != blank %}
+            <span class="recommendation-banner__tag">
+              {{ section.settings.tag_text }}
+            </span>
+          {% endif %}
+
+          {% if section.settings.title != blank %}
+            <h2 class="recommendation-banner__title">
+              {{ section.settings.title }}
+            </h2>
+          {% endif %}
+
+          {% if section.settings.description != blank %}
+            <div class="recommendation-banner__description">
+              {{ section.settings.description }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Baner rekomendacji",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tekst tagu",
+      "default": "WIZAZ.PL"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Produkt polecany przez 92% użytkowniczek na Wizaż.pl. Odkryj skuteczność Nourkrin®!"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Opis",
+      "default": "<p>Dołącz do grona zadowolonych użytkowniczek oraz użytkowników i przekonaj się, jak Nourkrin może poprawić kondycję Twoich włosów. Zaufaj rekomendacjom i wybierz produkt, który zdobył najwyższe oceny!</p>"
+    },
+    {
+      "type": "color",
+      "id": "box_background_color",
+      "label": "Kolor tła boxa",
+      "default": "#16B4EF"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Obrazek tła",
+      "info": "Opcjonalny obrazek tła dla boxa"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Baner rekomendacji"
+    }
+  ]
+}
+{% endschema %}

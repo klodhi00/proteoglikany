@@ -1,0 +1,183 @@
+{% comment %}
+  Sekcja: Skład produktu
+  Wyświetla tabelę ze składem produktu wraz z nagłówkiem i opisem
+  Zgodność: Shopify Online Store 2.0, WCAG 2.1 AA
+{% endcomment %}
+
+<section class="product-composition">
+  <div class="product-composition__outer-wrapper">
+    <div class="product-composition__inner-wrapper">
+      
+      {% if section.settings.tag != blank %}
+        <div class="product-composition__tag">
+          {{ section.settings.tag }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="product-composition__title">
+          {{ section.settings.title }}
+        </h2>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <div class="product-composition__table-wrapper">
+          <table class="product-composition__table">
+            <thead>
+              <tr>
+                <th scope="col" class="product-composition__table-header">
+                  {{ section.settings.header_ingredient }}
+                </th>
+                <th scope="col" class="product-composition__table-header">
+                  {{ section.settings.header_content }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for block in section.blocks %}
+                <tr class="product-composition__table-row" {{ block.shopify_attributes }}>
+                  <td class="product-composition__table-cell product-composition__table-cell--ingredient">
+                    {{ block.settings.ingredient }}
+                  </td>
+                  <td class="product-composition__table-cell product-composition__table-cell--content">
+                    {{ block.settings.content }}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="product-composition__description">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Skład produktu",
+  "tag": "section",
+  "class": "section-product-composition",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "SKŁADNIKI AKTYWNE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Skład produktu"
+    },
+    {
+      "type": "text",
+      "id": "header_ingredient",
+      "label": "Nagłówek kolumny - Składniki",
+      "default": "Składniki"
+    },
+    {
+      "type": "text",
+      "id": "header_content",
+      "label": "Nagłówek kolumny - Zawartość",
+      "default": "Zawartość"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Opis dodatkowy",
+      "default": "Marilex® (kompleks proteoglikanów frakcjonowany z ekstraktu rybieso), ditlenek krzemu, D-biotyna, substancja wypełniająca (celuloza mikrokrystaliczna), substancje glazurujące (alkohol poliwinylowy, glikol polietylenowy, talk), stabilizatory (sole magnezowe kwasów tłuszczowych, hydroksypropylometyloceluloza), barwniki (węglan wapnia, tlenek żelaza)."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient_row",
+      "name": "Wiersz składnika",
+      "settings": [
+        {
+          "type": "text",
+          "id": "ingredient",
+          "label": "Nazwa składnika",
+          "default": "TMG Trimetylogolicyna – (Betaina bezwodna)"
+        },
+        {
+          "type": "text",
+          "id": "content",
+          "label": "Zawartość",
+          "default": "200 mg"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Skład produktu",
+      "blocks": [
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "TMG Trimetylogolicyna – (Betaina bezwodna)",
+            "content": "200 mg"
+          }
+        },
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "Cholina – (Dwuwinian choliny)",
+            "content": "1,4 mg (100%)*"
+          }
+        },
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "Witamina B6 (Chlorowodorek pirydoksyny)",
+            "content": "200 mg"
+          }
+        },
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "Kwas Pantotenowy (D-pantotenian wapnia)",
+            "content": "20 mg (1428,6%)*"
+          }
+        },
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "Cholina – (Dwuwinian choliny)",
+            "content": "20 mg (1428,6%)*"
+          }
+        },
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "Witamina B6 (Chlorowodorek pirydoksyny)",
+            "content": "200 mg"
+          }
+        },
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "Kwas Pantotenowy (D-pantotenian wapnia)",
+            "content": "1,4 mg (100%)*"
+          }
+        },
+        {
+          "type": "ingredient_row",
+          "settings": {
+            "ingredient": "TMG Trimetylogolicyna – (Betaina bezwodna)",
+            "content": "100 mg"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

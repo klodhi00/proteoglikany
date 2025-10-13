@@ -1,0 +1,85 @@
+{% comment %}
+  Sekcja: Baner efekty naukowe
+  Wyświetla box z tagiem, tytułem i opisem na kolorowym tle z opcjonalnym obrazkiem
+{% endcomment %}
+
+<section class="scientific-effects-banner">
+  <div class="scientific-effects-banner__outer-wrapper">
+    <div class="scientific-effects-banner__inner-wrapper">
+      <div 
+        class="scientific-effects-banner__content-box"
+        style="
+          {% if section.settings.box_background_color != blank %}
+            background-color: {{ section.settings.box_background_color }};
+          {% endif %}
+          {% if section.settings.background_image != blank %}
+            background-image: url('{{ section.settings.background_image | image_url: width: 1600 }}');
+          {% endif %}
+        "
+      >
+        <div class="scientific-effects-banner__text-content">
+          {% if section.settings.tag_text != blank %}
+            <span class="scientific-effects-banner__tag">
+              {{ section.settings.tag_text }}
+            </span>
+          {% endif %}
+
+          {% if section.settings.title != blank %}
+            <h2 class="scientific-effects-banner__title">
+              {{ section.settings.title }}
+            </h2>
+          {% endif %}
+
+          {% if section.settings.description != blank %}
+            <div class="scientific-effects-banner__description">
+              {{ section.settings.description }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Baner efekty naukowe",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tekst tagu",
+      "default": "EFEKTY"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Efekty potwierdzone naukowo"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Opis",
+      "default": "<p>Nourkrin® z Marilex® wspiera naturalny cykl wzrostu włosów, dostarczając organizmowi wyselekcjonowane proteoglikany kluczowe dla optymalizacji fazy wzrostu włosa. Badania naukowe potwierdziły znaczący wzrost gęstości włosów już po 6 miesiącach regularnego stosowania kuracji.</p>"
+    },
+    {
+      "type": "color",
+      "id": "box_background_color",
+      "label": "Kolor tła boxa",
+      "default": "#16B4EF"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Obrazek tła",
+      "info": "Opcjonalny obrazek tła dla boxa"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Baner efekty naukowe"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,61 @@
+// ------------------------------------------------------------
+// Sekcja: Składniki aktywne
+// ------------------------------------------------------------
+
+.active-ingredients {
+    // Zewnętrzny wrapper - wyłącznie wyśrodkowanie
+    &__outer-wrapper {
+      width: 100%;
+    }
+  
+    // Wewnętrzny wrapper - max-width 1600px i paddingi
+    &__inner-wrapper {
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 64px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 100px 80px;
+      }
+    }
+  
+    // Kontener treści - max-width 1000px
+    &__content {
+      max-width: 1000px;
+      width: 100%;
+    }
+  
+    // Tag
+    &__tag {
+      display: inline-block;
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $blue;
+      background-color: rgba($blue, 0.1);
+      border: 1px solid $blue;
+      border-radius: 100px;
+      padding: 4px 16px;
+      margin-bottom: 16px;
+    }
+  
+    // Tytuł
+    &__title {
+      margin-bottom: 32px;
+    }
+  
+    // Tekst
+    &__text {
+      font-size: $font-size-regular;
+      color: $black-text;
+      line-height: $line-height-base;
+  
+      p {
+        margin-bottom: 16px;
+  
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }

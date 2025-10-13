@@ -1,0 +1,69 @@
+// ------------------------------------------------------------
+// Video Section - Zobacz jak działa produkt
+// Sekcja z tagiem, tytułem i wideo z autoplay przy scrollu
+// ------------------------------------------------------------
+
+.video-section {
+    width: 100%;
+  
+    // Outer wrapper - tylko wyśrodkowanie
+    &__outer-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+  
+    // Inner wrapper - max-width, wyśrodkowanie i paddingi
+    &__inner-wrapper {
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 50px 80px;
+      }
+    }
+  
+    // Tag
+    &__tag {
+      display: inline-block;
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $blue;
+      background-color: rgba($blue, 0.1);
+      border: 1px solid $blue;
+      border-radius: 100px;
+      padding: 4px 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  
+    // Tytuł
+    &__title {
+      margin-top: 16px;
+      font-size: $font-size-h2;
+      font-weight: 400;
+      line-height: $line-height-tight;
+      color: $black;
+    }
+  
+    // Video container
+    &__video-container {
+      margin-top: 32px;
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+  
+      @include respond-to(tablet) {
+        margin-top: 64px;
+      }
+    }
+  
+    // Video element
+    &__video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+    }
+  }

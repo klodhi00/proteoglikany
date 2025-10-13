@@ -27,23 +27,20 @@
   // Box z tłem
   &__content-box {
     width: 100%;
-    border-radius: 24px;
-    padding: 24px 24px 300px 24px;
+    border-radius: 16px;
+    padding: 32px;
     position: relative;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
     
-    @include respond-to(desktop) {
-      padding: 80px 80px 350px 80px;
-      min-height: 640px;
-    }
-    
     @include respond-to(desktop-lg) {
       padding: 80px;
+      min-height: auto;
       display: flex;
       align-items: center;
+      height: 640px;
     }
   }
   
@@ -53,6 +50,7 @@
     flex-direction: column;
     position: relative;
     z-index: 2;
+    margin-bottom: 96px;
     
     @include respond-to(desktop-lg) {
       max-width: 650px;
@@ -78,7 +76,7 @@
     font-size: $font-size-h1;
     line-height: $line-height-tight;
     color: $white;
-    margin-bottom: 16px;
+    margin-bottom: 32px;
   }
   
   // Opis
@@ -97,11 +95,10 @@
   &__buttons {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
     
     @include respond-to(mobile) {
       flex-direction: row;
-      gap: 16px;
     }
   }
   
@@ -115,21 +112,16 @@
   
   // Prawa strona - obrazek
   &__image-wrapper {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
     width: 100%;
-    max-width: 400px;
+    display: flex;
+    justify-content: center;
     z-index: 1;
     
-    @include respond-to(desktop) {
-      max-width: 600px;
-    }
-    
     @include respond-to(desktop-lg) {
+      position: absolute;
       right: -20px;
-      left: auto;
+      bottom: 0;
       transform: none;
       max-width: 1000px;
     }
@@ -142,6 +134,7 @@
     
     &--mobile {
       display: block;
+      max-width: 600px;
       
       @include respond-to(desktop-lg) {
         display: none;

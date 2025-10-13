@@ -1,0 +1,60 @@
+{% comment %}
+  Sekcja: Składniki aktywne i ich działanie
+  
+  Wyświetla tag, tytuł oraz treść opisową w wyśrodkowanym kontenerze.
+  Max-width treści: 1000px
+  Max-width sekcji: 1600px
+{% endcomment %}
+
+<section class="active-ingredients">
+  <div class="active-ingredients__outer-wrapper">
+    <div class="active-ingredients__inner-wrapper">
+      <div class="active-ingredients__content">
+        {% if section.settings.tag != blank %}
+          <span class="active-ingredients__tag">{{ section.settings.tag }}</span>
+        {% endif %}
+        
+        {% if section.settings.title != blank %}
+          <h2 class="active-ingredients__title">{{ section.settings.title }}</h2>
+        {% endif %}
+        
+        {% if section.settings.text != blank %}
+          <div class="active-ingredients__text">
+            {{ section.settings.text }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Składniki aktywne",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "SKŁADNIKI AKTYWNE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Składniki aktywne i ich działanie"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Treść",
+      "default": "<p>Marilex®, kluczowy składnik kuracji Nouritrin®, to opatentowany kompleks bioaktywnych proteoglikanów pozyskiwany w procesie enzymatycznego frakcjonowania ostrego.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Składniki aktywne"
+    }
+  ]
+}
+{% endschema %}

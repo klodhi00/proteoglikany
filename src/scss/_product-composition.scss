@@ -1,0 +1,152 @@
+// ------------------------------------------------------------
+// product-composition.scss
+// Sekcja wyświetlająca skład produktu w formie tabeli
+// ------------------------------------------------------------
+
+.product-composition {
+    // Outer wrapper - tylko wyśrodkowanie
+    &__outer-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+  
+    // Inner wrapper - max-width i paddingi
+    &__inner-wrapper {
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 64px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 50px 80px;
+      }
+    }
+  
+    // Tag
+    &__tag {
+      display: inline-block;
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $blue;
+      background-color: rgba(22, 180, 239, 0.1);
+      border: 1px solid $blue;
+      border-radius: 100px;
+      padding: 4px 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  
+    // Tytuł
+    &__title {
+      margin-top: 16px;
+      font-size: $font-size-h2;
+      font-weight: 400;
+      line-height: $line-height-tight;
+      color: $black;
+    }
+  
+    // Wrapper dla tabeli
+    &__table-wrapper {
+      margin-top: 64px;
+      width: 100%;
+      max-width: 1000px;
+      overflow-x: auto;
+    }
+  
+    // Tabela
+    &__table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid $stroke;
+      border-radius: 16px;
+      overflow: hidden;
+      background-color: $white;
+  
+      // Nagłówki tabeli
+      thead {
+        background-color: transparent;
+      }
+  
+      &-header {
+        padding: 12px;
+        text-align: left;
+        font-size: $font-size-small;
+        font-weight: 500;
+        color: $black;
+        border-bottom: 1px solid $stroke;
+        line-height: $line-height-base;
+  
+        @include respond-to(tablet) {
+          padding: 20px 24px;
+        }
+  
+        &:first-child {
+          width: 60%;
+          border-right: 1px solid $stroke;
+  
+          @include respond-to(desktop) {
+            width: 75%;
+          }
+        }
+  
+        &:last-child {
+          width: 40%;
+  
+          @include respond-to(desktop) {
+            width: 25%;
+          }
+        }
+      }
+  
+      // Wiersze tabeli
+      &-row {
+        &:not(:last-child) {
+          td {
+            border-bottom: 1px solid $stroke;
+          }
+        }
+      }
+  
+      // Komórki tabeli
+      &-cell {
+        padding: 12px;
+        font-size: $font-size-regular;
+        font-weight: 400;
+        color: $black-text;
+        line-height: $line-height-base;
+        vertical-align: top;
+  
+        @include respond-to(tablet) {
+          padding: 20px 24px;
+        }
+  
+        &--ingredient {
+          width: 60%;
+          border-right: 1px solid $stroke;
+  
+          @include respond-to(desktop) {
+            width: 75%;
+          }
+        }
+  
+        &--content {
+          width: 40%;
+  
+          @include respond-to(desktop) {
+            width: 25%;
+          }
+        }
+      }
+    }
+  
+    // Opis dodatkowy
+    &__description {
+      margin-top: 64px;
+      max-width: 1000px;
+      font-size: $font-size-regular;
+      font-weight: 300;
+      color: $black-text;
+      line-height: $line-height-base;
+    }
+  }

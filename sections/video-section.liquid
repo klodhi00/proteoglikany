@@ -1,0 +1,121 @@
+{% comment %}
+  Sekcja: Video Section - Zobacz jak działa produkt
+  Wyświetla tag, tytuł i wideo z autoplay przy scrollu
+  Obsługuje wideo z biblioteki Shopify z kontrolkami playera
+  
+  @schema - pełna konfiguracja w Theme Editor
+  @accessibility - aria-labels, semantic HTML, keyboard navigation
+{% endcomment %}
+
+<section class="video-section">
+  <div class="video-section__outer-wrapper">
+    <div class="video-section__inner-wrapper container">
+      
+      {% if section.settings.tag_text != blank %}
+        <div class="video-section__tag">
+          {{ section.settings.tag_text }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="video-section__title">
+          {{ section.settings.title }}
+        </h2>
+      {% endif %}
+
+      {% comment %} Wideo z biblioteki Shopify {% endcomment %}
+      {% if section.settings.video != blank %}
+        <div class="video-section__video-container">
+          <video 
+            class="video-section__video"
+            muted
+            controls
+            playsinline
+            loop
+            preload="metadata"
+            aria-label="{{ section.settings.video_aria_label | default: 'Wideo prezentujące produkt' }}"
+          >
+            {% for source in section.settings.video.sources %}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {% endfor %}
+            <p>Twoja przeglądarka nie obsługuje odtwarzania wideo.</p>
+          </video>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+<script>
+  {% comment %} Intersection Observer dla autoplay wideo {% endcomment %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const videoContainer = document.querySelector('.video-section__video-container');
+    const video = document.querySelector('.video-section__video');
+
+    if (!video || !videoContainer) return;
+
+    {% comment %} Intersection Observer - autoplay gdy wideo jest widoczne {% endcomment %}
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          {% comment %} Wideo widoczne (co najmniej 10%) - autoplay {% endcomment %}
+          video.play().catch(function(error) {
+            console.log('Autoplay prevented:', error);
+          });
+        } else {
+          {% comment %} Wideo poza ekranem - pause {% endcomment %}
+          video.pause();
+        }
+      });
+    }, observerOptions);
+
+    observer.observe(videoContainer);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Sekcja wideo",
+  "tag": "section",
+  "class": "section-video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tekst tagu",
+      "default": "JAK DZIAŁA?"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł sekcji",
+      "default": "Zobacz jak działa Nourkrin®"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Wideo",
+      "info": "Wybierz wideo z biblioteki plików lub wgraj nowe. Zalecany format: MP4, WebM."
+    },
+    {
+      "type": "text",
+      "id": "video_aria_label",
+      "label": "Opis wideo dla czytników ekranu",
+      "default": "Wideo prezentujące działanie produktu Nourkrin",
+      "info": "Ważne dla dostępności (WCAG)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sekcja wideo"
+    }
+  ]
+}
+{% endschema %}

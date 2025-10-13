@@ -1,0 +1,106 @@
+// ------------------------------------------------------------
+// how-to-use.scss
+// Sekcja: Jak stosować produkt
+// Wyświetla tag, tytuł, opis i obraz produktu w układzie 50/50 na desktop
+// ------------------------------------------------------------
+
+.how-to-use {
+  
+    // Zewnętrzny wrapper - tylko wyśrodkowanie
+    &__outer-wrapper {
+      margin: 0 auto;
+      width: 100%;
+    }
+  
+    // Wewnętrzny wrapper - max-width i paddingi
+    &__inner-wrapper {
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 64px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+  
+      @include respond-to(tablet) {
+        padding: 100px 80px;
+      }
+  
+      @include respond-to(desktop) {
+        flex-direction: row;
+        gap: 100px;
+        align-items: stretch;
+      }
+    }
+  
+    // Lewa strona - content
+    &__content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+  
+      @include respond-to(desktop) {
+        width: 50%;
+      }
+    }
+  
+    // Tag
+    &__tag {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $blue;
+      background-color: rgba($blue, 0.1);
+      border: 1px solid $blue;
+      border-radius: 100px;
+      padding: 4px 16px;
+      margin-bottom: 16px;
+    }
+  
+    // Tytuł
+    &__title {
+      font-size: $font-size-h2;
+      color: $black;
+      margin-bottom: 32px;
+  
+      @include respond-to(desktop) {
+        margin-bottom: 64px;
+      }
+    }
+  
+    // Opis
+    &__description {
+      font-size: $font-size-regular;
+      color: $black-text;
+      line-height: $line-height-base;
+  
+      p {
+        margin-bottom: 16px;
+  
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  
+    // Prawa strona - obraz
+    &__image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 24px;
+  
+      @include respond-to(desktop) {
+        width: 50%;
+        aspect-ratio: auto;
+      }
+  
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+    }
+  }
