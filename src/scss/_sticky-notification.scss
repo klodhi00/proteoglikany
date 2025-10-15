@@ -1,0 +1,276 @@
+/* 
+ * Pływający przycisk zakupu
+ * Przyklejony przycisk, który śledzi użytkownika podczas przewijania
+ */
+
+ .floating-buy-button {
+    position: fixed;
+    bottom: -100px; // Początek poza ekranem
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: $white;
+    box-shadow: 0 -4px 10px rgba($black, 0.1);
+    z-index: 100;
+    transition: all 0.3s ease-in-out;
+    padding: 12px 0;
+    border-top: 1px solid $stroke;
+    font-weight: 400;
+    
+    &--visible {
+      bottom: 0;
+    }
+    
+    &__wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      
+      @include respond-to(tablet) {
+        padding: 0 24px;
+      }
+    }
+    
+    &__product {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0; // Zapobiega przepełnianiu elementów flex
+    }
+    
+    &__image {
+      width: 50px;
+      height: 50px;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+      margin-right: 12px;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      
+      @include respond-to(desktop) {
+        width: 60px;
+        height: 60px;
+      }
+    }
+    
+    &__info {
+      min-width: 0; // Umożliwia obcięcie tekstu
+      margin-right: 12px;
+    }
+    
+    &__title {
+      font-size: $font-size-small;
+      margin: 0;
+      color: $black;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+      
+      @include respond-to(tablet) {
+        font-size: $font-size-regular;
+        max-width: 300px;
+      }
+      
+      @include respond-to(desktop) {
+        max-width: 400px;
+      }
+    }
+    
+    &__price {
+      font-size: $font-size-tiny;
+      color: $black-text;
+      display: block;
+      margin-top: 4px;
+      
+      @include respond-to(tablet) {
+        font-size: $font-size-small;
+      }
+    }
+    
+    &__price-sale {
+      color: $blue;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    
+    &__price-compare {
+      text-decoration: line-through;
+      color: $light-grey;
+    }
+    
+    &__action {
+      flex-shrink: 0;
+    }
+    
+    &__button {
+      background-color: var(--button-bg-color, $blue);
+      color: var(--button-text-color, $white);
+      font-size: $font-size-small;
+      padding: 12px 32px;
+      border-radius: 100px; // Zmieniono na zaokrąglony
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      position: relative;
+      
+      &:hover, &:focus-visible {
+        border: 1px solid $blue;
+        background-color: $white;
+        color: $blue;
+      }
+      
+      &:disabled {
+        background-color: $light-grey;
+        cursor: not-allowed;
+      }
+      
+      @include respond-to(tablet) {
+        font-size: $font-size-regular;
+        padding: 12px 32px;
+      }
+      
+      // Stany przycisku
+      &.is-loading {
+        .button-text {
+          opacity: 0;
+          visibility: hidden;
+        }
+        
+        .button-loading {
+          opacity: 1;
+          visibility: visible;
+        }
+        
+        .button-success {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+      
+      &.success {
+        background-color: darken($blue, 5%);
+        
+        .button-text {
+          opacity: 0;
+          visibility: hidden;
+        }
+        
+        .button-loading {
+          opacity: 0;
+          visibility: hidden;
+        }
+        
+        .button-success {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+      
+      .button-text {
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+      
+      .button-loading,
+      .button-success {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+      
+      // Ikona checkmark dla stanu sukcesu
+      .checkmark {
+        width: 24px;
+        height: 24px;
+        color: $white;
+      }
+      
+      // Animacja ładowania
+      .spinner {
+        width: 20px;
+        height: 20px;
+        animation: rotate 2s linear infinite;
+        
+        .path {
+          stroke: $blue;
+          stroke-linecap: round;
+          animation: dash 1.5s ease-in-out infinite;
+        }
+      }
+    }
+    
+    // Komunikat o błędzie
+    &__error {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      background-color: #ff6b6b;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: $font-size-small;
+      animation: slideDown 0.3s ease forwards;
+    }
+    
+    // Zapewnienie stylów dostępności dla focusa
+    &:focus-visible {
+      outline: 2px solid $blue;
+      outline-offset: 2px;
+    }
+  }
+  
+  // Animacje
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  // Dostosowania specyficzne dla urządzeń mobilnych
+  @media (max-width: $breakpoint-desktop) {
+    .floating-buy-button {
+      &__title {
+        max-width: 120px;
+      }
+      
+      &__button {
+        padding: 10px 20px;
+        font-size: $font-size-small;
+      }
+    }
+  }

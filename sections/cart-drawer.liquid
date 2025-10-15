@@ -1,0 +1,221 @@
+{% comment %} sections/cart-drawer.liquid — side cart z JS-ową randomizacją upsellu {% endcomment %}
+
+<cart-drawer
+  id="drawerMode"
+  class="drawer{% if cart == empty %} is-empty{% endif %}"
+  aria-hidden="true"
+  style="--drawer-width: {{ section.settings.drawer_width }}px;"
+>
+  <div id="CartDrawer" class="cart-drawer">
+    <div id="CartDrawer-Overlay" class="cart-drawer__overlay" aria-hidden="true"></div>
+
+    <div class="drawer__inner" role="dialog" aria-modal="true" aria-label="Twój koszyk" tabindex="-1">
+      <div class="drawer__header">
+        <h3 class="drawer__heading">Twój koszyk — {{ cart.item_count }}</h3>
+        <button class="drawer__close" type="button" aria-label="Zamknij" id="CartDrawer-CloseBtn">✕</button>
+      </div>
+
+      <div class="drawer__contents" id="CartDrawer-CartItems">
+        {% if cart == empty %}
+          <div class="cart-empty">
+            <p>Twój koszyk jest pusty.</p>
+          </div>
+        {% else %}
+          <div class="drawer__cart-items-wrapper">
+            <table class="cart-items" role="table">
+              <tbody role="rowgroup">
+                {% for item in cart.items %}
+                  <tr id="CartDrawer-Item-{{ forloop.index }}" class="cart-item" role="row" data-key="{{ item.key }}">
+                    <td class="cart-item__media" role="cell">
+                      {% if item.image %}
+                        <a href="{{ item.url }}" class="cart-item__link" tabindex="-1" aria-hidden="true"></a>
+                        <img
+                          class="cart-item__image"
+                          src="{{ item.image | image_url: width: 220 }}"
+                          alt="{{ item.image.alt | escape }}"
+                          loading="lazy"
+                          width="96"
+                          height="{{ 96 | divided_by: item.image.aspect_ratio | ceil }}"
+                        >
+                      {% endif %}
+                    </td>
+
+                    <td class="cart-item__details" role="cell">
+                      <a href="{{ item.url }}" class="cart-item__name">{{ item.product.title | escape }}</a>
+
+                      {% if item.original_price != item.final_price %}
+                        <div class="cart-item__discounted-prices">
+                          <s class="cart-item__old-price product-option">{{ item.original_price | money }}</s>
+                          <strong class="cart-item__final-price product-option">{{ item.final_price | money }}</strong>
+                        </div>
+                      {% else %}
+                        <div class="product-option">{{ item.final_price | money }}</div>
+                      {% endif %}
+
+                      {% if item.product.has_only_default_variant == false %}
+                        <dl class="cart-item__options">
+                          {% for option in item.options_with_values %}
+                            <div class="product-option"><dt>{{ option.name }}:</dt><dd>{{ option.value }}</dd></div>
+                          {% endfor %}
+                        </dl>
+                      {% endif %}
+                    </td>
+
+                    <td class="cart-item__totals right" role="cell">
+                      <span class="price price--end">{{ item.final_line_price | money }}</span>
+
+                      <div class="cart-item__quantity">
+                        <div class="quantity">
+                          <button class="quantity__button" name="minus" type="button" data-line="{{ forloop.index }}" aria-label="–">−</button>
+                          <input
+                            class="quantity__input"
+                            type="number"
+                            value="{{ item.quantity }}"
+                            min="{{ item.variant.quantity_rule.min }}"
+                            {% if item.variant.quantity_rule.max != null %}max="{{ item.variant.quantity_rule.max }}"{% endif %}
+                            step="{{ item.variant.quantity_rule.increment }}"
+                            id="Drawer-quantity-{{ forloop.index }}"
+                            data-line="{{ forloop.index }}"
+                            data-key="{{ item.key }}"
+                            data-variant-id="{{ item.variant.id }}"
+                            aria-label="Ilość dla {{ item.product.title | escape }}"
+                          >
+                          <button class="quantity__button" name="plus" type="button" data-line="{{ forloop.index }}" aria-label="+">+</button>
+                        </div>
+
+                        <!-- Kosz: dokładnie ta ikona -->
+                        <button
+                          type="button"
+                          class="button button--tertiary sc-remove"
+                          aria-label="Usuń {{ item.title | escape }}"
+                          data-line="{{ forloop.index }}"
+                          data-key="{{ item.key }}"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false" class="icon icon-remove" width="18" height="18">
+                            <path d="M14 3h-3.53a3.07 3.07 0 00-.6-1.65C9.44.82 8.8.5 8 .5s-1.44.32-1.87.85A3.06 3.06 0 005.53 3H2a.5.5 0 000 1h1.25v10c0 .28.22.5.5.5h8.5a.5.5 0 00.5-.5V4H14a.5.5 0 000-1zM6.91 1.98c.23-.29.58-.48 1.09-.48s.85.19 1.09.48c.2.24.3.6.36 1.02h-2.9c.05-.42.17-.78.36-1.02zm4.84 11.52h-7.5V4h7.5v9.5z" fill="currentColor"></path>
+                            <path d="M6.55 5.25a.5.5 0 00-.5.5v6a.5.5 0 001 0v-6a.5.5 0 00-.5-.5zM9.45 5.25a.5.5 0 00-.5.5v6a.5.5 0 001 0v-6a.5.5 0 00-.5-.5z" fill="currentColor"></path>
+                          </svg>
+                        </button>
+                      </div>
+
+                      <div id="CartDrawer-LineItemError-{{ forloop.index }}" class="cart-item__error" role="alert">
+                        <small class="cart-item__error-text"></small>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
+
+      {%- comment -%} UPSSELL — szablon (JS podmienia treść przy każdym otwarciu) {%- endcomment -%}
+      <div class="drawer__upsell" id="CartDrawer-Upsell" aria-label="Polecany produkt">
+        <div class="drawer__upsell-inner">
+          <div class="drawer__upsell-media">
+            <a href="#" class="drawer__upsell-link" tabindex="-1" aria-hidden="true">
+              <img src="" alt="" width="96" height="96">
+            </a>
+          </div>
+          <div class="drawer__upsell-content">
+            <div class="drawer__upsell-badge">Polecany</div>
+            <a class="drawer__upsell-title drawer__upsell-link" href="#"></a>
+            <div class="drawer__upsell-price">
+              <s class="drawer__upsell-compare product-option" style="display:none"></s>
+              <strong class="drawer__upsell-price-final product-option"></strong>
+            </div>
+            <button type="button" class="button button--primary sc-upsell-add" data-variant-id="">Dodaj do koszyka</button>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%}
+        PULA PRODUKTÓW DO LOSOWANIA (max 50, tylko dostępne).
+        Jeśli ustawisz kolekcję w ustawieniach sekcji — bierzemy z niej, w przeciwnym razie z collections.all.
+      {%- endcomment -%}
+      {%- assign pool = blank -%}
+      {%- if section.settings.upsell_collection and collections[section.settings.upsell_collection] -%}
+        {%- assign pool = collections[section.settings.upsell_collection].products -%}
+      {%- else -%}
+        {%- assign pool = collections.all.products -%}
+      {%- endif -%}
+
+      <script type="application/json" id="sc-upsell-pool">
+      [
+      {%- assign added = 0 -%}
+      {%- for p in pool -%}
+        {%- if p.available -%}
+          {%- assign v = p.selected_or_first_available_variant -%}
+          {%- if added > 0 -%},{%- endif -%}
+          {
+            "title":"{{ p.title | escape | replace: '"','\"' }}",
+            "url":"{{ p.url }}",
+            "image":"{{ p.featured_image | image_url: width: 220 }}",
+            "image_alt":"{{ p.featured_image.alt | escape | replace: '"','\"' }}",
+            "variant_id":"{{ v.id }}",
+            "price":"{{ v.price | money }}",
+            "compare_at_price":"{{ v.compare_at_price | money }}"
+          }
+          {%- assign added = added | plus: 1 -%}
+          {%- if added >= 50 -%}{%- break -%}{%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      ]
+      </script>
+
+      <div class="drawer__footer cart-drawer__footer">
+        <div class="totals" role="status">
+          <h2 class="totals__total">Przewidywana suma</h2>
+          <h2 class="totals__total-value">{{ cart.total_price | money_with_currency }}</h2>
+        </div>
+
+        <p class="totals__note">
+          {% if cart.taxes_included %}Z wliczonym podatkiem.{% else %}Podatek doliczony przy realizacji zakupu.{% endif %}
+          {% if shop.shipping_policy.body != blank %}
+            <a href="{{ shop.shipping_policy.url }}">Wysyłka</a>
+          {% else %}
+            Koszt wysyłki obliczony przy realizacji zakupu.
+          {% endif %}
+          i rabaty obliczone przy realizacji zakupu.
+        </p>
+
+        <div class="cart__ctas">
+          <a href="/cart" class="button button--outline-blue" {% if cart == empty %}aria-disabled="true"{% endif %}>Zobacz koszyk</a>
+          <a href="/checkout"
+             id="CartDrawer-Checkout"
+             class="button button--primary cart-drawer__checkout-btn"
+             {% if cart == empty %}aria-disabled="true" tabindex="-1"{% endif %}>
+            Realizuj zakup
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-cart-drawer-state>
+    { "item_count": {{ cart.item_count }}, "total_price": {{ cart.total_price | times: 1 }} }
+  </script>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "range",
+      "id": "drawer_width",
+      "label": "Szerokość drawer’a",
+      "min": 300, "max": 900, "step": 10, "unit": "px",
+      "default": 420
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Kolekcja dla poleceń (opcjonalnie)",
+      "info": "Jeśli nie ustawisz – bierzemy z wszystkich produktów (collections.all)."
+    }
+  ],
+  "enabled_on": { "templates": ["*"] }
+}
+{% endschema %}

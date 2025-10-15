@@ -248,6 +248,17 @@ button {
         background-color: $white;
       }
     }
+
+    &--outline-blue {
+      padding: 12px 32px;
+      border: 1px solid $blue;
+      color: $blue;
+  
+      &:hover {
+        color: $white;
+        background-color: $blue;
+      }
+    }
 }
 
 // ------------------------------------------------------------
@@ -291,6 +302,10 @@ button {
   height: auto !important;
   min-height: 0 !important;
   max-height: none !important;
+}
+
+button[class*=swiper-]{
+  height: 48px !important;
 }
 
 /* Dodatkowe zabezpieczenie dla konkretnych klas */

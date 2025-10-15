@@ -1,0 +1,239 @@
+// ------------------------------------------------------------
+// all-products.scss
+// Sekcja wyświetlająca listę wszystkich produktów
+// Mobile-first, responsive, BEM
+// ------------------------------------------------------------
+
+.all-products {
+  
+  // Outer wrapper - tylko wyśrodkowanie
+  &__outer-wrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  // Inner wrapper - max-width i paddingi
+  &__inner-wrapper {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px 64px 24px;
+
+    @include respond-to(tablet) {
+      padding: 50px 80px 100px 80px;
+    }
+  }
+
+  // Breadcrumbs
+  &__breadcrumbs {
+    margin-bottom: 24px;
+  }
+
+  &__breadcrumbs-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__breadcrumbs-item {
+    display: flex;
+    align-items: center;
+    font-size: $font-size-regular;
+    color: $light-grey;
+    font-weight: 300;
+  }
+
+  &__breadcrumbs-separator {
+    margin: 0 8px;
+    font-size: $font-size-regular;
+    color: $light-grey;
+    font-weight: 300;
+  }
+
+  &__breadcrumbs-link {
+    color: $light-grey;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $blue;
+    }
+  }
+
+  &__breadcrumbs-current {
+    color: $light-grey;
+  }
+
+  // Header (tag + tytuł)
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 48px;
+
+    @include respond-to(desktop) {
+      margin-bottom: 64px;
+    }
+  }
+
+  &__tag {
+    display: inline-block;
+    font-size: $font-size-tiny;
+    color: $blue;
+    font-weight: 500;
+    border: 1px solid $blue;
+    background-color: rgba($blue, 0.1);
+    padding: 4px 16px;
+    border-radius: 100px;
+    width: fit-content;
+  }
+
+  &__title {
+    font-size: $font-size-h2;
+    color: $black;
+    font-weight: 400;
+    line-height: $line-height-tight;
+  }
+
+  // Grid produktów - boxy obok siebie od desktop (1024px)
+  &__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @include respond-to(desktop) {
+      flex-direction: row;
+      gap: 32px;
+    }
+  }
+
+  // Karta produktu
+  &__card {
+    background-color: $blue;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 24px;
+    padding: 64px 32px 32px 32px;
+    width: 100%;
+
+    @include respond-to(desktop) {
+      width: calc(50% - 16px);
+      padding: 64px 32px;
+    }
+  }
+
+  // Card inner - responsywna zmiana układu
+  &__card-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+
+    // Od 768px (tablet): obrazek obok contentu, wyśrodkowany w pionie
+    @include respond-to(tablet) {
+      flex-direction: row;
+      gap: 40px;
+      align-items: center;
+    }
+
+    // Od 1024px (desktop): znowu obrazek nad contentem
+    @include respond-to(desktop) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    // Od 1366px (desktop-lg): obrazek obok contentu
+    @include respond-to(desktop-lg) {
+      flex-direction: row;
+      gap: 40px;
+      align-items: stretch;
+    }
+  }
+
+  // Zdjęcie produktu
+  &__card-image {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+
+    // Od tablet (768px): zdjęcie ma stałą szerokość, ale BEZ min-width
+    @include respond-to(tablet) {
+      width: auto;
+    }
+
+    // Od desktop (1024px): znowu pełna szerokość
+    @include respond-to(desktop) {
+      width: 100%;
+    }
+
+    // Od desktop-lg (1366px): znowu stała szerokość z min-width
+    @include respond-to(desktop-lg) {
+      width: auto;
+      min-width: 180px;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 180px;
+      object-fit: contain;
+
+      // Od tablet (768px): zdjęcie na pełną wysokość
+      @include respond-to(tablet) {
+        height: 100%;
+        max-width: none;
+        width: auto;
+      }
+
+      // Od desktop (1024px): znowu max-width
+      @include respond-to(desktop) {
+        height: auto;
+        max-width: 180px;
+        width: 100%;
+      }
+
+      // Od desktop-lg (1366px): zdjęcie na pełną wysokość
+      @include respond-to(desktop-lg) {
+        height: 100%;
+        max-width: none;
+        width: auto;
+      }
+    }
+  }
+
+  // Treść karty
+  &__card-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__card-title {
+    font-size: $font-size-h4;
+    color: $white;
+    font-weight: 400;
+    line-height: $line-height-tight;
+    margin-bottom: 16px;
+    max-width: unset;
+
+    @include respond-to(desktop-lg) {
+      max-width: 300px;
+    }
+  }
+
+  &__card-description {
+    font-size: $font-size-regular;
+    color: $white-text;
+    font-weight: 300;
+    line-height: $line-height-base;
+    margin-bottom: 32px;
+  }
+
+  &__card-button {
+    width: fit-content;
+  }
+}

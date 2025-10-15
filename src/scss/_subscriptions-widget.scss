@@ -1,0 +1,158 @@
+// ------------------------------------------------------------
+// _subscription-benefits.scss
+// Komponent rozwijanych korzyści w subskrypcji Appstle
+// ------------------------------------------------------------
+
+/**
+ * Komponent korzyści subskrypcji Appstle
+ * Zapewnia płynną animację rozwijania/zwijania listy korzyści
+ * z zachowaniem dostępności WCAG
+ */
+
+// Baza - element zwinięty
+.appstle {
+
+    &-save-badge {
+     color: $blue !important;
+    }
+
+    &_select_label {
+        margin: 16px 0 !important;
+    }
+
+    &_single_option_text {
+      display: none !important;
+    }
+
+    &_subscription_wrapper_option {
+        border-color: $stroke !important;
+        border-radius: 12px !important;
+    }
+
+    &_subscription_wrapper_option {
+      // Element z korzyściami subskrypcji
+      .appstle-custom-benefits {
+        // Stan zwinięty - zero miejsca
+        overflow: hidden;
+        max-height: 0;
+        padding: 0;
+        margin-top: 0;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        
+        // Płynna animacja rozwijania/zwijania
+        transition:
+          max-height 0.16s ease-out,
+          padding 0.16s ease-out,
+          margin-top 0.16s ease-out,
+          opacity 0.14s ease-out;
+        will-change: max-height, padding, margin-top, opacity;
+        
+        // Styl wizualny
+        border-radius: 10px;
+        font-size: $font-size-small;
+        line-height: 1.55;
+        
+        // Wiersze z korzyściami
+        .row {
+          font-size: $font-size-regular;
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          margin: 12px 0;
+        }
+        
+        // Ikona potwierdzenia
+        .check {
+          width: 24px;
+          height: 24px;
+          flex: 0 0 18px;
+          color: $blue;
+        }
+      }
+      .appstle_subscription_wrapper_option.appstle-active-option {
+        border: 1px solid $blue !important;
+      }
+
+      .appstle_one_time_details_wrapper label, .appstle_subscription_radio_wrapper label {
+        font-weight: 500;
+        font-style: $font-size-regular;
+        color: $black;
+      }
+      // Stan rozwinięty - opcja aktywna
+      &.appstle_include_dropdown.appstle-active-option {
+        .appstle-custom-benefits {
+          // Bezpieczny limit wysokości zamiast auto (auto nie animuje się)
+          max-height: 420px;
+          margin-top: 12px;
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
+      }
+    }
+  }
+  
+  // Dostępność - respektowanie preferencji użytkownika dot. redukcji ruchu
+  @media (prefers-reduced-motion: reduce) {
+    .appstle_subscription_wrapper_option .appstle-custom-benefits {
+      transition: none;
+    }
+  }
+  
+.appstle_subscription_wrapper_option {
+  border: 1px solid #DCDCDC !important;
+}
+  /* Stara cena (compare) – bez przekreślenia, z kolorem */
+.appstle_subscription_wrapper_option.appstle_include_dropdown
+.appstle_subscription_compare_amount {
+color: #787878 !important; /* podmień na kolor z motywu */
+}
+
+/* Nowa cena (po rabacie) – np. zielona, wyraźniejsza */
+.appstle_subscription_wrapper_option.appstle_include_dropdown
+.appstle_subscription_amount, .appstle_subscription_amount {
+color: $black !important; /* podmień */
+font-weight: 500;
+}
+
+
+.appstle_sub_widget.WIDGET_TYPE_7 .appstle_select {
+    border-radius: 36px !important;
+    border: 1px solid $stroke !important;
+ }
+
+ .WIDGET_TYPE_7 .appstle_custom_select:before {
+    right: 16px;
+
+    @include respond-to(mobile) {
+        right: 24px;
+    }
+ }
+
+
+ .appstle_sub_widget.WIDGET_TYPE_7 .appstle_circle {
+    border: 1px solid $stroke !important;
+ }
+
+ .appstle_sub_widget.WIDGET_TYPE_7 .appstle_dot {
+    background-color: $blue !important;
+  }
+
+  .WIDGET_TYPE_7 .appstle_subscription_wrapper_option.appstle_include_dropdown {
+    margin-top: 24px !important;
+  }
+
+
+  .appstle_subscription_wrapper .appstle_subscription_wrapper_option {
+    border: 1px solid #DCDCDC !important;
+  }
+
+  .appstle_subscription_wrapper .appstle_subscription_wrapper_option.appstle-active-option {
+    border: 2px solid $blue !important;
+  }
+
+  .appstle_subscription_wrapper_option input[type=radio]:focus + label span.appstle_circle:before {
+    border: none !important;
+  }

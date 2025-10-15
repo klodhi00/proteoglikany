@@ -1,0 +1,583 @@
+// ------------------------------------------------------------
+// _main-product.scss
+// Sekcja produktu – Shopify Online Store 2.0
+// ------------------------------------------------------------
+
+.product {
+  
+  &__outer-wrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  &__inner-wrapper {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px 64px 24px;
+
+    @include respond-to(tablet) {
+      padding: 50px 80px 100px 80px;
+    }
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    
+    @include respond-to(desktop) {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 100px;
+    }
+  }
+  
+  &__gallery,
+  &__info {
+    width: 100%;
+    
+    @include respond-to(desktop) {
+      width: calc(50% - 40px);
+    }
+  }
+  
+  // Galeria zdjęć
+  &__gallery {
+    margin-bottom: 64px;
+    
+    @include respond-to(desktop) {
+      margin-bottom: 0;
+      position: sticky;
+      top: 80px;
+      align-self: flex-start;
+    }
+  }
+  
+  &__main-image {
+    width: 100%;
+    margin-bottom: 16px;
+
+    @include respond-to(tablet) {
+       margin-bottom: 32px;
+    }
+    
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 24px;
+    }
+  }
+  
+  &__gallery-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    @include respond-to(tablet) {
+      gap: 32px;
+    }
+
+    @include respond-to(desktop) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  &__thumbnail {
+    position: relative;
+    border: 1px solid transparent;
+    width: calc((100% - 32px) / 2);
+    
+    &.hide-on-mobile {
+      display: none;
+      
+      @include respond-to(tablet) {
+        display: block;
+      }
+    }
+    
+    &.hide-on-tablet {
+      @include respond-to(tablet) {
+        display: none;
+      }
+      
+      @include respond-to(desktop) {
+        display: block;
+      }
+    }
+    
+    @include respond-to(tablet) {
+      width: calc((100% - 64px) / 3);
+    }
+    
+    @include respond-to(desktop) {
+      width: 100%;
+    }
+    
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+  }
+  
+  // Breadcrumbs
+  &__breadcrumbs {
+    margin-bottom: 24px;
+
+    @include respond-to(desktop) {
+      margin-bottom: 16px;
+    }
+    
+    &-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    &-link {
+      font-size: $font-size-small;
+      color: $light-grey;
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: $blue;
+      }
+    }
+    
+    &-separator {
+      font-size: $font-size-small;
+      color: $light-grey;
+    }
+    
+    &-current {
+      font-size: $font-size-small;
+      color: $light-grey;
+    }
+  }
+  
+  // Informacje o produkcie
+  &__tag {
+    font-size: $font-size-tiny;
+    font-weight: 500;
+    color: $blue;
+    background: rgba($blue, 0.1);
+    border: 1px solid $blue;
+    padding: 4px 16px;
+    margin-bottom: 12px;
+    display: inline-block;
+    border-radius: 100px;
+  }
+  
+  &__title {
+    font-size: $font-size-h2;
+    font-weight: 400;
+    color: $black;
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+  
+  // Widget gwiazdek (Judge.me)
+  &__reviews-widget {
+    margin-bottom: 32px;
+    
+    .jdgm-prev-badge__stars {
+      color: $star;
+    }
+    
+    .jdgm-prev-badge__text {
+      margin-left: 8px;
+    }
+  }
+  
+  &__description {
+    font-size: $font-size-regular;
+    color: $black-text;
+    line-height: $line-height-base;
+    margin-bottom: 32px;
+
+    @include respond-to(desktop) {
+      margin-bottom: 64px;
+    }
+    
+    p {
+      margin-bottom: 16px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  
+  // Widget subskrypcji (Appstle)
+  &__subscription-widget {
+    margin-bottom: 32px;
+  }
+  
+  // Box promocyjny
+  &__promo {
+    background-color: rgba($blue, 0.05);
+    padding: 24px;
+    margin-bottom: 32px;
+    border-radius: 8px;
+    
+    &-title {
+      font-size: $font-size-h5;
+      font-weight: 500;
+      color: $black;
+      margin-bottom: 16px;
+    }
+    
+    &-text {
+      font-size: $font-size-regular;
+      color: $black-text;
+      line-height: $line-height-base;
+      margin-bottom: 24px;
+      
+      p {
+        margin: 0;
+      }
+    }
+    
+    &-code {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    &-label {
+      font-size: $font-size-regular;
+      color: $black-text;
+    }
+    
+    &-button {
+      display: flex;
+      align-items: center;
+      padding: 6px 24px;
+      border: 1px dashed $blue;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 100px;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: rgba($blue, 0.05);
+      }
+      
+      &:active {
+        background-color: rgba($blue, 0.1);
+      }
+    }
+    
+    &-button-text {
+      font-size: $font-size-regular;
+      color: $black;
+      font-weight: 400;
+    }
+    
+    &-icon {
+      margin-left: 10px;
+    }
+  }
+  
+  &__price {
+    font-size: $font-size-medium;
+    font-weight: 500;
+    color: $black;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    &-sale {
+      color: $blue;
+    }
+    
+    &-regular {
+      &:only-child {
+        color: $black;
+      }
+      
+      .product__price-sale + & {
+        color: $light-grey;
+        text-decoration: line-through;
+        font-weight: 400;
+      }
+    }
+  }
+  
+  &__form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 32px;
+
+    @include respond-to(desktop) {
+      margin-bottom: 64px;
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+
+    @include respond-to(mobile) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  
+  &__quantity {
+    flex-shrink: 0;
+    
+    &-label.visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    
+    &-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid $stroke;
+      border-radius: 100px;
+      height: 50px;
+      width: fit-content;
+      padding: 0 8px;
+    }
+    
+    &-button {
+      width: 30px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: $font-size-large;
+      background-color: transparent;
+      cursor: pointer;
+      padding: 0;
+      
+      &:hover {
+        color: $blue;
+      }
+    }
+    
+    &-input {
+      font-size: $font-size-regular;
+      width: 30px;
+      height: 50px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      -moz-appearance: textfield;
+      padding: 0;
+      
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+  }
+  
+  &__add-to-cart {
+    width: 100%;
+
+    @include respond-to(mobile) {
+      width: auto;
+      flex: 1;
+    }
+    
+    &:disabled {
+      background-color: $light-grey;
+      cursor: not-allowed;
+    }
+  }
+
+  // Sekcja z ikonkami i informacjami (USP)
+  &__features {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 32px;
+
+    @include respond-to(tablet) {
+      flex-direction: row;
+      align-items: center;
+      gap: 24px;
+    }
+
+    @include respond-to(desktop) {
+      margin-top: 64px;
+    }
+
+    &-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 16px;
+      flex: 1;
+
+      @include respond-to(tablet) {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    &-icon {
+      width: 32px;
+      height: 32px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    &-text {
+      font-size: $font-size-regular;
+      color: $black-text;
+      line-height: $line-height-base;
+      margin: 0;
+    }
+
+    &-divider {
+      display: none;
+
+      @include respond-to(tablet) {
+        display: block;
+        width: 1px;
+        height: 60px;
+        background-color: $stroke;
+      }
+    }
+  }
+
+  // Sekcja z formami płatności
+  &__payment {
+    margin-top: 32px;
+
+    @include respond-to(desktop) {
+      margin-top: 64px;
+    }
+
+    &-title {
+      font-size: $font-size-regular;
+      font-weight: 400;
+      color: $black;
+      margin: 0 0 16px 0;
+    }
+
+    &-methods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    &-method {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border: 1px solid $stroke;
+      border-radius: 8px;
+      background-color: $white;
+
+      img {
+        display: block;
+        width: auto;
+        height: 25px;
+      }
+    }
+  }
+  
+  // Lightbox galerii
+  &__lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 1000;
+    
+    &.is-open { 
+      display: block; 
+    }
+  }
+
+  &__lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.85);
+  }
+
+  &__lightbox-dialog {
+    position: relative;
+    width: min(95vw, 1200px);
+    height: min(90vh, 90svh);
+    margin: auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__lightbox-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: transparent;
+    color: $white;
+    font-size: 32px;
+    line-height: 1;
+    border: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  &__lightbox-slider {
+    width: 100%;
+    height: 100%;
+    
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__lightbox .swiper-button-prev,
+  &__lightbox .swiper-button-next {
+    color: $white;
+  }
+  
+  &__lightbox .swiper-pagination-bullet { 
+    background: $white; 
+    opacity: .6; 
+  }
+  
+  &__lightbox .swiper-pagination-bullet-active { 
+    opacity: 1; 
+  }
+}

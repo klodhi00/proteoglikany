@@ -1,0 +1,517 @@
+{% comment %}
+  Sekcja: Video Grid
+  Wyświetla 6 filmów z miniaturkami i odtwarzaniem w modalu
+  Desktop: Grid 2 wiersze x 3 kolumny
+  Mobile: Swiper slider
+{% endcomment %}
+
+<section class="video-grid">
+  <div class="video-grid__outer-wrapper">
+    <div class="video-grid__inner-wrapper">
+      
+      {% comment %} Header z tagiem i tytułem {% endcomment %}
+      <div class="video-grid__header">
+        {% if section.settings.tag != blank %}
+          <span class="video-grid__tag">{{ section.settings.tag }}</span>
+        {% endif %}
+        {% if section.settings.title != blank %}
+          <h2 class="video-grid__title">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+
+      {% comment %} Container z filmami - desktop grid {% endcomment %}
+      <div class="video-grid__videos video-grid__videos--desktop">
+        {% if section.settings.video_url_1 != blank %}
+          <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_1 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 1">
+            <div class="video-grid__video-thumbnail">
+              {% if section.settings.video_thumbnail_1 != blank %}
+                {{ section.settings.video_thumbnail_1 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-grid__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-grid__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-grid__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.video_url_2 != blank %}
+          <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_2 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 2">
+            <div class="video-grid__video-thumbnail">
+              {% if section.settings.video_thumbnail_2 != blank %}
+                {{ section.settings.video_thumbnail_2 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-grid__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-grid__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-grid__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.video_url_3 != blank %}
+          <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_3 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 3">
+            <div class="video-grid__video-thumbnail">
+              {% if section.settings.video_thumbnail_3 != blank %}
+                {{ section.settings.video_thumbnail_3 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-grid__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-grid__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-grid__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.video_url_4 != blank %}
+          <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_4 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 4">
+            <div class="video-grid__video-thumbnail">
+              {% if section.settings.video_thumbnail_4 != blank %}
+                {{ section.settings.video_thumbnail_4 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-grid__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-grid__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-grid__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.video_url_5 != blank %}
+          <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_5 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 5">
+            <div class="video-grid__video-thumbnail">
+              {% if section.settings.video_thumbnail_5 != blank %}
+                {{ section.settings.video_thumbnail_5 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-grid__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-grid__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-grid__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.video_url_6 != blank %}
+          <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_6 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 6">
+            <div class="video-grid__video-thumbnail">
+              {% if section.settings.video_thumbnail_6 != blank %}
+                {{ section.settings.video_thumbnail_6 | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: section.settings.title,
+                  class: 'video-grid__thumbnail-image'
+                }}
+              {% endif %}
+              {% if section.settings.play_icon != blank %}
+                <div class="video-grid__play-button">
+                  {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                    alt: 'Odtwórz wideo',
+                    class: 'video-grid__play-icon'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {% comment %} Swiper slider - mobile {% endcomment %}
+      <div class="video-grid__videos video-grid__videos--mobile">
+        <div class="swiper video-grid__swiper">
+          <div class="swiper-wrapper">
+            {% if section.settings.video_url_1 != blank %}
+              <div class="swiper-slide">
+                <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_1 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 1">
+                  <div class="video-grid__video-thumbnail">
+                    {% if section.settings.video_thumbnail_1 != blank %}
+                      {{ section.settings.video_thumbnail_1 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-grid__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-grid__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-grid__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.video_url_2 != blank %}
+              <div class="swiper-slide">
+                <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_2 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 2">
+                  <div class="video-grid__video-thumbnail">
+                    {% if section.settings.video_thumbnail_2 != blank %}
+                      {{ section.settings.video_thumbnail_2 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-grid__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-grid__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-grid__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.video_url_3 != blank %}
+              <div class="swiper-slide">
+                <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_3 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 3">
+                  <div class="video-grid__video-thumbnail">
+                    {% if section.settings.video_thumbnail_3 != blank %}
+                      {{ section.settings.video_thumbnail_3 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-grid__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-grid__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-grid__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.video_url_4 != blank %}
+              <div class="swiper-slide">
+                <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_4 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 4">
+                  <div class="video-grid__video-thumbnail">
+                    {% if section.settings.video_thumbnail_4 != blank %}
+                      {{ section.settings.video_thumbnail_4 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-grid__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-grid__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-grid__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.video_url_5 != blank %}
+              <div class="swiper-slide">
+                <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_5 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 5">
+                  <div class="video-grid__video-thumbnail">
+                    {% if section.settings.video_thumbnail_5 != blank %}
+                      {{ section.settings.video_thumbnail_5 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-grid__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-grid__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-grid__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.video_url_6 != blank %}
+              <div class="swiper-slide">
+                <div class="video-grid__video-item" data-video-url="{{ section.settings.video_url_6 }}" tabindex="0" role="button" aria-label="Odtwórz wideo 6">
+                  <div class="video-grid__video-thumbnail">
+                    {% if section.settings.video_thumbnail_6 != blank %}
+                      {{ section.settings.video_thumbnail_6 | image_url: width: 600 | image_tag: 
+                        loading: 'lazy',
+                        alt: section.settings.title,
+                        class: 'video-grid__thumbnail-image'
+                      }}
+                    {% endif %}
+                    {% if section.settings.play_icon != blank %}
+                      <div class="video-grid__play-button">
+                        {{ section.settings.play_icon | image_url: width: 80 | image_tag: 
+                          alt: 'Odtwórz wideo',
+                          class: 'video-grid__play-icon'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {% comment %} Modal do odtwarzania wideo {% endcomment %}
+  <div class="video-grid__modal" id="videoModalGrid" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="video-grid__modal-overlay"></div>
+    <div class="video-grid__modal-content">
+      <button class="video-grid__modal-close" aria-label="Zamknij modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="video-grid__modal-video-wrapper">
+        <video class="video-grid__modal-video" controls playsinline controlsList="nodownload">
+          <source src="" type="video/mp4">
+          Twoja przeglądarka nie obsługuje odtwarzania wideo.
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    {% comment %} Inicjalizacja Swiper dla mobile {% endcomment %}
+    const swiperElement = document.querySelector('.video-grid__swiper');
+    if (swiperElement && typeof Swiper !== 'undefined') {
+      new Swiper('.video-grid__swiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 32,
+        centeredSlides: false,
+        grabCursor: true,
+      });
+    }
+
+    {% comment %} Obsługa modalu {% endcomment %}
+    const modal = document.getElementById('videoModalGrid');
+    const modalVideo = modal.querySelector('.video-grid__modal-video');
+    const modalVideoSource = modalVideo.querySelector('source');
+    const closeButton = modal.querySelector('.video-grid__modal-close');
+    const overlay = modal.querySelector('.video-grid__modal-overlay');
+    const videoItems = document.querySelectorAll('.video-grid__video-item');
+
+    function openModal(videoUrl) {
+      modalVideoSource.src = videoUrl;
+      modalVideo.load();
+      modal.classList.add('is-active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modalVideo.play();
+      closeButton.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      modalVideo.pause();
+      modalVideoSource.src = '';
+    }
+
+    videoItems.forEach(item => {
+      item.addEventListener('click', function() {
+        const videoUrl = this.getAttribute('data-video-url');
+        if (videoUrl) {
+          openModal(videoUrl);
+        }
+      });
+
+      item.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const videoUrl = this.getAttribute('data-video-url');
+          if (videoUrl) {
+            openModal(videoUrl);
+          }
+        }
+      });
+    });
+
+    closeButton.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+        closeModal();
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Galeria wideo",
+  "tag": "section",
+  "class": "section-video-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "GALERIA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Zobacz nasze filmy"
+    },
+    {
+      "type": "header",
+      "content": "Ikona przycisku play"
+    },
+    {
+      "type": "image_picker",
+      "id": "play_icon",
+      "label": "Ikona play"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 1"
+    },
+    {
+      "type": "url",
+      "id": "video_url_1",
+      "label": "URL wideo 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_1",
+      "label": "Miniaturka wideo 1"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 2"
+    },
+    {
+      "type": "url",
+      "id": "video_url_2",
+      "label": "URL wideo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_2",
+      "label": "Miniaturka wideo 2"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 3"
+    },
+    {
+      "type": "url",
+      "id": "video_url_3",
+      "label": "URL wideo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_3",
+      "label": "Miniaturka wideo 3"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 4"
+    },
+    {
+      "type": "url",
+      "id": "video_url_4",
+      "label": "URL wideo 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_4",
+      "label": "Miniaturka wideo 4"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 5"
+    },
+    {
+      "type": "url",
+      "id": "video_url_5",
+      "label": "URL wideo 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_5",
+      "label": "Miniaturka wideo 5"
+    },
+    {
+      "type": "header",
+      "content": "Wideo 6"
+    },
+    {
+      "type": "url",
+      "id": "video_url_6",
+      "label": "URL wideo 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail_6",
+      "label": "Miniaturka wideo 6"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Galeria wideo"
+    }
+  ]
+}
+{% endschema %}

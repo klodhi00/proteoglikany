@@ -1,52 +1,676 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  Sekcja produktu – Shopify Online Store 2.0
+  Wykorzystuje cover image z metapola, galerię miniatur, informacje produktu,
+  bloki promocyjne.
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+<section class="product">
+  <div class="product__outer-wrapper">
+    <div class="product__inner-wrapper">
+      <div class="product__wrapper">
+        <div class="product__gallery">
+          {% assign cover_image = product.metafields[section.settings.cover_metafield_namespace][section.settings.cover_metafield_key] %}
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+          <!-- Zdjęcie główne (cover) -->
+          <div class="product__gallery-main">
+            {% if cover_image != blank %}
+              <div class="product__main-image">
+                <img
+                  srcset="{%- if cover_image.width >= 165 -%}{{ cover_image | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if cover_image.width >= 360 -%}{{ cover_image | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if cover_image.width >= 533 -%}{{ cover_image | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if cover_image.width >= 720 -%}{{ cover_image | image_url: width: 720 }} 720w,{%- endif -%}
+                    {%- if cover_image.width >= 940 -%}{{ cover_image | image_url: width: 940 }} 940w,{%- endif -%}
+                    {%- if cover_image.width >= 1066 -%}{{ cover_image | image_url: width: 1066 }} 1066w,{%- endif -%}
+                    {{ cover_image | image_url }} {{ cover_image.width }}w"
+                  src="{{ cover_image | image_url: width: 533 }}"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  loading="eager"
+                  width="{{ cover_image.width }}"
+                  height="{{ cover_image.height }}"
+                  alt="{{ product.title | escape }}"
+                  id="main-product-image"
+                  class="js-gallery-image"
+                  data-full="{{ cover_image | image_url: width: 2048 }}"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Otwórz galerię"
+                />
+              </div>
+            {%- elsif product.featured_media -%}
+              <div class="product__main-image">
+                <img
+                  srcset="{%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                    {%- if product.featured_media.width >= 940 -%}{{ product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                    {%- if product.featured_media.width >= 1066 -%}{{ product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
+                    {{ product.featured_media | image_url }} {{ product.featured_media.width }}w"
+                  src="{{ product.featured_media | image_url: width: 533 }}"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  loading="eager"
+                  width="{{ product.featured_media.width }}"
+                  height="{{ product.featured_media.height }}"
+                  alt="{{ product.featured_media.alt | escape }}"
+                  id="main-product-image"
+                  class="js-gallery-image"
+                  data-full="{{ product.featured_media | image_url: width: 2048 }}"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Otwórz galerię"
+                />
+              </div>
+            {%- endif -%}
+          </div>
+          
+          <!-- Galeria miniatur -->
+          <div class="product__gallery-thumbnails">
+            {%- assign media_count = product.media.size | at_most: 6 -%}
+            {%- for media in product.media limit: media_count -%}
+              <div class="product__thumbnail{% if forloop.index > 2 %} hide-on-mobile{% endif %}{% if forloop.index > 3 %} hide-on-tablet{% endif %}">
+                <img
+                  srcset="{%- if media.width >= 165 -%}{{ media | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if media.width >= 360 -%}{{ media | image_url: width: 360 }} 360w,{%- endif -%}"
+                  src="{{ media | image_url: width: 165 }}"
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                  loading="lazy"
+                  width="{{ media.width }}"
+                  height="{{ media.height }}"
+                  alt="{{ media.alt | escape }}"
+                  class="js-gallery-image"
+                  data-full="{{ media | image_url: width: 2048 }}"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Otwórz galerię – {{ media.alt | escape }}"
+                />
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+        
+        <div class="product__info">
+          <!-- Breadcrumbs -->
+          <nav class="product__breadcrumbs" aria-label="Nawigacja okruszkowa">
+            <ol class="product__breadcrumbs-list">
+              <li class="product__breadcrumbs-item">
+                <a href="/" class="product__breadcrumbs-link">Strona główna</a>
+              </li>
+              {%- if collection -%}
+                <li class="product__breadcrumbs-item">
+                  <span class="product__breadcrumbs-separator">/</span>
+                  <a href="{{ collection.url }}" class="product__breadcrumbs-link">{{ collection.title }}</a>
+                </li>
+              {%- elsif product.collections.size > 0 -%}
+                <li class="product__breadcrumbs-item">
+                  <span class="product__breadcrumbs-separator">/</span>
+                  <a href="{{ product.collections.first.url }}" class="product__breadcrumbs-link">{{ product.collections.first.title }}</a>
+                </li>
+              {%- endif -%}
+              <li class="product__breadcrumbs-item">
+                <span class="product__breadcrumbs-separator">/</span>
+                <span class="product__breadcrumbs-current">{{ product.title }}</span>
+              </li>
+            </ol>
+          </nav>
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+          {%- if section.settings.product_tag_metafield_namespace != blank and section.settings.product_tag_metafield_key != blank -%}
+            {% assign product_tag_value = product.metafields[section.settings.product_tag_metafield_namespace][section.settings.product_tag_metafield_key] %}
+            {%- if product_tag_value != blank -%}
+              <div class="product__tag">
+                {{ product_tag_value }}
+              </div>
+            {%- elsif product.tags.size > 0 -%}
+              <div class="product__tag">
+                {{ product.tags.first }}
+              </div>
+            {%- endif -%}
+          {%- elsif product.tags.size > 0 -%}
+            <div class="product__tag">
+              {{ product.tags.first }}
+            </div>
+          {%- endif -%}
+          
+          <h2 class="product__title">{{ product.title }}</h2>
+          
+          <!-- Widget 1: Miejsce na gwiazdki (Judge.me) - PIERWSZY blok @app -->
+          {%- assign app_block_counter = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' and app_block_counter == 0 -%}
+              <div class="product__reviews-widget" {{ block.shopify_attributes }}>
+                {% render block %}
+              </div>
+              {%- assign app_block_counter = app_block_counter | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+          
+          <div class="product__description">
+            {{ product.description }}
+          </div>
+          
+          <!-- Widget 2: Miejsce na subskrypcje (Appstle) - WSZYSTKIE pozostałe bloki @app -->
+          {%- assign app_block_counter = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              {%- assign app_block_counter = app_block_counter | plus: 1 -%}
+              {%- if app_block_counter > 1 -%}
+                <div class="product__subscription-widget" {{ block.shopify_attributes }}>
+                  {% render block %}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          
+          <!-- Bloki promocyjne -->
+          {%- for block in section.blocks -%}
+            {% case block.type %}
+              {% when 'promo' %}
+                {% assign show_promo = false %}
+                
+                {% if block.settings.typ_promocji == 'wszystkie' %}
+                  {% assign show_promo = true %}
+                {% endif %}
+                
+                {% assign produkty_ids = block.settings.produkty | map: 'id' %}
+                {% if block.settings.typ_promocji == 'produkty' and produkty_ids contains product.id %}
+                  {% assign show_promo = true %}
+                {% endif %}
+                
+                {% assign kolekcje_ids = block.settings.kolekcje | map: 'id' %}
+                {% if block.settings.typ_promocji == 'kolekcje' %}
+                  {% for collection in product.collections %}
+                    {% if kolekcje_ids contains collection.id %}
+                      {% assign show_promo = true %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                
+                {% if show_promo and block.settings.kod_rabatowy != blank %}
+                  <div class="product__promo" {{ block.shopify_attributes }}>
+                    <h5 class="product__promo-title">{{ block.settings.tytul_promocji }}</h5>
+                    {{ block.settings.tekst_promocji | replace: '<p>', '<p class="product__promo-text">' }}
+                    
+                    <div class="product__promo-code">
+                      <span class="product__promo-label">Kod rabatowy:</span>
+                      <button class="product__promo-button" data-kod="{{ block.settings.kod_rabatowy }}" aria-label="Kopiuj kod rabatowy {{ block.settings.kod_rabatowy }}">
+                        <span class="product__promo-button-text">{{ block.settings.kod_rabatowy }}</span>
+                        <img class="product__promo-icon" src="{{ 'copy-icon.svg' | asset_url }}" width="16" height="16" alt="ikona kopiowania">
+                      </button>
+                    </div>
+                  </div>
+                {% endif %}
+            {% endcase %}
+          {%- endfor -%}
+          
+          {%- form 'product', product, id: 'product-form', class: 'product__form' -%}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            
+            <div class="product__actions">
+              <div class="product__quantity">
+                <label for="Quantity" class="product__quantity-label visually-hidden">Ilość</label>
+                <div class="product__quantity-controls">
+                  <button type="button" class="product__quantity-button" data-action="zmniejsz" aria-label="Zmniejsz ilość">-</button>
+                  <input type="number" id="Quantity" name="quantity" value="1" min="1" class="product__quantity-input" aria-label="Ilość produktu">
+                  <button type="button" class="product__quantity-button" data-action="zwieksz" aria-label="Zwiększ ilość">+</button>
+                </div>
+              </div>
+              <button type="submit" class="product__add-to-cart button button--primary" {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+                {% if product.selected_or_first_available_variant.available %}
+                  Dodaj do koszyka
+                {% else %}
+                  Wyprzedane
+                {% endif %}
+              </button>
+            </div>
+          {%- endform -%}
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+          <!-- Sekcja z ikonkami i informacjami (USP) -->
+          {%- assign feature_blocks = section.blocks | where: "type", "feature" -%}
+          {%- if feature_blocks.size > 0 -%}
+            <div class="product__features">
+              {%- for block in feature_blocks -%}
+                <div class="product__features-item" {{ block.shopify_attributes }}>
+                  {%- if block.settings.icon != blank -%}
+                    <img 
+                      src="{{ block.settings.icon | image_url: width: 64 }}" 
+                      alt="" 
+                      class="product__features-icon"
+                      width="32"
+                      height="32"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <p class="product__features-text">{{ block.settings.text }}</p>
+                  {%- endif -%}
+                </div>
+                
+                {%- unless forloop.last -%}
+                  <div class="product__features-divider" role="presentation"></div>
+                {%- endunless -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
 
-    <input type="text" name="quantity" min="1" value="1">
+          <!-- Sekcja z formami płatności -->
+          {%- assign payment_blocks = section.blocks | where: "type", "payment_method" -%}
+          {%- if payment_blocks.size > 0 -%}
+            <div class="product__payment">
+              <h4 class="product__payment-title">Formy płatności</h4>
+              <div class="product__payment-methods">
+                {%- for block in payment_blocks -%}
+                  {%- if block.settings.icon != blank -%}
+                    <div class="product__payment-method" {{ block.shopify_attributes }}>
+                      <img 
+                        src="{{ block.settings.icon | image_url: width: 80 }}" 
+                        alt="{{ block.settings.alt_text | default: 'Metoda płatności' }}"
+                        width="40"
+                        height="25"
+                        loading="lazy"
+                      >
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal galerii produktu -->
+  <div class="product__lightbox" id="product-lightbox" aria-hidden="true">
+    <div class="product__lightbox-backdrop" data-close></div>
+    <div class="product__lightbox-dialog" role="dialog" aria-modal="true" aria-label="Galeria produktu">
+      <button class="product__lightbox-close" aria-label="Zamknij galerię" data-close>&times;</button>
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</div>
+      <div class="product__lightbox-slider swiper">
+        <div class="swiper-wrapper"></div>
+
+        <div class="swiper-button-prev" aria-label="Poprzednie zdjęcie"></div>
+        <div class="swiper-button-next" aria-label="Następne zdjęcie"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "t:general.product",
-  "settings": [],
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  }
+  "name": "Produkt",
+  "tag": "section",
+  "class": "sekcja",
+  "settings": [
+    {
+      "type": "text",
+      "id": "product_tag_metafield_namespace",
+      "label": "Namespace metapola tagu produktu",
+      "info": "np. custom"
+    },
+    {
+      "type": "text",
+      "id": "product_tag_metafield_key",
+      "label": "Klucz metapola tagu produktu",
+      "info": "np. product_tag"
+    },
+    {
+      "type": "text",
+      "id": "cover_metafield_namespace",
+      "label": "Namespace metapola zdjęcia głównego",
+      "info": "np. custom",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "cover_metafield_key",
+      "label": "Klucz metapola zdjęcia głównego",
+      "info": "np. cover_image",
+      "default": "cover_image"
+    },
+    {
+      "type": "header",
+      "content": "Widget subskrypcji - korzyści"
+    },
+    {
+      "type": "image_picker",
+      "id": "subscription_benefit_icon",
+      "label": "Ikona korzyści (SVG 20x20px)",
+      "info": "Ikona wyświetlana przy korzyściach subskrypcji (Appstle)"
+    },
+    {
+      "type": "text",
+      "id": "subscription_benefit_1",
+      "label": "Korzyść 1",
+      "default": "Najniższa cena"
+    },
+    {
+      "type": "text",
+      "id": "subscription_benefit_2",
+      "label": "Korzyść 2",
+      "default": "Subskrypcja na 3 miesiące"
+    },
+    {
+      "type": "text",
+      "id": "subscription_benefit_3",
+      "label": "Korzyść 3",
+      "default": "Anuluj, edytuj i przesuwaj kiedy chcesz"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "promo",
+      "name": "Kod rabatowy",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tytul_promocji",
+          "label": "Tytuł promocji",
+          "default": "Promocja!"
+        },
+        {
+          "type": "richtext",
+          "id": "tekst_promocji",
+          "label": "Tekst promocji",
+          "default": "<p>Skorzystaj z kodu rabatowego, wpisując go w koszyku:</p>"
+        },
+        {
+          "type": "text",
+          "id": "kod_rabatowy",
+          "label": "Kod rabatowy",
+          "default": "RABAT10"
+        },
+        {
+          "type": "select",
+          "id": "typ_promocji",
+          "label": "Wyświetlaj dla",
+          "options": [
+            {
+              "value": "wszystkie",
+              "label": "Wszystkich produktów"
+            },
+            {
+              "value": "produkty",
+              "label": "Wybranych produktów"
+            },
+            {
+              "value": "kolekcje",
+              "label": "Produktów z kolekcji"
+            }
+          ],
+          "default": "wszystkie"
+        },
+        {
+          "type": "product_list",
+          "id": "produkty",
+          "label": "Wybrane produkty",
+          "limit": 10
+        },
+        {
+          "type": "collection_list",
+          "id": "kolekcje",
+          "label": "Wybrane kolekcje",
+          "limit": 5
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Funkcja USP",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Ikona (32x32px)"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Tekst",
+          "default": "Wysyłka produktów w ciągu 24h"
+        }
+      ]
+    },
+    {
+      "type": "payment_method",
+      "name": "Metoda płatności",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Ikona metody płatności (40x25px)"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Tekst alternatywny",
+          "default": "Metoda płatności"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produkt",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Wysyłka produktów w ciągu 24h"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Bezpłatna dostawa od 300 PLN"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Bezpieczne płatności online"
+          }
+        },
+        {
+          "type": "payment_method",
+          "settings": {
+            "alt_text": "Visa"
+          }
+        },
+        {
+          "type": "payment_method",
+          "settings": {
+            "alt_text": "Mastercard"
+          }
+        },
+        {
+          "type": "payment_method",
+          "settings": {
+            "alt_text": "Apple Pay"
+          }
+        },
+        {
+          "type": "payment_method",
+          "settings": {
+            "alt_text": "PayPal"
+          }
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Obsługa kontrolek ilości
+    const quantityControls = document.querySelectorAll('.product__quantity-controls');
+    
+    quantityControls.forEach(control => {
+      const input = control.querySelector('.product__quantity-input');
+      const minusButton = control.querySelector('[data-action="zmniejsz"]');
+      const plusButton = control.querySelector('[data-action="zwieksz"]');
+      
+      minusButton.addEventListener('click', () => {
+        const currentValue = parseInt(input.value);
+        if (currentValue > 1) {
+          input.value = currentValue - 1;
+        }
+      });
+      
+      plusButton.addEventListener('click', () => {
+        const currentValue = parseInt(input.value);
+        input.value = currentValue + 1;
+      });
+    });
+    
+    // Obsługa kopiowania kodu rabatowego
+    const copyButtons = document.querySelectorAll('.product__promo-button');
+    
+    copyButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const kod = button.getAttribute('data-kod');
+        navigator.clipboard.writeText(kod).then(() => {
+          const originalText = button.querySelector('.product__promo-button-text').textContent;
+          button.querySelector('.product__promo-button-text').textContent = 'Skopiowano!';
+          
+          setTimeout(() => {
+            button.querySelector('.product__promo-button-text').textContent = originalText;
+          }, 2000);
+        });
+      });
+    });
+  });
+
+  // Galeria: kliknięcie w zdjęcie otwiera modal ze sliderem
+  const galleryImages = document.querySelectorAll('.product__gallery .js-gallery-image');
+  const lightbox = document.getElementById('product-lightbox');
+
+  if (galleryImages.length && lightbox) {
+    const wrapper = lightbox.querySelector('.swiper-wrapper');
+    let gallerySwiper = null;
+    let slidesBuilt = false;
+
+    function buildSlidesOnce() {
+      if (slidesBuilt) return;
+      const slidesHTML = Array.from(galleryImages).map(img => {
+        const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+        const alt = img.getAttribute('alt') || '';
+        return `<div class="swiper-slide"><img src="${full}" alt="${alt}"></div>`;
+      }).join('');
+      wrapper.innerHTML = slidesHTML;
+      slidesBuilt = true;
+    }
+
+    function openLightbox(index) {
+      buildSlidesOnce();
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      if (!gallerySwiper) {
+        gallerySwiper = new Swiper(lightbox.querySelector('.product__lightbox-slider'), {
+          slidesPerView: 1,
+          spaceBetween: 0,
+          loop: false,
+          centeredSlides: false,
+          initialSlide: index || 0,
+          navigation: {
+            nextEl: lightbox.querySelector('.swiper-button-next'),
+            prevEl: lightbox.querySelector('.swiper-button-prev')
+          },
+          pagination: {
+            el: lightbox.querySelector('.swiper-pagination'),
+            clickable: true
+          },
+          keyboard: { enabled: true }
+        });
+      } else {
+        gallerySwiper.slideTo(index || 0, 0);
+      }
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    galleryImages.forEach((img, idx) => {
+      const handler = () => openLightbox(idx);
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', handler);
+      img.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handler();
+        }
+      });
+    });
+
+    lightbox.addEventListener('click', e => {
+      if (e.target.matches('[data-close]')) closeLightbox();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+    });
+  }
+
+  // Appstle custom benefits injection
+  (function(){
+    // Pobierz dane z Liquid (settings sekcji)
+    const sectionData = document.querySelector('.product');
+    const benefitIconUrl = "{{ section.settings.subscription_benefit_icon | image_url: width: 40 }}";
+    const benefit1 = "{{ section.settings.subscription_benefit_1 | escape }}";
+    const benefit2 = "{{ section.settings.subscription_benefit_2 | escape }}";
+    const benefit3 = "{{ section.settings.subscription_benefit_3 | escape }}";
+    
+    // Domyślne SVG jako fallback
+    const DEFAULT_SVG = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="check"><circle cx="10.0003" cy="10" r="8.33333" stroke="url(#paint0_linear_3163_1447)" stroke-width="1.5"/><path d="M7.08301 10.4L8.74967 12L12.9163 8" stroke="url(#paint1_linear_3163_1447)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear_3163_1447" x1="18.3337" y1="10" x2="1.66699" y2="10" gradientUnits="userSpaceOnUse"><stop stop-color="#16B4EF"/><stop offset="1" stop-color="#50BFE9"/></linearGradient><linearGradient id="paint1_linear_3163_1447" x1="12.9163" y1="10" x2="7.08301" y2="10" gradientUnits="userSpaceOnUse"><stop stop-color="#16B4EF"/><stop offset="1" stop-color="#50BFE9"/></linearGradient></defs></svg>';
+    
+    // Wybierz ikonę - użyj wgranej lub domyślnego SVG
+    let CHECK_ICON;
+    if (benefitIconUrl && !benefitIconUrl.includes('no-image')) {
+      CHECK_ICON = `<img src="${benefitIconUrl}" alt="" class="check" width="20" height="20" aria-hidden="true">`;
+    } else {
+      CHECK_ICON = DEFAULT_SVG;
+    }
+    
+    const BENEFITS_HTML = `
+      <div class="appstle-custom-benefits" role="region" aria-label="Korzyści subskrypcji">
+        ${benefit1 ? `<div class="row">${CHECK_ICON} ${benefit1}</div>` : ''}
+        ${benefit2 ? `<div class="row">${CHECK_ICON} ${benefit2}</div>` : ''}
+        ${benefit3 ? `<div class="row">${CHECK_ICON} ${benefit3}</div>` : ''}
+      </div>`;
+
+    function inject(widget){
+      widget.querySelectorAll('.appstle_subscription_wrapper_option.appstle_include_dropdown').forEach(opt=>{
+        if (!opt.querySelector('.appstle-custom-benefits')){
+          const anchor = opt.querySelector('.appstle_subscribe_option')
+                     ||  opt.querySelector('.appstle_subscribe_option_grid')
+                     ||  opt;
+          const wrap = document.createElement('div'); wrap.innerHTML = BENEFITS_HTML;
+          anchor.appendChild(wrap.firstElementChild);
+        }
+      });
+    }
+
+    function refresh(){
+      document.querySelectorAll('.appstle_sub_widget').forEach(inject);
+    }
+
+    const schedule = (()=>{let raf=null;return ()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(refresh);};})();
+
+    document.addEventListener('appstle:widget:loaded', schedule);
+    if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', schedule); else schedule();
+
+    document.addEventListener('change', e=>{
+      if (e.target && e.target.matches('.appstle_subscription_wrapper_option input[type="radio"]')) schedule();
+    });
+    new MutationObserver(schedule).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  })();
+</script>

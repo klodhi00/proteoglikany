@@ -1,0 +1,259 @@
+{% comment %}
+  Sekcja: Pływający przycisk zakupu
+  Przeznaczenie: Przycisk przyklejony do dołu ekranu, który śledzi użytkownika podczas przewijania na stronach produktów
+  Wyświetla: Zdjęcie produktu, nazwę i przycisk zakupu przymocowany do dołu ekranu
+{% endcomment %}
+
+{%- if section.settings.enabled -%}
+    <style>
+      .floating-buy-button {
+        --button-bg-color: {{ section.settings.button_bg_color }};
+        --button-text-color: {{ section.settings.button_text_color }};
+        --button-bg-hover-color: {{ section.settings.button_bg_color | color_modify: 'darken', 10 }};
+      }
+    </style>
+  
+    <section class="floating-buy-button" id="FloatingBuyButton-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="floating-buy-button" aria-label="Pływający przycisk zakupu">
+      <div class="container">
+        <div class="floating-buy-button__wrapper">
+          {% if product %}
+            <div class="floating-buy-button__product">
+              <div class="floating-buy-button__image">
+                {% if product.featured_image %}
+                  <img 
+                    src="{{ product.featured_image | img_url: '80x80', crop: 'center' }}" 
+                    alt="{{ product.featured_image.alt | escape }}"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                  >
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+              </div>
+              <div class="floating-buy-button__info">
+                <h3 class="floating-buy-button__title">{{ product.title }}</h3>
+                <div class="floating-buy-button__price">
+                  {% if product.compare_at_price_max > product.price %}
+                    <span class="floating-buy-button__price-sale">{{ product.price | money }}</span>
+                    <s class="floating-buy-button__price-compare">{{ product.compare_at_price_min | money }}</s>
+                  {% else %}
+                    {{ product.price | money }}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            
+            <div class="floating-buy-button__action">
+              <button 
+                type="button" 
+                class="button floating-buy-button__button"
+                aria-label="{{ section.settings.button_text | escape }}"
+                {% unless product.available %} disabled {% endunless %}
+                data-product-id="{{ product.id }}"
+              >
+                <span class="button-text">
+                  {% if product.available %}
+                    {{ section.settings.button_text }}
+                  {% else %}
+                    {% comment %}Upewnij się, że teksty są przetłumaczone{% endcomment %}
+                    {% assign sold_out_text = 'products.product.sold_out' | t %}
+                    {% if sold_out_text == 'products.product.sold_out' %}
+                      Wyprzedane
+                    {% else %}
+                      {{ sold_out_text }}
+                    {% endif %}
+                  {% endif %}
+                </span>
+                <span class="button-loading" aria-hidden="true">
+                  <svg class="spinner" viewBox="0 0 50 50">
+                    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                  </svg>
+                </span>
+                <span class="button-success" aria-hidden="true">
+                  <svg class="checkmark" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const floatingBuyButton = document.getElementById('FloatingBuyButton-{{ section.id }}');
+        const scrollThreshold = {{ section.settings.scroll_threshold | default: 400 }};
+        
+        if (floatingBuyButton) {
+          // Obsługa widoczności przy przewijaniu
+          window.addEventListener('scroll', function() {
+            if (window.scrollY > scrollThreshold) {
+              floatingBuyButton.classList.add('floating-buy-button--visible');
+            } else {
+              floatingBuyButton.classList.remove('floating-buy-button--visible');
+            }
+          });
+  
+          // Funkcjonalność dodawania do koszyka
+          const addToCartButton = floatingBuyButton.querySelector('.floating-buy-button__button');
+          
+          if (addToCartButton && !addToCartButton.disabled) {
+            addToCartButton.addEventListener('click', function() {
+              // Pobierz główny formularz produktu, aby uzyskać wybrany wariant
+              const productForm = document.querySelector('form[action*="/cart/add"]');
+              
+              if (!productForm) {
+                console.error('Nie znaleziono formularza produktu');
+                return;
+              }
+              
+              // Pokaż ładowanie
+              addToCartButton.classList.add('is-loading');
+              
+              // Pobierz wybrany wariant i ilość z formularza
+              const variantInput = productForm.querySelector('input[name="id"], select[name="id"]');
+              const quantityInput = productForm.querySelector('input[name="quantity"]');
+              
+              if (!variantInput) {
+                console.error('Nie znaleziono pola wyboru wariantu');
+                addToCartButton.classList.remove('is-loading');
+                return;
+              }
+              
+              const variantId = variantInput.value;
+              const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+              
+              // Dane do dodania produktu
+              const formData = {
+                'items': [{
+                  'id': variantId,
+                  'quantity': quantity
+                }]
+              };
+  
+              // Dodaj produkt do koszyka
+              fetch(window.Shopify.routes.root + 'cart/add.js', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+              })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Błąd dodawania do koszyka');
+                }
+                return response.json();
+              })
+              .then(data => {
+                // Sprawdź czy istnieje drawer koszyka
+                const cartDrawerTrigger = document.querySelector('[data-cart-drawer-trigger]');
+                
+                // Po sukcesie, odśwież koszyk
+                fetch(window.Shopify.routes.root + 'cart.js')
+                  .then(res => res.json())
+                  .then(cart => {
+                    // Zaktualizuj licznik elementów w koszyku, jeśli istnieje
+                    const cartCountElements = document.querySelectorAll('.cart-count-bubble');
+                    if (cartCountElements.length > 0) {
+                      cartCountElements.forEach(el => {
+                        el.textContent = cart.item_count;
+                        el.classList.remove('hidden');
+                      });
+                    }
+                    
+                    // Pokaż potwierdzenie
+                    addToCartButton.classList.remove('is-loading');
+                    addToCartButton.classList.add('success');
+                    setTimeout(() => {
+                      addToCartButton.classList.remove('success');
+                    }, 2000);
+                    
+                    // Otwórz drawer koszyka, jeśli istnieje
+                    if (cartDrawerTrigger) {
+                      cartDrawerTrigger.click();
+                    } else if (window.location.pathname !== '/cart') {
+                      // Jeśli drawer nie istnieje, przekieruj do koszyka
+                      window.location.href = window.Shopify.routes.root + 'cart';
+                    }
+                  });
+              })
+              .catch(error => {
+                console.error('Błąd:', error);
+                addToCartButton.classList.remove('is-loading');
+                
+                // Pokaż komunikat o błędzie
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'floating-buy-button__error';
+                errorMessage.textContent = 'Nie udało się dodać produktu do koszyka. Spróbuj ponownie.';
+                
+                floatingBuyButton.appendChild(errorMessage);
+                setTimeout(() => {
+                  errorMessage.remove();
+                }, 3000);
+              });
+            });
+          }
+        }
+      });
+    </script>
+  {%- endif -%}
+  
+  {% schema %}
+  {
+    "name": "Pływający przycisk zakupu",
+    "class": "floating-buy-button-section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enabled",
+        "label": "Włącz pływający przycisk zakupu",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Ustawienia przycisku"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Tekst przycisku",
+        "default": "Kup teraz"
+      },
+      {
+        "type": "color",
+        "id": "button_bg_color",
+        "label": "Kolor tła przycisku",
+        "default": "#16B4EF"
+      },
+      {
+        "type": "color",
+        "id": "button_text_color",
+        "label": "Kolor tekstu przycisku",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "header",
+        "content": "Widoczność"
+      },
+      {
+        "type": "range",
+        "id": "scroll_threshold",
+        "label": "Pokaż po przewinięciu (piksele)",
+        "min": 0,
+        "max": 1000,
+        "step": 10,
+        "default": 400
+      }
+    ],
+    "presets": [
+      {
+        "name": "Pływający przycisk zakupu",
+        "category": "Produkt"
+      }
+    ]
+  }
+  {% endschema %}

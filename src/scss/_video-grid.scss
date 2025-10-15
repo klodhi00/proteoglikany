@@ -1,0 +1,237 @@
+// ------------------------------------------------------------
+// Sekcja: Video Grid
+// BEM: .video-grid
+// ------------------------------------------------------------
+
+.video-grid {
+    width: 100%;
+  
+    // Outer wrapper - tylko wyśrodkowanie
+    &__outer-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+  
+    // Inner wrapper - max-width + paddingi
+    &__inner-wrapper {
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 64px 24px;
+  
+      @include respond-to(tablet) {
+        padding: 100px 80px;
+      }
+    }
+  
+    // Header - tag + tytuł
+    &__header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 64px;
+  
+      @include respond-to(desktop) {
+        margin-bottom: 80px;
+      }
+    }
+  
+    // Tag
+    &__tag {
+      font-size: $font-size-tiny;
+      color: $blue;
+      border: 1px solid $blue;
+      background-color: rgba($blue, 0.1);
+      font-weight: 500;
+      padding: 4px 16px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+  
+    // Tytuł
+    &__title {
+      font-size: $font-size-h2;
+      color: $black;
+      line-height: $line-height-tight;
+    }
+  
+    // Container z filmami - wersja desktopowa
+    &__videos--desktop {
+      display: none;
+  
+      @include respond-to(desktop) {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 32px;
+      }
+    }
+  
+    // Container z filmami - wersja mobile (Swiper)
+    &__videos--mobile {
+      display: block;
+  
+      @include respond-to(desktop) {
+        display: none;
+      }
+    }
+  
+    // Swiper
+    &__swiper {
+      width: 100%;
+      overflow: visible;
+  
+      .swiper-wrapper {
+        display: flex;
+      }
+  
+      .swiper-slide {
+        width: 280px;
+        height: auto;
+      }
+    }
+  
+    // Pojedynczy element wideo
+    &__video-item {
+      cursor: pointer;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.3s ease;
+  
+      &:hover {
+        transform: scale(1.02);
+      }
+  
+      &:focus-visible {
+        outline: 2px solid $blue;
+        outline-offset: 4px;
+        border-radius: 16px;
+      }
+    }
+  
+    // Thumbnail wideo
+    &__video-thumbnail {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+  
+    // Obrazek miniaturki
+    &__thumbnail-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+    // Przycisk play
+    &__play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      pointer-events: none;
+    }
+  
+    // Ikona play
+    &__play-icon {
+      width: 64px;
+      height: 64px;
+      transition: transform 0.3s ease;
+  
+      .video-grid__video-item:hover & {
+        transform: scale(1.1);
+      }
+    }
+  
+    // Modal
+    &__modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+  
+      &.is-active {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  
+    // Overlay modalu
+    &__modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+  
+    // Zawartość modalu
+    &__modal-content {
+      position: relative;
+      width: 90%;
+      max-width: 480px;
+      z-index: 10000;
+  
+      @include respond-to(tablet) {
+        max-width: 600px;
+      }
+    }
+  
+    // Przycisk zamknięcia
+    &__modal-close {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      background: transparent;
+      border: none;
+      color: $white;
+      cursor: pointer;
+      padding: 8px;
+      transition: transform 0.2s ease;
+  
+      &:hover {
+        transform: scale(1.1);
+      }
+  
+      &:focus-visible {
+        outline: 2px solid $white;
+        outline-offset: 4px;
+      }
+  
+      svg {
+        display: block;
+        width: 32px;
+        height: 32px;
+      }
+    }
+  
+    // Wrapper wideo w modalu
+    &__modal-video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      background-color: $black;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  
+    // Wideo w modalu
+    &__modal-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }

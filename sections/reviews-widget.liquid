@@ -1,0 +1,60 @@
+{% comment %}
+  Sekcja: Widget z opiniami
+  Plik: sections/reviews-widget.liquid
+{% endcomment %}
+
+<div class="reviews-widget__outer-wrapper">
+  <div class="reviews-widget__inner-wrapper">
+    
+    <div class="reviews-widget__header">
+      {% if section.settings.tag != blank %}
+        <span class="reviews-widget__tag">{{ section.settings.tag }}</span>
+      {% endif %}
+      
+      {% if section.settings.title != blank %}
+        <h2 class="reviews-widget__title">{{ section.settings.title }}</h2>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="reviews-widget__widget-container">
+        {% for block in section.blocks %}
+          <div class="reviews-widget__widget" {{ block.shopify_attributes }}>
+            {% render block %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Sekcja z opiniami",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "Opinie klientów"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Co mówią nasi klienci"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sekcja z opiniami"
+    }
+  ]
+}
+{% endschema %}
