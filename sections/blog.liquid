@@ -1,35 +1,196 @@
 {% comment %}
-  This section is used in the blog template to render the blog page listing all
-  articles within a blog.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
+  Section: Blog
+  - Wyświetla breadcrumbs, tag i tytuł w górnej części
+  - Na desktopie pokazuje 3 posty w rzędzie
+  - Na mobile pokazuje posty jeden pod drugim
+  - Zgodna z WCAG 2.1 AA
+  - Zawiera ikonki kalendarza i zegara przy datach i czasie czytania
+  - Responsywny layout z przejściem w układ mobilny poniżej 1024px
+  - Na desktopie: skrócone tytuły (60 znaków) i zajawki (150 znaków)
+  - Na mobile: pełne tytuły bez ograniczeń
 {% endcomment %}
 
-<h1>{{ blog.title }}</h1>
+<section class="blog" id="blog-{{ section.id }}">
+  <div class="blog__outer-wrapper">
+    <div class="blog__inner-wrapper">
+      <div class="blog__header">
+        {% if section.settings.breadcrumbs %}
+          <nav class="blog__breadcrumbs" aria-label="Nawigacja okruszkowa">
+            <ol class="blog__breadcrumbs-list">
+              <li class="blog__breadcrumbs-item">
+                <a href="{{ routes.root_url }}" class="blog__breadcrumbs-link">Strona główna</a>
+              </li>
+              <li class="blog__breadcrumbs-item">
+                <span class="blog__breadcrumbs-separator">/</span>
+                <a href="{{ blog.url }}" class="blog__breadcrumbs-link">Wiedza</a>
+              </li>
+            </ol>
+          </nav>
+        {% endif %}
+        
+        <div class="blog__title-container">
+          {% if section.settings.tag != blank %}
+            <div class="blog__tag">{{ section.settings.tag }}</div>
+          {% endif %}
+          
+          {% if section.settings.title != blank %}
+            <h2 class="blog__title">{{ section.settings.title }}</h2>
+          {% endif %}
+        </div>
+      </div>
 
-{% paginate blog.articles by 5 %}
-  {% for article in blog.articles %}
-    <div>
-      {% if article.image %}
-        {{ article.image | image_url: width: 1000 | image_tag }}
-      {% endif %}
-      <h2>
-        {{ article.title | link_to: article.url }}
-      </h2>
-      {% assign date = article.published_at | time_tag: format: 'date' %}
-      <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-      <p>{{ article.excerpt }}</p>
+      {% assign blog = blogs[section.settings.blog] %}
+      {% assign post_limit = section.settings.post_count %}
+      {% assign metafield_namespace = section.settings.metafield_namespace | default: 'custom' %}
+      {% assign metafield_key = section.settings.metafield_key | default: 'reading_time' %}
+
+      <div class="blog__grid">
+        {% for article in blog.articles limit: post_limit %}
+          <div class="blog__item">
+            {% if article.image %}
+              <a href="{{ article.url }}" class="blog__image-link" aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title | escape }}">
+                <div class="blog__image">
+                  <img src="{{ article.image | image_url: width: 800 }}"
+                       alt="{{ article.title | escape }}"
+                       width="800"
+                       height="230"
+                       loading="lazy">
+                </div>
+              </a>
+            {% endif %}
+            
+            <div class="blog__meta">
+              <div class="blog__date">
+                {% if section.settings.calendar_icon %}
+                  <img src="{{ section.settings.calendar_icon | image_url }}" alt="Kalendarz" class="blog__meta-icon" width="16" height="16">
+                {% endif %}
+                <span>{{ article.published_at | date: "%d.%m.%Y" }}</span>
+              </div>
+              
+              <div class="blog__reading-time">
+                {% if section.settings.clock_icon %}
+                  <img src="{{ section.settings.clock_icon | image_url }}" alt="Zegar" class="blog__meta-icon" width="16" height="16">
+                {% endif %}
+                <span>
+                  {% if article.metafields[metafield_namespace][metafield_key] %}
+                    {{ article.metafields[metafield_namespace][metafield_key] }}
+                  {% else %}
+                    {{ section.settings.default_reading_time }}
+                  {% endif %}
+                  min czytania
+                </span>
+              </div>
+            </div>
+            
+            <h4 class="blog__item-title">
+              <a href="{{ article.url }}">
+                <span class="blog__title-desktop">{{ article.title | truncate: 35 }}</span>
+                <span class="blog__title-mobile">{{ article.title }}</span>
+              </a>
+            </h4>
+            
+            <div class="blog__excerpt">
+              {% if article.excerpt != blank %}
+                {{ article.excerpt | strip_html | truncate: 135 }}
+              {% else %}
+                {{ article.content | strip_html | truncate: 135 }}
+              {% endif %}
+            </div>
+            
+            <div class="blog__button-container">
+              <a href="{{ article.url }}" class="button button--outline-blue">Czytaj więcej</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
-  {% endfor %}
-
-  {%- if paginate.pages > 1 -%}
-    {{- paginate | default_pagination -}}
-  {%- endif -%}
-{% endpaginate %}
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "t:general.blog",
-  "settings": []
+  "name": "Wpisy blogowe",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "breadcrumbs",
+      "label": "Pokaż breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "WIEDZA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Pozyskuj wiedzę z naszych artykułów"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Wybierz blog, z którego chcesz wyświetlać artykuły"
+    },
+    {
+      "type": "range",
+      "id": "post_count",
+      "min": 3,
+      "max": 12,
+      "step": 3,
+      "default": 6,
+      "label": "Liczba wyświetlanych postów"
+    },
+    {
+      "type": "image_picker",
+      "id": "calendar_icon",
+      "label": "Ikona kalendarza",
+      "info": "Ikona wyświetlana przy dacie publikacji"
+    },
+    {
+      "type": "image_picker",
+      "id": "clock_icon",
+      "label": "Ikona zegara",
+      "info": "Ikona wyświetlana przy czasie czytania"
+    },
+    {
+      "type": "number",
+      "id": "default_reading_time",
+      "label": "Domyślny czas czytania (min)",
+      "default": 5,
+      "info": "Używany, gdy artykuł nie ma własnego czasu czytania w metapolach"
+    },
+    {
+      "type": "header",
+      "content": "Ustawienia metapól"
+    },
+    {
+      "type": "text",
+      "id": "metafield_namespace",
+      "label": "Namespace metapola",
+      "default": "custom",
+      "info": "Namespace metapola z czasem czytania"
+    },
+    {
+      "type": "text",
+      "id": "metafield_key",
+      "label": "Klucz metapola",
+      "default": "reading_time",
+      "info": "Klucz metapola z czasem czytania"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wpisy blogowe",
+      "settings": {
+        "post_count": 6
+      }
+    }
+  ]
 }
 {% endschema %}

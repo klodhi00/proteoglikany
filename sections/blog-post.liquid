@@ -1,0 +1,250 @@
+{% comment %}
+  Blog Post Section dla motywu Proteoglikany
+  Zgodny z Shopify Online Store 2.0
+  
+  Struktura zapewnia:
+  - Semantyczny HTML (article, h1-h6, etc.)
+  - Responsywność mobile-first
+  - Automatyczny spis treści
+  - Zgodność WCAG 2.1 AA
+{% endcomment %}
+
+<article class="blog-post">
+  <div class="blog-post__outer-wrapper">
+    <div class="blog-post__inner-wrapper">
+      {% if article.image %}
+        <div class="blog-post__featured-image">
+          <img 
+            src="{{ article.image | img_url: 'master' }}" 
+            alt="{{ article.image.alt | default: article.title }}"
+            width="{{ article.image.width }}"
+            height="{{ article.image.height }}"
+            loading="eager"
+          >
+        </div>
+      {% endif %}
+
+      <div class="blog-post__mobile-toc">
+        <h4 class="blog-post__toc-title">{{ section.settings.toc_title }}</h4>
+        <div class="blog-post__toc-items" id="mobile-toc-items"></div>
+      </div>
+
+      <div class="blog-post__main">
+        <div class="blog-post__text">
+          {% if section.settings.breadcrumbs %}
+            <nav class="blog-post__breadcrumbs" aria-label="Nawigacja okruszkowa">
+              <ol class="blog-post__breadcrumbs-list">
+                <li class="blog-post__breadcrumbs-item">
+                  <a href="{{ routes.root_url }}" class="blog-post__breadcrumbs-link">Strona główna</a>
+                </li>
+                <li class="blog-post__breadcrumbs-item">
+                  <span class="blog-post__breadcrumbs-separator">/</span>
+                  <a href="{{ blog.url }}" class="blog-post__breadcrumbs-link">Wiedza</a>
+                </li>
+                <li class="blog-post__breadcrumbs-item">
+                  <span class="blog-post__breadcrumbs-separator">/</span>
+                  <span class="blog-post__breadcrumbs-current">{{ article.title }}</span>
+                </li>
+              </ol>
+            </nav>
+          {% endif %}
+          
+          <div class="blog-post__header">
+            {% if section.settings.static_tag != blank %}
+              <div class="blog-post__tag-container">
+                <span class="blog-post__tag">{{ section.settings.static_tag }}</span>
+              </div>
+            {% elsif article.tags.size > 0 %}
+              <div class="blog-post__tag-container">
+                {% for tag in article.tags limit:1 %}
+                  <span class="blog-post__tag">{{ tag }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <h2 class="blog-post__title">
+              {{ article.title }}
+            </h2>
+          </div>
+          
+          <div class="blog-post__body rte">
+            {{ article.content }}
+          </div>
+        </div>
+        
+        <div class="blog-post__sidebar">
+          <div class="blog-post__toc">
+            <h4 class="blog-post__toc-title">{{ section.settings.toc_title }}</h4>
+            <div class="blog-post__toc-items" id="desktop-toc-items"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<script>
+  // Generowanie spisu treści na podstawie nagłówków w artykule
+  document.addEventListener('DOMContentLoaded', function() {
+    const articleContent = document.querySelector('.blog-post__body');
+    const mobileTocItems = document.getElementById('mobile-toc-items');
+    const desktopTocItems = document.getElementById('desktop-toc-items');
+    
+    // Znajdujemy i mierzymy wysokość headera
+    const header = document.querySelector('.site-header, header[role="banner"], .header');
+    const headerHeight = header ? header.offsetHeight : 0;
+    
+    // Dodajemy padding-top do mobilnego i desktopowego spisu treści, aby uniknąć zakrywania przez header
+    document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
+    
+    if (articleContent && mobileTocItems && desktopTocItems) {
+      // Wyszukaj wszystkie nagłówki w treści artykułu (h2, h3, h4, h5, h6)
+      const headings = articleContent.querySelectorAll('h2, h3, h4, h5, h6');
+      
+      if (headings.length > 0) {
+        // Dodaj offsetowe elementy docelowe przed każdym nagłówkiem
+        headings.forEach((heading, index) => {
+          if (!heading.id) {
+            heading.id = `heading-${index}`;
+          }
+          
+          // Tworzenie offsetowego elementu docelowego
+          const target = document.createElement('div');
+          target.id = `target-${heading.id}`;
+          target.className = 'blog-post__scroll-target';
+          target.style.position = 'relative';
+          target.style.top = `-${headerHeight + 50}px`; // Dodatkowy offset 50px
+          target.style.height = '1px';
+          target.style.width = '1px';
+          target.style.visibility = 'hidden';
+          target.style.pointerEvents = 'none';
+          target.setAttribute('aria-hidden', 'true');
+          
+          // Wstaw cel przed nagłówkiem
+          heading.parentNode.insertBefore(target, heading);
+        });
+        
+        // Tworzenie listy spisu treści
+        const tocList = document.createElement('ol');
+        
+        headings.forEach((heading, index) => {
+          const listItem = document.createElement('li');
+          const link = document.createElement('a');
+          
+          // Link kieruje do elementu docelowego, nie do nagłówka
+          link.href = `#target-${heading.id}`;
+          link.textContent = heading.textContent;
+          link.classList.add('blog-post__toc-link');
+          link.dataset.headingId = heading.id;
+          
+          // Dodaj klasę na podstawie poziomu nagłówka dla stylowania
+          link.classList.add(`blog-post__toc-link--${heading.tagName.toLowerCase()}`);
+          
+          listItem.appendChild(link);
+          tocList.appendChild(listItem);
+        });
+        
+        // Dodaj spis treści do wersji mobilnej i desktopowej
+        mobileTocItems.appendChild(tocList.cloneNode(true));
+        desktopTocItems.appendChild(tocList);
+        
+        // Obsługa kliknięcia w spis treści z dokładnymi offsetami
+        function handleTocClick(e) {
+          const link = e.target.closest('.blog-post__toc-link');
+          if (!link) return;
+          
+          e.preventDefault();
+          
+          // Pobierz element docelowy z atrybutu href linku
+          const targetId = link.getAttribute('href').substring(1);
+          const target = document.getElementById(targetId);
+          
+          if (target) {
+            // Przewijanie z uwzględnieniem dokładnej pozycji elementu docelowego
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({
+              top: targetPosition - 20, // Dodatkowy mały offset dla wygody
+              behavior: 'smooth'
+            });
+          }
+        }
+        
+        // Dodaj obsługę kliknięcia do obu spisów treści
+        mobileTocItems.addEventListener('click', handleTocClick);
+        desktopTocItems.addEventListener('click', handleTocClick);
+        
+        // Oznaczanie aktywnych elementów w spisie treści podczas przewijania
+        function highlightActiveTocItem() {
+          let currentActiveHeading = null;
+          const scrollPos = window.pageYOffset;
+          
+          // Znajdź nagłówek, który jest aktualnie widoczny
+          for (let i = 0; i < headings.length; i++) {
+            const heading = headings[i];
+            const target = document.getElementById(`target-${heading.id}`);
+            
+            if (target) {
+              const targetPos = target.getBoundingClientRect().top + window.pageYOffset;
+              
+              if (scrollPos >= targetPos - 50) {
+                currentActiveHeading = heading.id;
+              } else {
+                break; // Zatrzymaj pętlę, gdy znajdziemy pierwszy nagłówek poniżej aktualnej pozycji
+              }
+            }
+          }
+          
+          // Usuń aktywne klasy ze wszystkich linków
+          document.querySelectorAll('.blog-post__toc-link--active').forEach(item => {
+            item.classList.remove('blog-post__toc-link--active');
+          });
+          
+          // Jeśli znaleźliśmy aktywny nagłówek, podświetl odpowiednie linki
+          if (currentActiveHeading) {
+            document.querySelectorAll(`.blog-post__toc-link[data-heading-id="${currentActiveHeading}"]`).forEach(item => {
+              item.classList.add('blog-post__toc-link--active');
+            });
+          }
+        }
+        
+        // Aktualizuj aktywny element podczas przewijania
+        window.addEventListener('scroll', highlightActiveTocItem);
+        
+        // Wywołaj raz na początku
+        highlightActiveTocItem();
+      }
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Post treść",
+  "settings": [
+    {
+      "type": "text",
+      "id": "toc_title",
+      "label": "Tytuł spisu treści",
+      "default": "Spis treści"
+    },
+    {
+      "type": "checkbox",
+      "id": "breadcrumbs",
+      "label": "Pokaż okruszki",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "static_tag",
+      "label": "Stały tag (ma priorytet nad tagami artykułu)",
+      "default": "Artykuł"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Post treść",
+      "category": "Blog"
+    }
+  ]
+}
+{% endschema %}

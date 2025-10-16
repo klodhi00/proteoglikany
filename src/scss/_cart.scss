@@ -1,0 +1,393 @@
+// ------------------------------------------------------------
+// cart-section.scss
+// Sekcja koszyka z breadcrumbs, produktami, bannerem i podsumowaniem
+// ------------------------------------------------------------
+
+.cart-section {
+  
+    // Outer wrapper - tylko wyśrodkowanie
+    &__outer-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    // Inner wrapper - max-width i paddingi
+    &__inner-wrapper {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 32px 24px 64px 24px;
+      
+      @include respond-to(tablet) {
+        padding: 50px 80px 100px 80px;
+      }
+    }
+    
+    // Breadcrumbs
+    &__breadcrumbs {
+      margin-bottom: 24px;
+    }
+  
+    &__breadcrumbs-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    &__breadcrumbs-item {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-regular;
+      color: $light-grey;
+      font-weight: 300;
+    }
+  
+    &__breadcrumbs-separator {
+      margin: 0 8px;
+      font-size: $font-size-regular;
+      color: $light-grey;
+      font-weight: 300;
+    }
+  
+    &__breadcrumbs-link {
+      color: $light-grey;
+      transition: color 0.3s ease;
+  
+      &:hover {
+        color: $blue;
+      }
+    }
+  
+    &__breadcrumbs-current {
+      color: $light-grey;
+    }
+    
+    // Header sekcji
+    &__header {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 64px;
+    }
+    
+    // Tag
+    &__tag {
+      font-size: $font-size-tiny;
+      font-weight: 500;
+      color: $blue;
+      background-color: rgba($blue, 0.1);
+      border: 1px solid $blue;
+      padding: 4px 16px;
+      border-radius: 100px;
+      display: inline-block;
+      width: fit-content;
+      margin-bottom: 16px;
+    }
+    
+    // Tytuł sekcji
+    &__title {
+      font-size: $font-size-h2;
+      color: $black;
+    }
+    
+    // Główny kontener - 2 kolumny na desktopie
+    &__container {
+      display: flex;
+      flex-direction: column;
+      
+      @include respond-to(desktop) {
+        flex-direction: row;
+        gap: 100px;
+      }
+    }
+    
+    // Lewa kolumna z produktami
+    &__products {
+      width: 100%;
+      
+      @include respond-to(desktop) {
+        width: 60%;
+      }
+    }
+    
+    // Lista produktów
+    &__products-list {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    // Pojedynczy produkt
+    &__product {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+      position: relative;
+      
+      @include respond-to(tablet) {
+        flex-direction: row;
+      }
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    // Zdjęcie produktu - kwadrat 1:1
+    &__product-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      flex-shrink: 0;
+      margin-bottom: 24px;
+      border-radius: 12px;
+      overflow: hidden;
+      
+      @include respond-to(tablet) {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 0;
+        margin-right: 32px;
+      }
+      
+      img, svg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+    }
+    
+    // Placeholder dla braku zdjęcia
+    &__placeholder {
+      width: 100%;
+      height: 100%;
+      background-color: rgba($blue, 0.05);
+      border-radius: 12px;
+    }
+    
+    // Szczegóły produktu
+    &__product-details {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    // Górna część szczegółów
+    &__product-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    // Informacje o produkcie
+    &__product-info {
+      padding-right: 20px;
+    }
+    
+    // Tytuł produktu
+    &__product-title {
+      font-size: $font-size-regular;
+      font-weight: 400;
+      color: $black-text;
+    }
+    
+    // Wariant produktu
+    &__product-variant {
+      font-size: $font-size-small;
+      color: $blue;
+      margin-top: 12px;
+    }
+    
+    // Przycisk usunięcia
+    &__product-remove {
+      font-size: 24px;
+      color: $black-text;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: $blue;
+      }
+    }
+    
+    // Dolna część szczegółów
+    &__product-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+      
+      @include respond-to(tablet) {
+        margin-top: 32px;
+      }
+    }
+    
+    // Selektor ilości
+    &__product-quantity {
+      display: flex;
+      align-items: center;
+      border: 1px solid $stroke;
+      border-radius: 100px;
+      padding: 12px 24px;
+      gap: 16px;
+    }
+    
+    // Przyciski +/-
+    &__quantity-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: $font-size-h5;
+      color: $black;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      line-height: 1;
+      
+      &:hover {
+        color: $blue;
+      }
+    }
+    
+    // Liczba produktów
+    &__quantity-number {
+      font-size: $font-size-regular;
+      color: $black;
+    }
+    
+    // Cena produktu
+    &__product-price {
+      font-size: $font-size-medium;
+      font-weight: 500;
+      color: $black;
+    }
+    
+    // Banner dostawy - POD produktami
+    &__shipping-banner {
+      display: flex;
+      align-items: flex-start;
+      background-color: $blue;
+      padding: 24px;
+      border-radius: 12px;
+      margin-top: 64px;
+    }
+    
+    // Ikona bannera
+    &__icon-box {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      margin-right: 24px;
+      
+      img, svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    
+    // Tekst bannera
+    &__shipping-text {
+      flex-grow: 1;
+    }
+    
+    // Tytuł bannera
+    &__shipping-title {
+      font-size: $font-size-h5;
+      font-weight: 400;
+      color: $white;
+      margin-bottom: 12px;
+    }
+    
+    // Komunikat bannera
+    &__shipping-message {
+      font-size: $font-size-regular;
+      color: $white;
+    }
+    
+    // Podsumowanie - prawa kolumna
+    &__summary {
+      width: 100%;
+      background-color: $white-bg;
+      padding: 32px;
+      margin-top: 64px;
+      height: fit-content;
+      border-radius: 24px;
+      
+      @include respond-to(desktop) {
+        width: 40%;
+        max-width: 380px;
+        margin-top: 0;
+      }
+    }
+    
+    // Tytuł podsumowania
+    &__summary-title {
+      font-size: $font-size-h5;
+      color: $black;
+      margin-bottom: 32px;
+    }
+    
+    // Kwota podsumowania
+    &__summary-amount {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+    }
+    
+    // Całkowita kwota
+    &__total-price {
+      font-size: $font-size-h3;
+      color: $black;
+      margin-bottom: 8px;
+    }
+    
+    // Informacja o kosztach dostawy
+    &__shipping-cost {
+      font-size: $font-size-small;
+      color: $black-text;
+    }
+    
+    // Przycisk do płatności
+    &__checkout-button {
+      display: block;
+      width: fit-content;
+      text-align: center;
+    }
+    
+    // Komunikat pustego koszyka
+    &__empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 0;
+      margin: 0 auto;
+      
+      &-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 24px;
+        
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      
+      &-title {
+        font-size: $font-size-h3;
+        color: $black;
+        margin-bottom: 16px;
+      }
+      
+      &-text {
+        font-size: $font-size-regular;
+        color: $black-text;
+        margin-bottom: 32px;
+        max-width: 400px;
+      }
+    }
+  }

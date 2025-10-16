@@ -1,37 +1,315 @@
 {% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
+  Section: Cart
+  Sekcja koszyka zgodna z Online Store 2.0
+  Zawiera breadcrumbs, listę produktów, banner informacyjny i podsumowanie
 {% endcomment %}
 
-<h1>{{ 'cart.title' | t }}</h1>
-
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
-
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+<section class="cart-section">
+  <div class="cart-section__outer-wrapper">
+    <div class="cart-section__inner-wrapper">
+      
+      {% if section.settings.breadcrumbs %}
+        <nav class="cart-section__breadcrumbs" aria-label="Nawigacja okruszkowa">
+          <ol class="cart-section__breadcrumbs-list">
+            <li class="cart-section__breadcrumbs-item">
+              <a href="{{ routes.root_url }}" class="cart-section__breadcrumbs-link">Strona główna</a>
+            </li>
+            <li class="cart-section__breadcrumbs-item">
+              <span class="cart-section__breadcrumbs-separator">/</span>
+              <span class="cart-section__breadcrumbs-current">{{ section.settings.breadcrumbs_text }}</span>
+            </li>
+          </ol>
+        </nav>
+      {% endif %}
+      
+      <div class="cart-section__header">
+        {% if section.settings.tag != blank %}
+          <div class="cart-section__tag">{{ section.settings.tag }}</div>
+        {% endif %}
+        <h2 class="cart-section__title">{{ section.settings.title }}</h2>
+      </div>
+      
+      <div class="cart-section__container">
+        <div class="cart-section__products">
+          {% if cart.item_count > 0 %}
+            
+            <div class="cart-section__products-list">
+              {% for item in cart.items %}
+                <div class="cart-section__product" id="CartItem-{{ item.index | plus: 1 }}" data-cart-item>
+                  <div class="cart-section__product-image">
+                    {% if item.image != blank %}
+                      <a href="{{ item.url }}" aria-label="{{ item.title | escape }}">
+                        <img 
+                          src="{{ item.image | img_url: '300x300', crop: 'center' }}" 
+                          alt="{{ item.title | escape }}" 
+                          loading="lazy" 
+                          width="300" 
+                          height="300"
+                        >
+                      </a>
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'cart-section__placeholder' }}
+                    {% endif %}
+                  </div>
+                  
+                  <div class="cart-section__product-details">
+                    <div class="cart-section__product-top">
+                      <div class="cart-section__product-info">
+                        <a href="{{ item.url }}">
+                          <h3 class="cart-section__product-title">{{ item.product.title }}</h3>
+                        </a>
+                        <div class="cart-section__product-variant">
+                          {% if item.selling_plan_allocation %}
+                            {{ item.selling_plan_allocation.selling_plan.name }}
+                          {% else %}
+                            {{ section.settings.zakup_jednorazowy }}
+                          {% endif %}
+                        </div>
+                      </div>
+                      
+                      <a 
+                        href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" 
+                        class="cart-section__product-remove" 
+                        aria-label="{{ 'cart.general.remove' | t }}: {{ item.title | escape }}"
+                      >
+                        <span aria-hidden="true">×</span>
+                      </a>
+                    </div>
+                    
+                    <div class="cart-section__product-bottom">
+                      <div class="cart-section__product-quantity" data-quantity-wrapper>
+                        <a 
+                          href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" 
+                          class="cart-section__quantity-button cart-section__quantity-minus" 
+                          aria-label="{{ 'cart.general.decrease' | t }}: {{ item.title | escape }}"
+                          data-quantity-button="decrease"
+                        >
+                          <span aria-hidden="true">−</span>
+                        </a>
+                        <span class="cart-section__quantity-number" aria-label="Ilość: {{ item.quantity }}">{{ item.quantity }}</span>
+                        <a 
+                          href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" 
+                          class="cart-section__quantity-button cart-section__quantity-plus" 
+                          aria-label="{{ 'cart.general.increase' | t }}: {{ item.title | escape }}"
+                          data-quantity-button="increase"
+                        >
+                          <span aria-hidden="true">+</span>
+                        </a>
+                      </div>
+                      <div class="cart-section__product-price">
+                        {{ item.final_line_price | money }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            
+            {% if section.settings.pokazuj_banner_dostawy %}
+              <div class="cart-section__shipping-banner">
+                {% if section.settings.ikona_dostawy != blank %}
+                  <div class="cart-section__icon-box">
+                    <img 
+                      src="{{ section.settings.ikona_dostawy | img_url: '80x80' }}" 
+                      alt="{{ section.settings.banner_tytul | escape }}" 
+                      width="40" 
+                      height="40" 
+                      loading="lazy"
+                    >
+                  </div>
+                {% else %}
+                  <div class="cart-section__icon-box">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M33.333 11.667L20 4.167L6.667 11.667V28.333L20 35.833L33.333 28.333V11.667Z" stroke="#16B4EF" stroke-width="2" stroke-linejoin="round"/>
+                      <path d="M6.667 11.667L20 19.167" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M20 35.833V19.167" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M33.333 11.667L20 19.167" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M26.667 8.333L13.333 15.833" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                {% endif %}
+                
+                <div class="cart-section__shipping-text">
+                  {% if section.settings.banner_tytul != blank %}
+                    <h5 class="cart-section__shipping-title">{{ section.settings.banner_tytul }}</h5>
+                  {% endif %}
+                  {% if section.settings.banner_tekst != blank %}
+                    <p class="cart-section__shipping-message">{{ section.settings.banner_tekst }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+            
+          {% else %}
+            
+            <div class="cart-section__empty">
+              <div class="cart-section__empty-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M32 12H28.5714L25.4286 6H14.5714L11.4286 12H8C6.89543 12 6 12.8954 6 14V32C6 33.1046 6.89543 34 8 34H32C33.1046 34 34 33.1046 34 32V14C34 12.8954 33.1046 12 32 12Z" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14.5714 12L17.5714 6H22.4286L25.4286 12" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M20 28C23.3137 28 26 25.3137 26 22C26 18.6863 23.3137 16 20 16C16.6863 16 14 18.6863 14 22C14 25.3137 16.6863 28 20 28Z" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14.6667 22H25.3333" stroke="#16B4EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="cart-section__empty-title">{{ section.settings.pusty_koszyk_tytul }}</h3>
+              <p class="cart-section__empty-text">{{ section.settings.pusty_koszyk_komunikat }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+                {{ section.settings.kontynuuj_zakupy_tekst }}
+              </a>
+            </div>
+            
+          {% endif %}
+        </div>
+        
+        {% if cart.item_count > 0 %}
+          <div class="cart-section__summary">
+            <h5 class="cart-section__summary-title">{{ section.settings.podsumowanie_tytul }}</h5>
+            
+            <div class="cart-section__summary-amount">
+              <span class="cart-section__total-price">{{ cart.total_price | money }}</span>
+              <span class="cart-section__shipping-cost">{{ section.settings.koszty_dostawy_tekst }}</span>
+            </div>
+            
+            <form action="{{ routes.cart_url }}" method="post" id="checkout-form">
+              <input type="hidden" name="checkout" value="1">
+              <button 
+                type="submit" 
+                class="cart-section__checkout-button button button--primary" 
+                aria-label="{{ section.settings.platnosc_tekst | escape }}"
+              >
+                {{ section.settings.platnosc_tekst }}
+              </button>
+            </form>
+          </div>
+        {% endif %}
+        
+      </div>
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "t:general.cart",
-  "settings": []
+  "name": "Koszyk",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Nawigacja okruszkowa"
+    },
+    {
+      "type": "checkbox",
+      "id": "breadcrumbs",
+      "label": "Pokaż nawigację okruszkową",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumbs_text",
+      "label": "Tekst nawigacji",
+      "default": "Koszyk"
+    },
+    {
+      "type": "header",
+      "content": "Nagłówek sekcji"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "KOSZYK"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł",
+      "default": "Twój koszyk"
+    },
+    {
+      "type": "header",
+      "content": "Banner informacyjny"
+    },
+    {
+      "type": "checkbox",
+      "id": "pokazuj_banner_dostawy",
+      "label": "Pokaż banner",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "ikona_dostawy",
+      "label": "Ikona bannera (40x40px)"
+    },
+    {
+      "type": "text",
+      "id": "banner_tytul",
+      "label": "Tytuł bannera",
+      "default": "Darmowa dostawa!"
+    },
+    {
+      "type": "textarea",
+      "id": "banner_tekst",
+      "label": "Tekst bannera",
+      "default": "Zamówienia powyżej 200 zł wysyłamy za darmo na terenie całej Polski!"
+    },
+    {
+      "type": "header",
+      "content": "Ustawienia produktów"
+    },
+    {
+      "type": "text",
+      "id": "zakup_jednorazowy",
+      "label": "Tekst zakupu jednorazowego",
+      "default": "Zakup jednorazowy"
+    },
+    {
+      "type": "header",
+      "content": "Podsumowanie Twojego zamówienia"
+    },
+    {
+      "type": "text",
+      "id": "podsumowanie_tytul",
+      "label": "Tytuł podsumowania",
+      "default": "Podsumowanie zamówienia"
+    },
+    {
+      "type": "text",
+      "id": "koszty_dostawy_tekst",
+      "label": "Tekst kosztów dostawy",
+      "default": "+ koszty dostawy"
+    },
+    {
+      "type": "text",
+      "id": "platnosc_tekst",
+      "label": "Tekst przycisku płatności",
+      "default": "Przejdź do płatności"
+    },
+    {
+      "type": "header",
+      "content": "Pusty koszyk"
+    },
+    {
+      "type": "text",
+      "id": "pusty_koszyk_tytul",
+      "label": "Tytuł pustego koszyka",
+      "default": "Twój koszyk jest pusty"
+    },
+    {
+      "type": "textarea",
+      "id": "pusty_koszyk_komunikat",
+      "label": "Komunikat pustego koszyka",
+      "default": "Wygląda na to, że nie masz jeszcze nic w koszyku. Odkryj nasze produkty i znajdź coś dla siebie."
+    },
+    {
+      "type": "text",
+      "id": "kontynuuj_zakupy_tekst",
+      "label": "Tekst przycisku kontynuacji",
+      "default": "Kontynuuj zakupy"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Koszyk"
+    }
+  ]
 }
 {% endschema %}

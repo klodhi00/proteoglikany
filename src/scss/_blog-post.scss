@@ -1,0 +1,340 @@
+// blog-post.scss
+// Komponent artykułu bloga dla motywu Proteoglikany
+// Wykorzystuje metodologię BEM i podejście mobile-first
+
+:root {
+    --header-height: 80px; // Domyślna wartość, nadpisywana przez JS
+  }
+  
+  .blog-post {
+      &__outer-wrapper {
+        width: 100%;
+        margin: 0 auto;
+      }
+      
+      &__inner-wrapper {
+        max-width: 1600px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 32px 24px 64px 24px;
+        
+        @include respond-to(tablet) {
+          padding: 50px 80px 100px 80px;
+        }
+      }
+      
+      // Breadcrumbs
+      &__breadcrumbs {
+        margin-bottom: 24px;
+      }
+    
+      &__breadcrumbs-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+    
+      &__breadcrumbs-item {
+        display: flex;
+        align-items: center;
+        font-size: $font-size-regular;
+        color: $light-grey;
+        font-weight: 300;
+      }
+    
+      &__breadcrumbs-separator {
+        margin: 0 8px;
+        font-size: $font-size-regular;
+        color: $light-grey;
+        font-weight: 300;
+      }
+    
+      &__breadcrumbs-link {
+        color: $light-grey;
+        transition: color 0.3s ease;
+    
+        &:hover {
+          color: $blue;
+        }
+      }
+    
+      &__breadcrumbs-current {
+        color: $light-grey;
+      }
+      
+      // Główny kontener zdjęcia
+      &__featured-image {
+        width: 100%;
+        margin-bottom: 64px;
+        
+        @include respond-to(desktop) {
+          margin-bottom: 80px;
+        }
+        
+        img {
+          width: 100%;
+          height: auto;
+          aspect-ratio: 1 / 1;
+          object-fit: cover;
+          display: block;
+          border-radius: 24px;
+          
+          @include respond-to(desktop) {
+            aspect-ratio: auto;
+            max-height: 460px;
+          }
+        }
+      }
+      
+      // Header z tagiem i tytułem
+      &__header {
+        margin-bottom: 32px;
+      }
+    
+      // Kontener tagu
+      &__tag-container {
+        margin-bottom: 16px;
+      }
+      
+      &__tag {
+        display: inline-block;
+        font-size: $font-size-tiny;
+        color: $blue;
+        font-weight: 500;
+        border: 1px solid $blue;
+        background-color: rgba($blue, 0.1);
+        padding: 4px 16px;
+        border-radius: 100px;
+        width: fit-content;
+      }
+      
+      // Mobilny spis treści
+      &__mobile-toc {
+        display: block;
+        margin-bottom: 64px;
+        padding: 32px;
+        border-radius: 16px;
+        border: 1px solid $stroke;
+        
+        @include respond-to(desktop) {
+          display: none;
+        }
+      }
+      
+      // Układ główny
+      &__main {
+        width: 100%;
+        
+        @include respond-to(desktop) {
+          // Na desktopie podstawowe style
+          
+          // Tylko dla zakresu desktop (1024px - 1365px)
+          @media (max-width: $breakpoint-desktop-lg - 1px) {
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+          }
+        }
+        
+        @include respond-to(desktop-lg) {
+          // Na desktop-lg i większych przywróć układ rzędowy
+          display: flex;
+          flex-direction: row;
+          gap: 100px;
+        }
+      }
+      
+      // Główny obszar tekstu
+      &__text {
+        width: 100%;
+        
+        @include respond-to(desktop-lg) {
+          flex: 1;
+        }
+      }
+      
+      // Sidebar (tylko desktop)
+      &__sidebar {
+        display: none;
+        
+        @include respond-to(desktop) {
+          display: block;
+          width: 100%;
+          
+          // Tylko dla zakresu desktop (1024px - 1365px)
+          @media (max-width: $breakpoint-desktop-lg - 1px) {
+            order: -1; // Przesuń na początek
+          }
+        }
+        
+        @include respond-to(desktop-lg) {
+          max-width: 400px;
+          order: unset; // Usuń nadpisanie kolejności
+        }
+      }
+      
+      // Desktopowy spis treści
+      &__toc {
+        padding: 32px;
+        border-radius: 16px;
+        border: 1px solid $stroke;
+        
+        @include respond-to(desktop) {
+          position: sticky;
+          top: calc(var(--header-height) + 32px); // Uwzględniamy wysokość headera + margines
+        }
+      }
+      
+      // Tytuł spisu treści
+      &__toc-title {
+        margin-bottom: 24px;
+        font-weight: 400;
+        color: $black;
+        font-size: $font-size-h4;
+      }
+      
+      // Lista spisu treści
+      &__toc-items {
+        ol {
+          list-style: decimal;
+          padding-left: 20px;
+        }
+        
+        li {
+          margin-bottom: 16px;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      
+      // Linki w spisie treści
+      &__toc-link {
+        color: $black-text;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        
+        &:hover, &--active {
+          color: $blue;
+        }
+        
+        // Różne style dla różnych poziomów nagłówków
+        &--h2 {
+          font-weight: 400;
+        }
+        
+        &--h3, &--h4, &--h5, &--h6 {
+          font-weight: 300;
+        }
+      }
+      
+      // Tytuł artykułu
+      &__title {
+        font-size: $font-size-h2;
+        font-weight: 400;
+      }
+      
+      // Treść artykułu (rich text)
+      &__body {
+        // Nagłówki w treści
+        h1, h2, h3, h4, h5, h6 {
+          font-weight: 400;
+          margin-bottom: 32px;
+          margin-top: 64px;
+          position: relative; // Dla lepszej obsługi przewijania
+          scroll-margin-top: calc(var(--header-height) + 50px); // Nowoczesna właściwość scroll-margin
+          
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+        
+        // Paragrafy
+        p {
+          margin-bottom: 64px;
+          font-weight: 300;
+          font-size: $font-size-regular;
+          color: $black-text;
+          
+          strong, b {
+            font-weight: 400;
+          }
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        
+        // Obrazki w treści
+        img {
+          width: 100%;
+          height: auto;
+          margin: 64px 0;
+          border-radius: 12px;
+        }
+        
+        // Usuwanie dolnego marginesu, gdy obrazek jest w ostatnim elemencie w treści
+        > *:last-child img,
+        > p:last-child img,
+        > figure:last-child img,
+        > div:last-child img,
+        > img:last-child {
+          margin-bottom: 0;
+        }
+        
+        // Listy
+        ul, ol {
+          margin-bottom: 32px;
+          padding-left: 20px;
+          
+          li {
+            font-weight: 300;
+            margin-bottom: 16px;
+            font-size: $font-size-regular;
+            color: $black-text;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+        
+        ul {
+          list-style: disc;
+        }
+        
+        ol {
+          list-style: decimal;
+        }
+        
+        // Cytaty
+        blockquote {
+          padding-left: 24px;
+          border-left: 4px solid $blue;
+          margin: 32px 0;
+          font-style: italic;
+          
+          p {
+            margin-bottom: 24px;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+        
+        // Linki
+        a {
+          color: $blue;
+          text-decoration: underline;
+          
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
