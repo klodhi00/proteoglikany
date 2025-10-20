@@ -1,0 +1,514 @@
+// ------------------------------------------------------------
+// diagnostic-test.scss
+// Sekcja: Test diagnostyczny z formularzem pytań i zapisem do newslettera
+// ------------------------------------------------------------
+
+.diagnostic-test {
+  // Zewnętrzny wrapper - tylko wyśrodkowanie
+  &__outer-wrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  // Wewnętrzny wrapper - max-width + paddingi
+  &__inner-wrapper {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px 64px 24px;
+
+    @include respond-to(tablet) {
+      padding: 50px 80px 300px 80px;
+    }
+  }
+
+  // Breadcrumbs
+  &__breadcrumbs {
+    margin-bottom: 24px;
+  }
+
+  &__breadcrumbs-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__breadcrumbs-item {
+    display: flex;
+    align-items: center;
+    font-size: $font-size-regular;
+    color: $light-grey;
+    font-weight: 300;
+  }
+
+  &__breadcrumbs-separator {
+    margin: 0 8px;
+    font-size: $font-size-regular;
+    color: $light-grey;
+    font-weight: 300;
+  }
+
+  &__breadcrumbs-link {
+    color: $light-grey;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $blue;
+    }
+  }
+
+  &__breadcrumbs-current {
+    color: $light-grey;
+  }
+
+  // Nagłówek sekcji
+  &__header {
+    margin-bottom: 64px;
+  }
+
+  // Tag
+  &__tag {
+    display: inline-block;
+    font-size: $font-size-tiny;
+    font-weight: 500;
+    color: $blue;
+    background-color: rgba($blue, 0.1);
+    border: 1px solid $blue;
+    border-radius: 100px;
+    padding: 4px 16px;
+    margin-bottom: 16px;
+  }
+
+  // Tytuł
+  &__title {
+    font-size: $font-size-h2;
+    color: $black;
+    font-weight: 400;
+    line-height: $line-height-tight;
+  }
+
+  // Wrapper formularza
+  &__form-wrapper {
+    transition: opacity 0.3s ease;
+  }
+
+  // Formularz
+  &__form {
+    width: 100%;
+  }
+
+  // Kontener pytań
+  &__questions {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 64px;
+  }
+
+  // Box pytania
+  &__question-box {
+    border: 1px solid $stroke;
+    border-radius: 16px;
+    padding: 24px;
+
+    @include respond-to(tablet) {
+      padding: 32px;
+    }
+  }
+
+  // Tytuł pytania - DO LEWEJ, 32PX NAD OPCJAMI
+  &__question-title {
+    font-size: $font-size-h5;
+    font-weight: 400;
+    color: $black;
+    line-height: $line-height-tight;
+    margin: 0 0 32px 0;
+    text-align: left;
+  }
+
+  // Opcje odpowiedzi
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  // Pojedyncza opcja
+  &__option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 1px solid $stroke;
+      border-radius: 50%;
+      margin-right: 16px;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+
+      &:checked::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        background-color: $blue;
+        border-radius: 50%;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $blue;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  &__option-text {
+    font-size: $font-size-regular;
+    color: $black-text;
+    line-height: $line-height-base;
+  }
+
+  // Pole email
+  &__email-field {
+    margin-bottom: 64px;
+  }
+
+  &__email-label {
+    display: block;
+    font-size: $font-size-regular;
+    color: $black;
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+
+  &__email-input {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: $font-size-regular;
+    color: $black-text;
+    border: 1px solid $stroke;
+    border-radius: 100px;
+    transition: border-color 0.3s ease;
+
+    &::placeholder {
+      color: $light-grey;
+    }
+
+    &:focus {
+      border-color: $blue;
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $blue;
+      outline-offset: 2px;
+    }
+  }
+
+  // Zgody
+  &__consents {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  &__consent {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+  }
+
+  &__consent-checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid $stroke;
+    border-radius: 4px;
+    margin-right: 16px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 2px;
+
+    &:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: $blue;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $blue;
+      outline-offset: 2px;
+    }
+  }
+
+  &__consent-text {
+    font-size: $font-size-regular;
+    color: $black-text;
+    line-height: $line-height-base;
+    display: inline;
+
+    p {
+      margin: 0;
+      display: inline;
+    }
+
+    a {
+      color: $blue;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  // Czerwona gwiazdka - REQUIRED (inline z tekstem)
+  &__consent-required {
+    color: #F44336;
+    margin-left: 2px;
+    font-weight: 500;
+    display: inline;
+  }
+
+  // Komunikat sukcesu
+  &__success {
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    background-color: rgba(#4CAF50, 0.1);
+    border: 1px solid #4CAF50;
+
+    p {
+      font-size: $font-size-regular;
+      color: #2E7D32;
+      line-height: $line-height-base;
+      margin: 0;
+    }
+  }
+
+  // Komunikaty błędów
+  &__errors {
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    background-color: rgba(#F44336, 0.1);
+    border: 1px solid #F44336;
+  }
+
+  &__error-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  &__error-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__error-item {
+    font-size: $font-size-regular;
+    color: #C62828;
+    line-height: $line-height-base;
+
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+
+  &__error-link {
+    color: #C62828;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  // Przycisk submit
+  &__submit {
+    width: fit-content;
+
+    @include respond-to(tablet) {
+      width: auto;
+    }
+  }
+
+  // Kontener wyniku
+  &__result {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  // Baner wyniku - osobny box z tytułem i tekstem
+  &__result-banner {
+    padding: 24px;
+    border-radius: 16px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    @include respond-to(tablet) {
+      padding: 32px;
+    }
+  }
+
+  &__result-banner-content {
+    // Brak dodatkowego marginesu - tytuł i tekst są razem
+  }
+
+  &__result-banner-title {
+    font-size: $font-size-h4;
+    color: $white;
+    font-weight: 400;
+    line-height: $line-height-tight;
+    margin-bottom: 16px;
+  }
+
+  &__result-banner-text {
+    font-size: $font-size-regular;
+    color: $white;
+    line-height: $line-height-base;
+    margin: 0;
+  }
+
+  // Wrapper produktu - 64px poniżej bannera
+  &__product-wrapper {
+    margin-top: 32px;
+
+    @include respond-to(tablet) {
+      margin-top: 64px;
+    }
+  }
+
+  // Karta produktu - BEZ BORDERA I PADDINGU, 50/50 szerokości
+  &__product-card {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @include respond-to(tablet) {
+      flex-direction: row;
+      gap: 64px;
+      align-items: center;
+    }
+  }
+
+  &__product-image {
+    flex-shrink: 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    overflow: hidden;
+
+    @include respond-to(tablet) {
+      width: calc(50% - 32px);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__product-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    @include respond-to(tablet) {
+      width: calc(50% - 32px);
+      flex-shrink: 0;
+    }
+  }
+
+  &__product-title {
+    font-size: $font-size-h5;
+    color: $black;
+    font-weight: 400;
+    line-height: $line-height-tight;
+    margin-bottom: 16px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  &__product-description {
+    font-size: $font-size-regular;
+    color: $black-text;
+    line-height: $line-height-base;
+    margin-bottom: 32px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  &__product-price {
+    font-size: $font-size-h4;
+    color: $black;
+    font-weight: 500;
+    line-height: $line-height-tight;
+    margin-bottom: 6px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  &__product-subscription {
+    font-size: $font-size-small;
+    color: $light-grey;
+    line-height: $line-height-base;
+    margin-bottom: 32px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  &__product-button {
+    align-self: flex-start;
+  }
+}
+
+// Animacja fade in
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Klasa pomocnicza dla buttona outline-blue
+.button--outline-blue {
+  background-color: transparent;
+  border: 1px solid $blue;
+  color: $blue;
+
+  &:hover {
+    background-color: $blue;
+    color: $white;
+  }
+}

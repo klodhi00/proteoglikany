@@ -1,0 +1,143 @@
+// ------------------------------------------------------------
+// _error-404.scss
+// Stylowanie sekcji 404 dla motywu Proteoglikany
+// Zgodne z metodologią BEM i zasadami mobile-first
+// ------------------------------------------------------------
+
+.error-404 {
+    width: 100%;
+    
+    &__wrapper {
+      padding: 64px 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column-reverse;
+      
+      @include respond-to(desktop) {
+        padding: 50px 80px 100px;
+        flex-direction: row;
+        align-items: center;
+        gap: 64px;
+      }
+    }
+    
+    &__content {
+      width: 100%;
+      
+      @include respond-to(desktop) {
+        width: 50%;
+      }
+    }
+    
+    &__header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      
+      @include respond-to(desktop) {
+        align-items: flex-start;
+        text-align: left;
+        margin-bottom: 32px;
+      }
+    }
+    
+    // Kontener tagu
+    &__tag-container {
+      margin-bottom: 16px;
+    }
+    
+    &__tag {
+      display: inline-block;
+      font-size: $font-size-tiny;
+      color: $blue;
+      font-weight: 500;
+      border: 1px solid $blue;
+      background-color: rgba($blue, 0.1);
+      padding: 4px 16px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    
+    &__title {
+      font-size: $font-size-h2;
+      line-height: $line-height-tight;
+      margin-bottom: 32px;
+      color: $black;
+    }
+    
+    &__description {
+      font-size: $font-size-small;
+      color: $black-text;
+      line-height: $line-height-base;
+      
+      p {
+        margin-bottom: 16px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    &__actions {
+      display: flex;
+      justify-content: flex-start;
+    }
+    
+    &__illustration {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 32px;
+      
+      @include respond-to(desktop) {
+        width: 50%;
+        justify-content: center;
+        margin-bottom: 0;
+      }
+    }
+    
+    &__image-container {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      
+      @include respond-to(desktop) {
+        width: 360px;
+        height: 360px;
+      }
+    }
+    
+    &__svg {
+      width: 100%;
+      height: 100%;
+      animation: error404-pulse 4s infinite ease-in-out;
+    }
+    
+    // Animacja dla SVG
+    @keyframes error404-pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    // Klasa pomocnicza dla dostępności
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  }

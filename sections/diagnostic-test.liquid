@@ -1,0 +1,747 @@
+{% comment %}
+  Sekcja: Test diagnostyczny
+  Formularz z pytaniami diagnostycznymi i zapisem do newslettera
+{% endcomment %}
+
+<section class="diagnostic-test">
+  <div class="diagnostic-test__outer-wrapper">
+    <div class="diagnostic-test__inner-wrapper">
+      
+      {% comment %} Breadcrumbs {% endcomment %}
+      {% if section.settings.breadcrumbs %}
+        <nav class="diagnostic-test__breadcrumbs" aria-label="Nawigacja okruszkowa">
+          <ol class="diagnostic-test__breadcrumbs-list">
+            <li class="diagnostic-test__breadcrumbs-item">
+              <a href="{{ routes.root_url }}" class="diagnostic-test__breadcrumbs-link">Strona główna</a>
+            </li>
+            <li class="diagnostic-test__breadcrumbs-item">
+              <span class="diagnostic-test__breadcrumbs-separator">/</span>
+              <span class="diagnostic-test__breadcrumbs-current">{{ section.settings.breadcrumbs_text }}</span>
+            </li>
+          </ol>
+        </nav>
+      {% endif %}
+
+      {% comment %} Nagłówek sekcji {% endcomment %}
+      <header class="diagnostic-test__header">
+        {% if section.settings.tag_text != blank %}
+          <span class="diagnostic-test__tag">{{ section.settings.tag_text }}</span>
+        {% endif %}
+        
+        {% if section.settings.title != blank %}
+          <h2 class="diagnostic-test__title">{{ section.settings.title }}</h2>
+        {% endif %}
+      </header>
+
+      {% comment %} Formularz diagnostyczny {% endcomment %}
+      <div class="diagnostic-test__form-wrapper" id="diagnosticFormWrapper">
+        {% form 'customer', class: 'diagnostic-test__form', id: 'diagnostic-test-form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter,diagnostic-test">
+          <input type="hidden" name="contact[context]" value="diagnostic-test">
+          
+          <div class="diagnostic-test__questions">
+            
+            {% comment %} PYTANIE 1 - STAŁE (3 OPCJE) {% endcomment %}
+            <div class="diagnostic-test__question-box">
+              <h5 class="diagnostic-test__question-title">
+                {{ section.settings.question_1_text }}
+              </h5>
+              
+              <div class="diagnostic-test__options">
+                <label class="diagnostic-test__option">
+                  <input 
+                    type="radio" 
+                    name="question_1" 
+                    value="option_1"
+                    data-question="1"
+                    data-answer="option_1"
+                    required
+                    aria-required="true"
+                  >
+                  <span class="diagnostic-test__option-text">{{ section.settings.question_1_option_1 }}</span>
+                </label>
+                
+                <label class="diagnostic-test__option">
+                  <input 
+                    type="radio" 
+                    name="question_1" 
+                    value="option_2"
+                    data-question="1"
+                    data-answer="option_2"
+                    required
+                    aria-required="true"
+                  >
+                  <span class="diagnostic-test__option-text">{{ section.settings.question_1_option_2 }}</span>
+                </label>
+
+                <label class="diagnostic-test__option">
+                  <input 
+                    type="radio" 
+                    name="question_1" 
+                    value="option_3"
+                    data-question="1"
+                    data-answer="option_3"
+                    required
+                    aria-required="true"
+                  >
+                  <span class="diagnostic-test__option-text">{{ section.settings.question_1_option_3 }}</span>
+                </label>
+              </div>
+            </div>
+
+            {% comment %} PYTANIA DODATKOWE Z BLOKÓW (DO 4 OPCJI) {% endcomment %}
+            {% if section.blocks.size > 0 %}
+              {% for block in section.blocks %}
+                {% case block.type %}
+                  {% when 'question' %}
+                    <div class="diagnostic-test__question-box" {{ block.shopify_attributes }}>
+                      <h5 class="diagnostic-test__question-title">
+                        {{ block.settings.question_text }}
+                      </h5>
+                      
+                      <div class="diagnostic-test__options">
+                        {% if block.settings.option_1 != blank %}
+                          <label class="diagnostic-test__option">
+                            <input 
+                              type="radio" 
+                              name="question_{{ forloop.index | plus: 1 }}" 
+                              value="option_1"
+                              data-answer="a"
+                              required
+                              aria-required="true"
+                            >
+                            <span class="diagnostic-test__option-text">{{ block.settings.option_1 }}</span>
+                          </label>
+                        {% endif %}
+                        
+                        {% if block.settings.option_2 != blank %}
+                          <label class="diagnostic-test__option">
+                            <input 
+                              type="radio" 
+                              name="question_{{ forloop.index | plus: 1 }}" 
+                              value="option_2"
+                              data-answer="b"
+                              required
+                              aria-required="true"
+                            >
+                            <span class="diagnostic-test__option-text">{{ block.settings.option_2 }}</span>
+                          </label>
+                        {% endif %}
+
+                        {% if block.settings.option_3 != blank %}
+                          <label class="diagnostic-test__option">
+                            <input 
+                              type="radio" 
+                              name="question_{{ forloop.index | plus: 1 }}" 
+                              value="option_3"
+                              data-answer="c"
+                              required
+                              aria-required="true"
+                            >
+                            <span class="diagnostic-test__option-text">{{ block.settings.option_3 }}</span>
+                          </label>
+                        {% endif %}
+
+                        {% if block.settings.option_4 != blank %}
+                          <label class="diagnostic-test__option">
+                            <input 
+                              type="radio" 
+                              name="question_{{ forloop.index | plus: 1 }}" 
+                              value="option_4"
+                              data-answer="d"
+                              required
+                              aria-required="true"
+                            >
+                            <span class="diagnostic-test__option-text">{{ block.settings.option_4 }}</span>
+                          </label>
+                        {% endif %}
+                      </div>
+                    </div>
+                {% endcase %}
+              {% endfor %}
+            {% endif %}
+
+            {% comment %} PYTANIE O PŁEĆ - STAŁE (OSTATNIE PRZED EMAILEM) {% endcomment %}
+            <div class="diagnostic-test__question-box">
+              <h5 class="diagnostic-test__question-title">
+                {{ section.settings.gender_question_text }}
+              </h5>
+              
+              <div class="diagnostic-test__options">
+                <label class="diagnostic-test__option">
+                  <input 
+                    type="radio" 
+                    name="question_gender" 
+                    value="female"
+                    data-question="gender"
+                    data-answer="female"
+                    required
+                    aria-required="true"
+                  >
+                  <span class="diagnostic-test__option-text">{{ section.settings.gender_option_female }}</span>
+                </label>
+                
+                <label class="diagnostic-test__option">
+                  <input 
+                    type="radio" 
+                    name="question_gender" 
+                    value="male"
+                    data-question="gender"
+                    data-answer="male"
+                    required
+                    aria-required="true"
+                  >
+                  <span class="diagnostic-test__option-text">{{ section.settings.gender_option_male }}</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          {% comment %} Pole email {% endcomment %}
+          <div class="diagnostic-test__email-field">
+            <label for="diagnostic-email" class="diagnostic-test__email-label">
+              {{ section.settings.email_label }}
+            </label>
+            <input 
+              type="email" 
+              id="diagnostic-email"
+              name="contact[email]"
+              class="diagnostic-test__email-input"
+              placeholder="{{ section.settings.email_placeholder }}"
+              required
+              autocomplete="email"
+              aria-required="true"
+            >
+          </div>
+
+          {% comment %} Zgoda - jedna wymagana {% endcomment %}
+          <div class="diagnostic-test__consents">
+            {% if section.settings.consent_text != blank %}
+              <label class="diagnostic-test__consent">
+                <input 
+                  type="checkbox" 
+                  name="consent_required"
+                  id="consent-required"
+                  class="diagnostic-test__consent-checkbox"
+                  required
+                  aria-required="true"
+                >
+                <span class="diagnostic-test__consent-text">
+                  {{ section.settings.consent_text }} <span class="diagnostic-test__consent-required">*</span>
+                </span>
+              </label>
+            {% endif %}
+          </div>
+
+          {% comment %} Komunikat sukcesu {% endcomment %}
+          {% if form.posted_successfully? %}
+            <div class="diagnostic-test__success" role="status" aria-live="polite" id="diagnosticSuccess">
+              <p>{{ section.settings.success_message | default: 'Dziękujemy za wypełnienie testu diagnostycznego!' }}</p>
+            </div>
+          {% endif %}
+
+          {% comment %} Komunikaty błędów {% endcomment %}
+          {% if form.errors %}
+            <div class="diagnostic-test__errors" role="alert" aria-live="assertive">
+              <h3 class="diagnostic-test__error-title visually-hidden">Formularz zawiera błędy</h3>
+              <ul class="diagnostic-test__error-list">
+                {% for field in form.errors %}
+                  <li class="diagnostic-test__error-item">
+                    {% if field == 'form' %}
+                      {{ form.errors.messages[field] }}
+                    {% else %}
+                      {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% comment %} Przycisk submit {% endcomment %}
+          <button type="submit" class="button button--primary diagnostic-test__submit" name="commit">
+            {{ section.settings.submit_button_text }}
+          </button>
+
+        {% endform %}
+      </div>
+
+      {% comment %} Kontener na wynik - ukryty domyślnie, pokazuje się po sukcesie {% endcomment %}
+      <div class="diagnostic-test__result" id="diagnosticResult" style="display: none;">
+        
+        {% comment %} Baner z tytułem i tekstem {% endcomment %}
+        <div class="diagnostic-test__result-banner" style="background-image: url('{{ section.settings.result_banner_background | image_url: width: 1600 }}');">
+          <div class="diagnostic-test__result-banner-content">
+            {% if section.settings.result_banner_title != blank %}
+              <h4 class="diagnostic-test__result-banner-title">{{ section.settings.result_banner_title }}</h4>
+            {% endif %}
+            
+            <p class="diagnostic-test__result-banner-text" id="resultBannerText"></p>
+          </div>
+        </div>
+
+        {% comment %} Box z produktem - 64px poniżej bannera {% endcomment %}
+        <div class="diagnostic-test__product-wrapper">
+          <div class="diagnostic-test__product-card" id="productCard">
+            <div class="diagnostic-test__product-image">
+              <img src="" alt="" id="productImage" loading="lazy">
+            </div>
+            
+            <div class="diagnostic-test__product-info">
+              <h5 class="diagnostic-test__product-title" id="productTitle"></h5>
+              <p class="diagnostic-test__product-description" id="productDescription"></p>
+              <h4 class="diagnostic-test__product-price" id="productPrice"></h4>
+              <p class="diagnostic-test__product-subscription" id="productSubscription"></p>
+              <a href="#" class="button button--outline-blue diagnostic-test__product-button" id="productButton">
+                {{ section.settings.product_button_text }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% comment %} JavaScript - logika wyświetlania wyniku po sukcesie {% endcomment %}
+<script>
+(function() {
+  const form = document.getElementById('diagnostic-test-form');
+  const formWrapper = document.getElementById('diagnosticFormWrapper');
+  const resultContainer = document.getElementById('diagnosticResult');
+  const successMessage = document.getElementById('diagnosticSuccess');
+  const resultBannerText = document.getElementById('resultBannerText');
+  
+  // Dane produktów dla kobiet
+  const productDataFemale = {
+    image: '{{ section.settings.product_female_image | image_url: width: 800 }}',
+    title: '{{ section.settings.product_female_title }}',
+    description: '{{ section.settings.product_female_description }}',
+    price: '{{ section.settings.product_female_price }}',
+    subscription: '{{ section.settings.product_female_subscription }}',
+    url: '{{ section.settings.product_female_url }}'
+  };
+  
+  // Dane produktów dla mężczyzn
+  const productDataMale = {
+    image: '{{ section.settings.product_male_image | image_url: width: 800 }}',
+    title: '{{ section.settings.product_male_title }}',
+    description: '{{ section.settings.product_male_description }}',
+    price: '{{ section.settings.product_male_price }}',
+    subscription: '{{ section.settings.product_male_subscription }}',
+    url: '{{ section.settings.product_male_url }}'
+  };
+
+  // Teksty bannera dla pytania 1
+  const bannerTexts = {
+    option_1: '{{ section.settings.banner_text_option_1 }}',
+    other: '{{ section.settings.banner_text_other }}'
+  };
+  
+  if (!form) return;
+
+  // Walidacja formularza przed wysłaniem
+  form.addEventListener('submit', function(e) {
+    const requiredRadios = form.querySelectorAll('input[type="radio"][required]');
+    const requiredCheckbox = form.querySelector('input[type="checkbox"][required]');
+    const emailField = form.querySelector('input[type="email"][required]');
+    
+    let isValid = true;
+    let errorMessage = '';
+
+    // Sprawdź radio buttons (pytania)
+    const radioGroups = {};
+    requiredRadios.forEach(radio => {
+      const name = radio.name;
+      if (!radioGroups[name]) {
+        radioGroups[name] = false;
+      }
+      if (radio.checked) {
+        radioGroups[name] = true;
+      }
+    });
+
+    for (let group in radioGroups) {
+      if (!radioGroups[group]) {
+        isValid = false;
+        errorMessage = 'Proszę odpowiedzieć na wszystkie pytania.';
+        break;
+      }
+    }
+
+    // Sprawdź email
+    if (isValid && emailField && !emailField.value.trim()) {
+      isValid = false;
+      errorMessage = 'Proszę podać adres e-mail.';
+    }
+
+    // Sprawdź checkbox zgody
+    if (isValid && requiredCheckbox && !requiredCheckbox.checked) {
+      isValid = false;
+      errorMessage = 'Proszę zaznaczyć wymaganą zgodę.';
+    }
+
+    // Jeśli walidacja nie przeszła, zatrzymaj wysyłanie
+    if (!isValid) {
+      e.preventDefault();
+      alert(errorMessage);
+      return false;
+    }
+
+    // Zapisz odpowiedzi przed wysłaniem formularza
+    const question1Answer = form.querySelector('input[name="question_1"]:checked');
+    const genderAnswer = form.querySelector('input[name="question_gender"]:checked');
+    
+    if (question1Answer && genderAnswer) {
+      const dataToStore = {
+        question1: question1Answer.getAttribute('data-answer'),
+        gender: genderAnswer.getAttribute('data-answer')
+      };
+      localStorage.setItem('diagnostic-test-answers', JSON.stringify(dataToStore));
+    }
+  });
+
+  // Jeśli formularz został pomyślnie wysłany
+  if (successMessage) {
+    const storedAnswers = localStorage.getItem('diagnostic-test-answers');
+    
+    if (storedAnswers) {
+      const answers = JSON.parse(storedAnswers);
+      
+      // Wybierz produkt na podstawie płci
+      const recommendedProduct = answers.gender === 'female' ? productDataFemale : productDataMale;
+      
+      // Wybierz tekst bannera na podstawie odpowiedzi na pytanie 1
+      // Jeśli option_1 - pokaż banner_text_option_1, dla pozostałych (option_2, option_3) - banner_text_other
+      const bannerText = answers.question1 === 'option_1' ? bannerTexts.option_1 : bannerTexts.other;
+      
+      // Wypełnij tekst bannera
+      if (resultBannerText) {
+        resultBannerText.textContent = bannerText;
+      }
+      
+      // Wypełnij dane produktu
+      document.getElementById('productImage').src = recommendedProduct.image;
+      document.getElementById('productImage').alt = recommendedProduct.title;
+      document.getElementById('productTitle').textContent = recommendedProduct.title;
+      document.getElementById('productDescription').textContent = recommendedProduct.description;
+      document.getElementById('productPrice').textContent = recommendedProduct.price;
+      document.getElementById('productSubscription').textContent = recommendedProduct.subscription;
+      document.getElementById('productButton').href = recommendedProduct.url;
+      
+      // Ukryj formularz
+      formWrapper.style.display = 'none';
+      
+      // Pokaż wynik
+      resultContainer.style.display = 'block';
+      
+      // Wyczyść localStorage
+      localStorage.removeItem('diagnostic-test-answers');
+      
+      // Scroll do wyniku
+      resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Test diagnostyczny",
+  "tag": "section",
+  "class": "section-diagnostic-test",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Breadcrumbs"
+    },
+    {
+      "type": "checkbox",
+      "id": "breadcrumbs",
+      "label": "Wyświetl breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumbs_text",
+      "label": "Tekst breadcrumbs",
+      "default": "Test diagnostyczny"
+    },
+    {
+      "type": "header",
+      "content": "Nagłówek sekcji"
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tekst tagu",
+      "default": "TEST DIAGNOSTYCZNY"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tytuł sekcji",
+      "default": "Test diagnostyczny"
+    },
+    {
+      "type": "header",
+      "content": "Pytanie 1 (stałe - 3 opcje)"
+    },
+    {
+      "type": "text",
+      "id": "question_1_text",
+      "label": "Treść pytania 1",
+      "default": "Czy obserwujesz przenikanie włosów?"
+    },
+    {
+      "type": "text",
+      "id": "question_1_option_1",
+      "label": "Opcja 1",
+      "default": "Tak, znacznie"
+    },
+    {
+      "type": "text",
+      "id": "question_1_option_2",
+      "label": "Opcja 2",
+      "default": "Tak, nieznacznie"
+    },
+    {
+      "type": "text",
+      "id": "question_1_option_3",
+      "label": "Opcja 3",
+      "default": "Nie"
+    },
+    {
+      "type": "header",
+      "content": "Pytanie o płeć (stałe, ostatnie przed emailem)"
+    },
+    {
+      "type": "text",
+      "id": "gender_question_text",
+      "label": "Treść pytania o płeć",
+      "default": "Jaka jest Twoja płeć?"
+    },
+    {
+      "type": "text",
+      "id": "gender_option_female",
+      "label": "Opcja dla kobiet",
+      "default": "Kobieta"
+    },
+    {
+      "type": "text",
+      "id": "gender_option_male",
+      "label": "Opcja dla mężczyzn",
+      "default": "Mężczyzna"
+    },
+    {
+      "type": "header",
+      "content": "Pole email"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Etykieta pola email",
+      "default": "Adres e-mail"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Placeholder pola email",
+      "default": "Wpisz e-mail"
+    },
+    {
+      "type": "header",
+      "content": "Zgoda"
+    },
+    {
+      "type": "richtext",
+      "id": "consent_text",
+      "label": "Tekst zgody (wymagana)",
+      "default": "<p>Wyrażam zgodę na przetwarzanie moich danych osobowych w celu przeprowadzenia testu diagnostycznego trychologicznego oraz otrzymywania informacji marketingowych, zgodnie z <a href=\"/pages/polityka-prywatnosci\">Polityką Prywatności</a>.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Przycisk"
+    },
+    {
+      "type": "text",
+      "id": "submit_button_text",
+      "label": "Tekst przycisku",
+      "default": "Wyślij formularz"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Wiadomość po pomyślnym zapisie",
+      "default": "Dziękujemy za wypełnienie testu diagnostycznego!"
+    },
+    {
+      "type": "header",
+      "content": "Baner wyniku"
+    },
+    {
+      "type": "image_picker",
+      "id": "result_banner_background",
+      "label": "Tło bannera wyniku"
+    },
+    {
+      "type": "text",
+      "id": "result_banner_title",
+      "label": "Tytuł bannera",
+      "default": "Twój rekomendowany produkt"
+    },
+    {
+      "type": "textarea",
+      "id": "banner_text_option_1",
+      "label": "Tekst bannera dla opcji 1 w pytaniu 1",
+      "default": "Na podstawie Twoich odpowiedzi przygotowaliśmy specjalną rekomendację produktu dostosowaną do Twoich potrzeb."
+    },
+    {
+      "type": "textarea",
+      "id": "banner_text_other",
+      "label": "Tekst bannera dla pozostałych opcji (2 i 3) w pytaniu 1",
+      "default": "Twoje odpowiedzi zostały zapisane. Oto produkt, który może Ci pomóc w utrzymaniu zdrowych włosów."
+    },
+    {
+      "type": "header",
+      "content": "Produkt dla kobiet"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_female_image",
+      "label": "Zdjęcie produktu dla kobiet"
+    },
+    {
+      "type": "text",
+      "id": "product_female_title",
+      "label": "Tytuł produktu dla kobiet",
+      "default": "Suplement diety Nourkrin Woman z bioaktywnymi proteoglikamy"
+    },
+    {
+      "type": "textarea",
+      "id": "product_female_description",
+      "label": "Opis produktu dla kobiet",
+      "default": "Nourkrin® Woman to naukowo opracowany suplement diety, który pomaga przywrócić i utrzymać prawidłowy cykl wzrostu włosów."
+    },
+    {
+      "type": "text",
+      "id": "product_female_price",
+      "label": "Cena produktu dla kobiet",
+      "default": "239.00 PLN"
+    },
+    {
+      "type": "text",
+      "id": "product_female_subscription",
+      "label": "Informacja o subskrypcji produktu dla kobiet",
+      "default": "lub 199 PLN w modelu subskrypcyjnym"
+    },
+    {
+      "type": "url",
+      "id": "product_female_url",
+      "label": "Link do produktu dla kobiet"
+    },
+    {
+      "type": "header",
+      "content": "Produkt dla mężczyzn"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_male_image",
+      "label": "Zdjęcie produktu dla mężczyzn"
+    },
+    {
+      "type": "text",
+      "id": "product_male_title",
+      "label": "Tytuł produktu dla mężczyzn",
+      "default": "Suplement diety Nourkrin Man"
+    },
+    {
+      "type": "textarea",
+      "id": "product_male_description",
+      "label": "Opis produktu dla mężczyzn",
+      "default": "Nourkrin® Man to naukowo opracowany suplement diety dla mężczyzn."
+    },
+    {
+      "type": "text",
+      "id": "product_male_price",
+      "label": "Cena produktu dla mężczyzn",
+      "default": "239.00 PLN"
+    },
+    {
+      "type": "text",
+      "id": "product_male_subscription",
+      "label": "Informacja o subskrypcji produktu dla mężczyzn",
+      "default": "lub 199 PLN w modelu subskrypcyjnym"
+    },
+    {
+      "type": "url",
+      "id": "product_male_url",
+      "label": "Link do produktu dla mężczyzn"
+    },
+    {
+      "type": "header",
+      "content": "Przycisk produktu"
+    },
+    {
+      "type": "text",
+      "id": "product_button_text",
+      "label": "Tekst przycisku produktu",
+      "default": "Zobacz produkt"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Pytanie dodatkowe",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question_text",
+          "label": "Treść pytania",
+          "default": "Czy obserwujesz dodatkowe objawy?"
+        },
+        {
+          "type": "text",
+          "id": "option_1",
+          "label": "Opcja 1 (wymagana)",
+          "default": "Tak"
+        },
+        {
+          "type": "text",
+          "id": "option_2",
+          "label": "Opcja 2 (wymagana)",
+          "default": "Nie"
+        },
+        {
+          "type": "text",
+          "id": "option_3",
+          "label": "Opcja 3 (opcjonalna)",
+          "info": "Pozostaw puste, jeśli nie potrzebna"
+        },
+        {
+          "type": "text",
+          "id": "option_4",
+          "label": "Opcja 4 (opcjonalna)",
+          "info": "Pozostaw puste, jeśli nie potrzebna"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Test diagnostyczny",
+      "blocks": [
+        {
+          "type": "question"
+        },
+        {
+          "type": "question"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

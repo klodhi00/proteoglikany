@@ -1,0 +1,32 @@
+.shopify-challenge__container {
+    margin: 32px auto !important;
+}
+
+.shopify-challenge__message {
+    font-size: $font-size-regular;
+    margin-bottom: 32px !important;
+}
+
+
+.shopify-challenge__button.btn {
+    font-family: $main-font;
+    font-weight: 400;
+    font-size: $font-size-regular;
+    line-height: $line-height-base;
+    padding: 16px 32px;
+    border-radius: 100px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    background-color: $blue;
+    color: $white;
+
+    &:hover {
+        background-color: transparent;
+        border: 1px solid $blue;
+        color: $blue;
+      }
+}

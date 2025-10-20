@@ -1,70 +1,163 @@
 {% comment %}
-  This section is used in the search template to render search results for
-  products, articles, and pages.
-
+  Section: Search Results
+  Usage: Wyświetlana w szablonie search - renderuje wyniki wyszukiwania produktów, artykułów i stron
+  WCAG: Pełna zgodność z WCAG 2.1 AA
+  Theme: Proteoglikany
+  
   https://shopify.dev/docs/storefronts/themes/architecture/templates/search
 {% endcomment %}
 
-<h1>{{ 'search.title' | t }}</h1>
+<section class="search-page">
+  <div class="container">
+    <div class="search-page__wrapper">
+      
+      {% comment %} Header z tytułem {% endcomment %}
+      <div class="search-page__header">
+        <h1 class="search-page__title">{{ 'search.title' | t }}</h1>
+      </div>
 
-<form action="{{ routes.search_url }}" method="get" role="search">
-  <input
-    type="search"
-    size="50"
-    name="q"
-    value="{{ search.terms | escape }}"
-    placeholder="{{ 'search.placeholder' | t }}"
-  >
-  <button type="submit">{{ 'search.submit' | t }}</button>
-</form>
+      {% comment %} Formularz wyszukiwania {% endcomment %}
+      <div class="search-page__form-wrapper">
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+          <div class="search-page__input-wrapper">
+            <label for="search-input" class="visually-hidden">{{ 'search.placeholder' | t }}</label>
+            <input
+              type="search"
+              id="search-input"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ 'search.placeholder' | t }}"
+              class="search-page__input"
+              aria-label="{{ 'search.placeholder' | t }}"
+              autocomplete="off"
+            >
+            <button type="submit" class="search-page__submit" aria-label="{{ 'search.submit' | t }}">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
 
-{% if search.performed %}
-  {% if search.results_count == 0 %}
-    <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-  {% else %}
-    <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
-
-    <div class="search-results">
-      {% paginate search.results by 20 %}
-        {% # Search result items may be an article, a page, or a product. %}
-        {% for result in search.results %}
-          <div class="search-result">
-            {% assign featured_image = result.featured_image | default: result.image %}
-            {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
-            {% endif %}
-            <div class="search-result__content">
-              <p>
-                {{ result.title | link_to: result.url }}
-                {% if result.price %}
-                  {{ result.price | money_with_currency }}
-                {% endif %}
+      {% comment %} Wyniki wyszukiwania {% endcomment %}
+      {% if search.performed %}
+        <div class="search-page__results-wrapper">
+          
+          {% if search.results_count == 0 %}
+            {% comment %} Brak wyników {% endcomment %}
+            <div class="search-page__no-results">
+              <div class="search-page__no-results-icon">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="32" cy="32" r="30" stroke="#EAEAEA" stroke-width="2"/>
+                  <path d="M28 28L36 36M36 28L28 36" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="search-page__no-results-text">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
+              <p class="search-page__no-results-suggestion">Spróbuj użyć innych słów kluczowych lub sprawdź pisownię.</p>
+            </div>
+            
+          {% else %}
+            {% comment %} Liczba wyników {% endcomment %}
+            <div class="search-page__results-header">
+              <p class="search-page__results-count">
+                {{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}
               </p>
             </div>
-          </div>
-        {% endfor %}
 
-        {{ paginate | default_pagination }}
-      {% endpaginate %}
+            {% comment %} Siatka wyników {% endcomment %}
+            <div class="search-page__results">
+              {% paginate search.results by 20 %}
+                
+                {% for result in search.results %}
+                  <article class="search-result">
+                    {% assign featured_image = result.featured_image | default: result.image %}
+                    
+                    <a href="{{ result.url }}" class="search-result__link" aria-label="{{ result.title | escape }}">
+                      {% if featured_image %}
+                        <div class="search-result__image-wrapper">
+                          <img 
+                            src="{{ featured_image | image_url: width: 400 }}"
+                            alt="{{ result.title | escape }}"
+                            class="search-result__image"
+                            width="400"
+                            height="400"
+                            loading="lazy"
+                          >
+                        </div>
+                      {% else %}
+                        <div class="search-result__image-placeholder">
+                          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <rect width="80" height="80" fill="#EAEAEA"/>
+                            <path d="M35 45L40 40L45 45L50 38L55 45" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="35" cy="32" r="3" fill="#A4A4A4"/>
+                          </svg>
+                        </div>
+                      {% endif %}
+                      
+                      <div class="search-result__content">
+                        {% if result.object_type == 'product' %}
+                          <span class="search-result__type">Produkt</span>
+                          <h2 class="search-result__title">{{ result.title }}</h2>
+                          {% if result.price %}
+                            <p class="search-result__price">{{ result.price | money_with_currency }}</p>
+                          {% endif %}
+                          <div class="search-result__button">
+                            <span class="button button--outline-blue">Zobacz produkt</span>
+                          </div>
+                        {% elsif result.object_type == 'article' %}
+                          <span class="search-result__type">Artykuł</span>
+                          <h2 class="search-result__title">{{ result.title }}</h2>
+                        {% elsif result.object_type == 'page' %}
+                          <span class="search-result__type">Strona</span>
+                          <h2 class="search-result__title">{{ result.title }}</h2>
+                        {% endif %}
+                      </div>
+                    </a>
+                  </article>
+                {% endfor %}
+
+                {% comment %} Paginacja {% endcomment %}
+                {% if paginate.pages > 1 %}
+                  <nav class="search-page__pagination" role="navigation" aria-label="Paginacja wyników wyszukiwania">
+                    {{ paginate | default_pagination }}
+                  </nav>
+                {% endif %}
+
+              {% endpaginate %}
+            </div>
+          {% endif %}
+          
+        </div>
+      {% endif %}
+
     </div>
-  {% endif %}
-{% endif %}
-
-{% stylesheet %}
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
-    grid-column: 1 / -1;
-  }
-{% endstylesheet %}
+  </div>
+</section>
 
 {% schema %}
 {
   "name": "t:general.search",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Ustawienia wyszukiwania"
+    },
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "default": 20,
+      "label": "Liczba wyników na stronę"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search Results",
+      "category": "Search"
+    }
+  ]
 }
 {% endschema %}

@@ -1,23 +1,89 @@
 {% comment %}
-  This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/404
+  Section: 404 Error Page
+  Usage: Wyświetlana gdy użytkownik przejdzie do nieistniejącego URL
+  WCAG: Pełna zgodność z WCAG 2.1 AA
+  Theme: Proteoglikany
 {% endcomment %}
 
-<h1>{{ '404.title' | t }}</h1>
-
-<p>
-  {{ '404.not_found' | t }}
-</p>
-
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+<section class="error-404">
+  <div class="error-404__wrapper">
+    <div class="error-404__content">
+      <div class="error-404__header">
+        <div class="error-404__tag-container">
+          <span class="error-404__tag">{{ section.settings.tag_text }}</span>
+        </div>
+        <h1 class="error-404__title">
+          {{ section.settings.title }}
+        </h1>
+        <div class="error-404__description">
+          {{ section.settings.description }}
+        </div>
+      </div>
+      
+      <div class="error-404__actions">
+        <a href="{{ routes.root_url }}" class="button button--primary">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    </div>
+    
+    <div class="error-404__illustration">
+      {% if section.settings.show_illustration %}
+        <div class="error-404__image-container">
+          <svg class="error-404__svg" width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- 404 styled path -->
+            <path d="M76.125 163.625H51.75V140.625L76.125 107.75H95.625V140H105V163.625H95.625V175H76.125V163.625ZM76.125 140V124.125L64.875 140H76.125Z" fill="#16B4EF"/>
+            <path d="M137.625 175C130.708 175 125.229 172.958 121.188 168.875C117.146 164.792 115.125 158.708 115.125 150.625V132.125C115.125 124.042 117.146 117.958 121.188 113.875C125.229 109.792 130.708 107.75 137.625 107.75C144.542 107.75 150.021 109.792 154.062 113.875C158.104 117.958 160.125 124.042 160.125 132.125V150.625C160.125 158.708 158.104 164.792 154.062 168.875C150.021 172.958 144.542 175 137.625 175ZM137.625 151.375C139.708 151.375 140.75 150.167 140.75 147.75V135C140.75 132.583 139.708 131.375 137.625 131.375C135.542 131.375 134.5 132.583 134.5 135V147.75C134.5 150.167 135.542 151.375 137.625 151.375Z" fill="#16B4EF"/>
+            <path d="M196.125 163.625H171.75V140.625L196.125 107.75H215.625V140H225V163.625H215.625V175H196.125V163.625ZM196.125 140V124.125L184.875 140H196.125Z" fill="#16B4EF"/>
+            <!-- Circle design element -->
+            <circle cx="140" cy="140" r="120" stroke="#16B4EF" stroke-width="2" stroke-dasharray="8 8"/>
+          </svg>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "t:general.404",
-  "settings": []
+  "name": "404 Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag Text",
+      "default": "Strona nie znaleziona"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Ups! Nie możemy znaleźć tej strony"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Strona, której szukasz mogła zostać usunięta, jej nazwa została zmieniona lub jest tymczasowo niedostępna.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Powrót do strony głównej"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_illustration",
+      "label": "Show 404 Illustration",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "404 Page",
+      "category": "Page"
+    }
+  ]
 }
 {% endschema %}
