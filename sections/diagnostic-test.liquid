@@ -442,7 +442,7 @@
       localStorage.removeItem('diagnostic-test-answers');
       
       // Scroll do wyniku
-      resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 })();

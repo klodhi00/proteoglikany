@@ -84,7 +84,7 @@
             
             <h4 class="blog__item-title">
               <a href="{{ article.url }}">
-                <span class="blog__title-desktop">{{ article.title | truncate: 35 }}</span>
+                <span class="blog__title-desktop">{{ article.title | truncate: 65 }}</span>
                 <span class="blog__title-mobile">{{ article.title }}</span>
               </a>
             </h4>
@@ -141,7 +141,7 @@
       "type": "range",
       "id": "post_count",
       "min": 3,
-      "max": 12,
+      "max": 99,
       "step": 3,
       "default": 6,
       "label": "Liczba wyświetlanych postów"

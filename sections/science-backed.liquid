@@ -1,22 +1,24 @@
 {% comment %}
   Sekcja: Wspierany przez naukę
   
-  Wyświetla tag, tytuł oraz treść opisową w wyśrodkowanym kontenerze.
-  Max-width treści: 1000px
-  Max-width sekcji: 1600px
+  Wyświetla tag, tytuł oraz treść opisową.
+  Desktop: tag + tytuł po lewej, tekst po prawej (64px gap)
+  Mobile: układ kolumnowy
 {% endcomment %}
 
 <section class="science-backed">
   <div class="science-backed__outer-wrapper">
     <div class="science-backed__inner-wrapper">
       <div class="science-backed__content">
-        {% if section.settings.tag != blank %}
-          <span class="science-backed__tag">{{ section.settings.tag }}</span>
-        {% endif %}
-        
-        {% if section.settings.title != blank %}
-          <h2 class="science-backed__title">{{ section.settings.title }}</h2>
-        {% endif %}
+        <div class="science-backed__header">
+          {% if section.settings.tag != blank %}
+            <span class="science-backed__tag">{{ section.settings.tag }}</span>
+          {% endif %}
+          
+          {% if section.settings.title != blank %}
+            <h2 class="science-backed__title">{{ section.settings.title }}</h2>
+          {% endif %}
+        </div>
         
         {% if section.settings.text != blank %}
           <div class="science-backed__text">

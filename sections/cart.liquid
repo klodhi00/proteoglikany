@@ -106,7 +106,17 @@
             </div>
             
             {% if section.settings.pokazuj_banner_dostawy %}
-              <div class="cart-section__shipping-banner">
+              <div 
+  class="cart-section__shipping-banner"
+  style="
+    {% if section.settings.shipping_banner_bg_color %}
+      background-color: {{ section.settings.shipping_banner_bg_color }};
+    {% endif %}
+    {% if section.settings.shipping_banner_bg_image %}
+      background-image: url('{{ section.settings.shipping_banner_bg_image | img_url: '1600x' }}');
+    {% endif %}
+  "
+>
                 {% if section.settings.ikona_dostawy != blank %}
                   <div class="cart-section__icon-box">
                     <img 
@@ -153,7 +163,7 @@
               </div>
               <h3 class="cart-section__empty-title">{{ section.settings.pusty_koszyk_tytul }}</h3>
               <p class="cart-section__empty-text">{{ section.settings.pusty_koszyk_komunikat }}</p>
-              <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+              <a href="{{ section.settings.kontynuuj_zakupy_link | default: routes.all_products_collection_url }}" class="button button--primary">
                 {{ section.settings.kontynuuj_zakupy_tekst }}
               </a>
             </div>
@@ -252,6 +262,16 @@
       "default": "Zamówienia powyżej 200 zł wysyłamy za darmo na terenie całej Polski!"
     },
     {
+  "type": "color",
+  "id": "shipping_banner_bg_color",
+  "label": "Tło bannera – kolor (opcjonalnie)"
+},
+{
+  "type": "image_picker",
+  "id": "shipping_banner_bg_image",
+  "label": "Tło bannera – obraz (opcjonalnie)"
+},
+    {
       "type": "header",
       "content": "Ustawienia produktów"
     },
@@ -293,6 +313,13 @@
       "label": "Tytuł pustego koszyka",
       "default": "Twój koszyk jest pusty"
     },
+    {
+  "type": "url",
+  "id": "kontynuuj_zakupy_link",
+  "label": "Link przycisku kontynuacji zakupów",
+  "default": "/collections/all"
+},
+
     {
       "type": "textarea",
       "id": "pusty_koszyk_komunikat",

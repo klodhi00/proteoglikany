@@ -3,59 +3,80 @@
 // ------------------------------------------------------------
 
 .science-backed {
-    // Zewnętrzny wrapper - wyłącznie wyśrodkowanie
-    &__outer-wrapper {
-      width: 100%;
+  &__outer-wrapper {
+    width: 100%;
+  }
+
+  &__inner-wrapper {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 64px 24px;
+
+    @include respond-to(tablet) {
+      padding: 100px 80px;
     }
-  
-    // Wewnętrzny wrapper - max-width 1600px i paddingi
-    &__inner-wrapper {
-      max-width: 1600px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 64px 24px;
-  
-      @include respond-to(tablet) {
-        padding: 100px 80px;
-      }
+  }
+
+  &__content {
+    max-width: 1000px;
+    width: 100%;
+
+    @include respond-to(desktop) {
+      display: flex;
+      gap: 64px;
+      max-width: 100%;
+      align-items: flex-start;
     }
-  
-    // Kontener treści - max-width 1000px
-    &__content {
-      max-width: 1000px;
+  }
+
+  &__header {
+    margin-bottom: 32px;
+
+    @include respond-to(desktop) {
+      max-width: 450px;
       width: 100%;
+      flex-shrink: 0;
+      margin-bottom: 0;
     }
-  
-    // Tag
-    &__tag {
-      display: inline-block;
-      font-size: $font-size-tiny;
-      font-weight: 500;
-      color: $blue;
-      background-color: rgba($blue, 0.1);
-      border: 1px solid $blue;
-      border-radius: 100px;
-      padding: 4px 16px;
+  }
+
+  &__tag {
+    display: inline-block;
+    font-size: $font-size-tiny;
+    font-weight: 500;
+    color: $blue;
+    background-color: rgba($blue, 0.1);
+    border: 1px solid $blue;
+    border-radius: 100px;
+    padding: 4px 16px;
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    margin-bottom: 32px;
+
+    @include respond-to(desktop) {
+      margin-bottom: 0;
+    }
+  }
+
+  &__text {
+    font-size: $font-size-regular;
+    color: $black-text;
+    line-height: $line-height-base;
+
+    @include respond-to(desktop) {
+      flex: 1;
+      min-width: 0;
+    }
+
+    p {
       margin-bottom: 16px;
-    }
-  
-    // Tytuł
-    &__title {
-      margin-bottom: 32px;
-    }
-  
-    // Tekst
-    &__text {
-      font-size: $font-size-regular;
-      color: $black-text;
-      line-height: $line-height-base;
-  
-      p {
-        margin-bottom: 16px;
-  
-        &:last-child {
-          margin-bottom: 0;
-        }
+
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }
+}

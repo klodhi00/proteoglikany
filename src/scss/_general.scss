@@ -213,6 +213,7 @@ button {
 
 // Ogólne style dla przycisku
 .button {
+  display: inline-block;
   font-family: $main-font;
   font-weight: 400;
   font-size: $font-size-regular;

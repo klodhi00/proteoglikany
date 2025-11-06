@@ -24,16 +24,16 @@
   }
 
   &__box {
-    padding: 32px;
+    padding: 24px;
     position: relative;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-radius: 32px;
+    border-radius: 24px;
     overflow: hidden;
     
     @include respond-to(tablet) {
-      padding: 80px;
+      padding: 80px 40px;
       display: flex;
       align-items: center;
       gap: 80px;
@@ -90,7 +90,7 @@
     @include respond-to(desktop-lg) {
       display: block;
       position: absolute;
-      right: -100px;
+      right: -75px;
       bottom: -200px;
       max-width: 1000px;
       z-index: 1;

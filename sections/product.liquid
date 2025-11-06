@@ -64,29 +64,29 @@
             {%- endif -%}
           </div>
           
-          <!-- Galeria miniatur -->
-          <div class="product__gallery-thumbnails">
-            {%- assign media_count = product.media.size | at_most: 6 -%}
-            {%- for media in product.media limit: media_count -%}
-              <div class="product__thumbnail{% if forloop.index > 2 %} hide-on-mobile{% endif %}{% if forloop.index > 3 %} hide-on-tablet{% endif %}">
-                <img
-                  srcset="{%- if media.width >= 165 -%}{{ media | image_url: width: 165 }} 165w,{%- endif -%}
-                    {%- if media.width >= 360 -%}{{ media | image_url: width: 360 }} 360w,{%- endif -%}"
-                  src="{{ media | image_url: width: 165 }}"
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                  loading="lazy"
-                  width="{{ media.width }}"
-                  height="{{ media.height }}"
-                  alt="{{ media.alt | escape }}"
-                  class="js-gallery-image"
-                  data-full="{{ media | image_url: width: 2048 }}"
-                  role="button"
-                  tabindex="0"
-                  aria-label="Otwórz galerię – {{ media.alt | escape }}"
-                />
-              </div>
-            {%- endfor -%}
-          </div>
+<!-- Galeria miniatur -->
+<div class="product__gallery-thumbnails">
+  {%- assign media_count = product.media.size | at_most: 6 -%}
+  {%- for media in product.media limit: media_count -%}
+    <div class="product__thumbnail{% if forloop.index > 3 %} hide-on-mobile{% endif %}{% if forloop.index > 4 %} hide-on-tablet{% endif %}">
+      <img
+        srcset="{%- if media.width >= 165 -%}{{ media | image_url: width: 165 }} 165w,{%- endif -%}
+          {%- if media.width >= 360 -%}{{ media | image_url: width: 360 }} 360w,{%- endif -%}"
+        src="{{ media | image_url: width: 165 }}"
+        sizes="(min-width: 1024px) 25vw, 50vw"
+        loading="lazy"
+        width="{{ media.width }}"
+        height="{{ media.height }}"
+        alt="{{ media.alt | escape }}"
+        class="js-gallery-image"
+        data-full="{{ media | image_url: width: 2048 }}"
+        role="button"
+        tabindex="0"
+        aria-label="Otwórz galerię – {{ media.alt | escape }}"
+      />
+    </div>
+  {%- endfor -%}
+</div>
         </div>
         
         <div class="product__info">
@@ -96,17 +96,10 @@
               <li class="product__breadcrumbs-item">
                 <a href="/" class="product__breadcrumbs-link">Strona główna</a>
               </li>
-              {%- if collection -%}
                 <li class="product__breadcrumbs-item">
                   <span class="product__breadcrumbs-separator">/</span>
-                  <a href="{{ collection.url }}" class="product__breadcrumbs-link">{{ collection.title }}</a>
+                  <a href="/pages/produkty" class="product__breadcrumbs-link">Produkty</a>
                 </li>
-              {%- elsif product.collections.size > 0 -%}
-                <li class="product__breadcrumbs-item">
-                  <span class="product__breadcrumbs-separator">/</span>
-                  <a href="{{ product.collections.first.url }}" class="product__breadcrumbs-link">{{ product.collections.first.title }}</a>
-                </li>
-              {%- endif -%}
               <li class="product__breadcrumbs-item">
                 <span class="product__breadcrumbs-separator">/</span>
                 <span class="product__breadcrumbs-current">{{ product.title }}</span>

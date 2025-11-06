@@ -35,6 +35,16 @@
               {{ section.settings.description }}
             </div>
           {% endif %}
+
+          {% if section.settings.button_text != blank %}
+            <a 
+              href="{{ section.settings.button_url | default: '#' }}" 
+              class="button button--outline scientific-effects-banner__button"
+              {% if section.settings.button_url == blank %}aria-disabled="true"{% endif %}
+            >
+              {{ section.settings.button_text }}
+            </a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -62,6 +72,17 @@
       "id": "description",
       "label": "Opis",
       "default": "<p>Nourkrin® z Marilex® wspiera naturalny cykl wzrostu włosów, dostarczając organizmowi wyselekcjonowane proteoglikany kluczowe dla optymalizacji fazy wzrostu włosa. Badania naukowe potwierdziły znaczący wzrost gęstości włosów już po 6 miesiącach regularnego stosowania kuracji.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Tekst przycisku",
+      "default": "Dowiedz się więcej"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Link przycisku"
     },
     {
       "type": "color",

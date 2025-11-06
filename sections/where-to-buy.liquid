@@ -5,9 +5,16 @@
   Desktop: Grid layout
 {% endcomment %}
 
+{%- liquid
+  assign padding_class = ''
+  if section.settings.padding_size == 'small'
+    assign padding_class = 'where-to-buy__inner-wrapper--small-padding'
+  endif
+-%}
+
 <section class="where-to-buy">
   <div class="where-to-buy__outer-wrapper">
-    <div class="where-to-buy__inner-wrapper">
+    <div class="where-to-buy__inner-wrapper {{ padding_class }}">
       
       {%- if section.settings.tag != blank or section.settings.title != blank -%}
         <div class="where-to-buy__header">
@@ -112,6 +119,22 @@
       "id": "title",
       "label": "Tytuł (H2)",
       "default": "Produkty do nabycia znajdziesz również:"
+    },
+    {
+      "type": "select",
+      "id": "padding_size",
+      "label": "Rozmiar paddingów sekcji",
+      "options": [
+        {
+          "value": "large",
+          "label": "Duże (64px/100px)"
+        },
+        {
+          "value": "small",
+          "label": "Małe (32px/50px)"
+        }
+      ],
+      "default": "large"
     }
   ],
   "blocks": [

@@ -1,0 +1,177 @@
+// generic-page.scss
+// Komponent strony statycznej dla motywu Proteoglikany
+// Wykorzystuje metodologię BEM i podejście mobile-first
+
+.generic-page {
+    &__outer-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    &__inner-wrapper {
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px 64px 24px;
+      
+      @include respond-to(tablet) {
+        padding: 50px 80px 100px 80px;
+      }
+    }
+    
+    // Breadcrumbs
+    &__breadcrumbs {
+      margin-bottom: 24px;
+    }
+  
+    &__breadcrumbs-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    &__breadcrumbs-item {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-regular;
+      color: $light-grey;
+      font-weight: 300;
+    }
+  
+    &__breadcrumbs-separator {
+      margin: 0 8px;
+      font-size: $font-size-regular;
+      color: $light-grey;
+      font-weight: 300;
+    }
+  
+    &__breadcrumbs-link {
+      color: $light-grey;
+      transition: color 0.3s ease;
+  
+      &:hover {
+        color: $blue;
+      }
+    }
+  
+    &__breadcrumbs-current {
+      color: $light-grey;
+    }
+    
+    // Header z tytułem
+    &__header {
+      margin-bottom: 32px;
+    }
+    
+    // Główny obszar
+    &__main {
+      width: 100%;
+    }
+    
+    // Tytuł strony
+    &__title {
+      font-size: $font-size-h2;
+      font-weight: 400;
+    }
+    
+    // Treść strony (rich text)
+    &__body {
+      // Nagłówki w treści
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 400;
+        margin-bottom: 32px;
+        margin-top: 64px;
+        
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+      
+      // Paragrafy
+      p {
+        margin-bottom: 64px;
+        font-weight: 300;
+        font-size: $font-size-regular;
+        color: $black-text;
+        
+        strong, b {
+          font-weight: 400;
+        }
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      
+      // Obrazki w treści
+      img {
+        width: 100%;
+        height: auto;
+        margin: 64px 0;
+        border-radius: 12px;
+      }
+      
+      // Usuwanie dolnego marginesu, gdy obrazek jest w ostatnim elemencie w treści
+      > *:last-child img,
+      > p:last-child img,
+      > figure:last-child img,
+      > div:last-child img,
+      > img:last-child {
+        margin-bottom: 0;
+      }
+      
+      // Listy
+      ul, ol {
+        margin-bottom: 32px;
+        padding-left: 20px;
+        
+        li {
+          font-weight: 300;
+          margin-bottom: 16px;
+          font-size: $font-size-regular;
+          color: $black-text;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      
+      ul {
+        list-style: disc;
+      }
+      
+      ol {
+        list-style: decimal;
+      }
+      
+      // Cytaty
+      blockquote {
+        padding-left: 24px;
+        border-left: 4px solid $blue;
+        margin: 32px 0;
+        font-style: italic;
+        
+        p {
+          margin-bottom: 24px;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      
+      // Linki
+      a {
+        color: $blue;
+        text-decoration: underline;
+        
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }

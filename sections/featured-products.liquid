@@ -27,6 +27,7 @@
         <div class="featured-products__container">
           <div class="featured-products__grid">
             {%- for product in collection.products limit: products_to_show -%}
+              {%- assign current_variant = product.selected_or_first_available_variant -%}
               <article class="featured-products__item">
                 
                 <div class="featured-products__image-wrapper">
@@ -52,9 +53,20 @@
                 <div class="featured-products__content">
                   <h3 class="featured-products__title">{{ product.title }}</h3>
 
-                  <p class="featured-products__price">
-                    {{ product.price | money }}
-                  </p>
+                  <div class="featured-products__price-wrapper">
+                    {%- if current_variant.compare_at_price != blank and current_variant.compare_at_price > current_variant.price -%}
+                      <s class="featured-products__price featured-products__price--compare">
+                        {{ current_variant.compare_at_price | money }}
+                      </s>
+                      <strong class="featured-products__price featured-products__price--sale">
+                        {{ current_variant.price | money }}
+                      </strong>
+                    {%- else -%}
+                      <p class="featured-products__price">
+                        {{ current_variant.price | money }}
+                      </p>
+                    {%- endif -%}
+                  </div>
 
                   {%- if metafield_namespace != blank and metafield_key != blank -%}
                     {%- assign metafield_value = product.metafields[metafield_namespace][metafield_key] -%}
@@ -66,7 +78,7 @@
                   <button 
                     type="button" 
                     class="featured-products__button button button--outline-blue"
-                    data-product-id="{{ product.variants.first.id }}"
+                    data-product-id="{{ current_variant.id }}"
                     aria-label="{{ 'products.product.add_to_cart' | t }}: {{ product.title | escape }}"
                   >
                     {{ section.settings.button_text | default: 'Dodaj do koszyka' }}

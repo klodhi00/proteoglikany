@@ -83,7 +83,7 @@
     }
 
     @include respond-to(desktop) {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 
@@ -100,17 +100,6 @@
     @include respond-to(tablet) {
       width: auto;
       min-width: auto;
-    }
-
-    // Ukryj 3. i kolejne elementy poniżej breakpointu desktop
-    &:nth-child(n+3) {
-      @include respond-to(tablet) {
-        display: none;
-      }
-
-      @include respond-to(desktop) {
-        display: flex;
-      }
     }
   }
 

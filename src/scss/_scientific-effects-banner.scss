@@ -5,84 +5,90 @@
 
 .scientific-effects-banner {
   
-    // Zewnętrzny wrapper - tylko wyśrodkowanie
-    &__outer-wrapper {
-      margin: 0 auto;
-      width: 100%;
-    }
-  
-    // Wewnętrzny wrapper - max-width i paddingi sekcji
-    &__inner-wrapper {
-      max-width: 1600px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 32px 24px;
-  
-      @include respond-to(tablet) {
-        padding: 50px 40px;
-      }
-    }
-  
-    // Box z kolorowym tłem i opcjonalnym obrazkiem
-    &__content-box {
-      background-color: $blue;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border-radius: 24px;
-      padding: 32px 32px;
-      position: relative;
-  
-      @include respond-to(desktop) {
-        padding: 80px 80px;
-      }
-    }
-  
-    // Kontener tekstowy
-    &__text-content {
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      z-index: 1;
-    }
-  
-    // Tag - specjalny styl z białym border i tłem
-    &__tag {
-      display: inline-block;
-      font-family: $main-font;
-      font-size: $font-size-tiny;
-      font-weight: 500;
-      color: $white;
-      background-color: rgba($white, 0.1);
-      border: 1px solid $white;
-      border-radius: 100px;
-      padding: 4px 16px;
-      margin-bottom: 16px;
-      width: fit-content;
-      text-transform: uppercase;
-    }
-  
-    // Tytuł
-    &__title {
-      font-family: $main-font;
-      font-size: $font-size-h2;
-      font-weight: 400;
-      line-height: $line-height-tight;
-      color: $white;
-      margin-bottom: 32px;
-    }
-  
-    // Opis
-    &__description {
-      font-family: $main-font;
-      font-size: $font-size-regular;
-      font-weight: 300;
-      line-height: $line-height-base;
-      color: $white-text;
-  
-      p {
-        margin: 0;
-        color: $white-text;
-      }
+  // Zewnętrzny wrapper - tylko wyśrodkowanie
+  &__outer-wrapper {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  // Wewnętrzny wrapper - max-width i paddingi sekcji
+  &__inner-wrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 32px 24px;
+
+    @include respond-to(tablet) {
+      padding: 50px 40px;
     }
   }
+
+  // Box z kolorowym tłem i opcjonalnym obrazkiem
+  &__content-box {
+    background-color: $blue;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 24px;
+    padding: 24px;
+    position: relative;
+
+    @include respond-to(desktop) {
+      padding: 40px;
+    }
+  }
+
+  // Kontener tekstowy
+  &__text-content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+
+  // Tag - specjalny styl z białym border i tłem
+  &__tag {
+    display: inline-block;
+    font-family: $main-font;
+    font-size: $font-size-tiny;
+    font-weight: 500;
+    color: $white;
+    background-color: rgba($white, 0.1);
+    border: 1px solid $white;
+    border-radius: 100px;
+    padding: 4px 16px;
+    margin-bottom: 16px;
+    width: fit-content;
+    text-transform: uppercase;
+  }
+
+  // Tytuł
+  &__title {
+    font-family: $main-font;
+    font-size: $font-size-h2;
+    font-weight: 400;
+    line-height: $line-height-tight;
+    color: $white;
+    margin-bottom: 32px;
+  }
+
+  // Opis
+  &__description {
+    font-family: $main-font;
+    font-size: $font-size-regular;
+    font-weight: 300;
+    line-height: $line-height-base;
+    color: $white-text;
+    margin-bottom: 32px;
+
+    p {
+      margin: 0;
+      color: $white-text;
+    }
+  }
+
+  // Button
+  &__button {
+    width: fit-content;
+  }
+}

@@ -6,22 +6,22 @@
   Mobile: układ kolumnowy
 {% endcomment %}
 
-<section class="active-ingredients">
-  <div class="active-ingredients__outer-wrapper">
-    <div class="active-ingredients__inner-wrapper">
-      <div class="active-ingredients__content">
-        <div class="active-ingredients__header">
+<section class="hair-therapy">
+  <div class="hair-therapy__outer-wrapper">
+    <div class="hair-therapy__inner-wrapper">
+      <div class="hair-therapy__content">
+        <div class="hair-therapy__header">
           {% if section.settings.tag != blank %}
-            <span class="active-ingredients__tag">{{ section.settings.tag }}</span>
+            <span class="hair-therapy__tag">{{ section.settings.tag }}</span>
           {% endif %}
           
           {% if section.settings.title != blank %}
-            <h2 class="active-ingredients__title">{{ section.settings.title }}</h2>
+            <h2 class="hair-therapy__title">{{ section.settings.title }}</h2>
           {% endif %}
         </div>
         
         {% if section.settings.text != blank %}
-          <div class="active-ingredients__text">
+          <div class="hair-therapy__text">
             {{ section.settings.text }}
           </div>
         {% endif %}
@@ -32,30 +32,30 @@
 
 {% schema %}
 {
-  "name": "Składniki aktywne",
+  "name": "Terapia włosów",
   "settings": [
     {
       "type": "text",
       "id": "tag",
       "label": "Tag",
-      "default": "SKŁADNIKI AKTYWNE"
+      "default": "WYPADANIE WŁOsów"
     },
     {
       "type": "text",
       "id": "title",
       "label": "Tytuł",
-      "default": "Składniki aktywne i ich działanie"
+      "default": "Terapia na wypadanie włosów"
     },
     {
       "type": "richtext",
       "id": "text",
       "label": "Treść",
-      "default": "<p>Marilex®, kluczowy składnik kuracji Nouritrin®, to opatentowany kompleks bioaktywnych proteoglikanów pozyskiwany w procesie enzymatycznego frakcjonowania ostrego.</p>"
+      "default": "<p>Nourkrin® to innowacyjna kuracja wspierająca naturalny cykl wzrostu włosa, oparta o przebadane, bezpieczne składniki.</p>"
     }
   ],
   "presets": [
     {
-      "name": "Składniki aktywne"
+      "name": "Terapia włosów"
     }
   ]
 }

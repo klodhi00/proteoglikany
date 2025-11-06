@@ -1,0 +1,62 @@
+{% comment %}
+  Generic Page Section dla motywu Proteoglikany
+  Sekcja dla stron statycznych (regulamin, polityka prywatności, etc.)
+  Zgodny z Shopify Online Store 2.0
+  
+  Struktura zapewnia:
+  - Semantyczny HTML
+  - Responsywność mobile-first
+  - Zgodność WCAG 2.1 AA
+{% endcomment %}
+
+<article class="generic-page">
+  <div class="generic-page__outer-wrapper">
+    <div class="generic-page__inner-wrapper">
+      <div class="generic-page__main">
+        {% if section.settings.breadcrumbs %}
+          <nav class="generic-page__breadcrumbs" aria-label="Nawigacja okruszkowa">
+            <ol class="generic-page__breadcrumbs-list">
+              <li class="generic-page__breadcrumbs-item">
+                <a href="{{ routes.root_url }}" class="generic-page__breadcrumbs-link">Strona główna</a>
+              </li>
+              <li class="generic-page__breadcrumbs-item">
+                <span class="generic-page__breadcrumbs-separator">/</span>
+                <span class="generic-page__breadcrumbs-current">{{ page.title }}</span>
+              </li>
+            </ol>
+          </nav>
+        {% endif %}
+        
+        <div class="generic-page__header">
+          <h1 class="generic-page__title">
+            {{ page.title }}
+          </h1>
+        </div>
+        
+        <div class="generic-page__body rte">
+          {{ page.content }}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Treść strony",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "breadcrumbs",
+      "label": "Pokaż okruszki",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Treść strony",
+      "category": "Strona"
+    }
+  ]
+}
+{% endschema %}

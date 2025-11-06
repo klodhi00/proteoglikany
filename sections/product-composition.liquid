@@ -7,53 +7,59 @@
 <section class="product-composition">
   <div class="product-composition__outer-wrapper">
     <div class="product-composition__inner-wrapper">
-      
-      {% if section.settings.tag != blank %}
-        <div class="product-composition__tag">
-          {{ section.settings.tag }}
-        </div>
-      {% endif %}
 
-      {% if section.settings.title != blank %}
-        <h2 class="product-composition__title">
-          {{ section.settings.title }}
-        </h2>
-      {% endif %}
+      <div class="product-composition__content">
+        <div class="product-composition__header">
+          {% if section.settings.tag != blank %}
+            <div class="product-composition__tag">
+              {{ section.settings.tag }}
+            </div>
+          {% endif %}
 
-      {% if section.blocks.size > 0 %}
-        <div class="product-composition__table-wrapper">
-          <table class="product-composition__table">
-            <thead>
-              <tr>
-                <th scope="col" class="product-composition__table-header">
-                  {{ section.settings.header_ingredient }}
-                </th>
-                <th scope="col" class="product-composition__table-header">
-                  {{ section.settings.header_content }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for block in section.blocks %}
-                <tr class="product-composition__table-row" {{ block.shopify_attributes }}>
-                  <td class="product-composition__table-cell product-composition__table-cell--ingredient">
-                    {{ block.settings.ingredient }}
-                  </td>
-                  <td class="product-composition__table-cell product-composition__table-cell--content">
-                    {{ block.settings.content }}
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+          {% if section.settings.title != blank %}
+            <h2 class="product-composition__title">
+              {{ section.settings.title }}
+            </h2>
+          {% endif %}
         </div>
-      {% endif %}
 
-      {% if section.settings.description != blank %}
-        <div class="product-composition__description">
-          {{ section.settings.description }}
+        <div class="product-composition__body">
+          {% if section.blocks.size > 0 %}
+            <div class="product-composition__table-wrapper">
+              <table class="product-composition__table">
+                <thead>
+                  <tr>
+                    <th scope="col" class="product-composition__table-header">
+                      {{ section.settings.header_ingredient }}
+                    </th>
+                    <th scope="col" class="product-composition__table-header">
+                      {{ section.settings.header_content }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for block in section.blocks %}
+                    <tr class="product-composition__table-row" {{ block.shopify_attributes }}>
+                      <td class="product-composition__table-cell product-composition__table-cell--ingredient">
+                        {{ block.settings.ingredient }}
+                      </td>
+                      <td class="product-composition__table-cell product-composition__table-cell--content">
+                        {{ block.settings.content }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+
+          {% if section.settings.description != blank %}
+            <div class="product-composition__description">
+              {{ section.settings.description }}
+            </div>
+          {% endif %}
         </div>
-      {% endif %}
+      </div>
 
     </div>
   </div>
@@ -120,62 +126,14 @@
     {
       "name": "Skład produktu",
       "blocks": [
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "TMG Trimetylogolicyna – (Betaina bezwodna)",
-            "content": "200 mg"
-          }
-        },
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "Cholina – (Dwuwinian choliny)",
-            "content": "1,4 mg (100%)*"
-          }
-        },
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "Witamina B6 (Chlorowodorek pirydoksyny)",
-            "content": "200 mg"
-          }
-        },
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "Kwas Pantotenowy (D-pantotenian wapnia)",
-            "content": "20 mg (1428,6%)*"
-          }
-        },
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "Cholina – (Dwuwinian choliny)",
-            "content": "20 mg (1428,6%)*"
-          }
-        },
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "Witamina B6 (Chlorowodorek pirydoksyny)",
-            "content": "200 mg"
-          }
-        },
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "Kwas Pantotenowy (D-pantotenian wapnia)",
-            "content": "1,4 mg (100%)*"
-          }
-        },
-        {
-          "type": "ingredient_row",
-          "settings": {
-            "ingredient": "TMG Trimetylogolicyna – (Betaina bezwodna)",
-            "content": "100 mg"
-          }
-        }
+        { "type": "ingredient_row", "settings": { "ingredient": "TMG Trimetylogolicyna – (Betaina bezwodna)", "content": "200 mg" } },
+        { "type": "ingredient_row", "settings": { "ingredient": "Cholina – (Dwuwinian choliny)", "content": "1,4 mg (100%)*" } },
+        { "type": "ingredient_row", "settings": { "ingredient": "Witamina B6 (Chlorowodorek pirydoksyny)", "content": "200 mg" } },
+        { "type": "ingredient_row", "settings": { "ingredient": "Kwas Pantotenowy (D-pantotenian wapnia)", "content": "20 mg (1428,6%)*" } },
+        { "type": "ingredient_row", "settings": { "ingredient": "Cholina – (Dwuwinian choliny)", "content": "20 mg (1428,6%)*" } },
+        { "type": "ingredient_row", "settings": { "ingredient": "Witamina B6 (Chlorowodorek pirydoksyny)", "content": "200 mg" } },
+        { "type": "ingredient_row", "settings": { "ingredient": "Kwas Pantotenowy (D-pantotenian wapnia)", "content": "1,4 mg (100%)*" } },
+        { "type": "ingredient_row", "settings": { "ingredient": "TMG Trimetylogolicyna – (Betaina bezwodna)", "content": "100 mg" } }
       ]
     }
   ]

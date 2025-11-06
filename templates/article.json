@@ -7,14 +7,16 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
+ {
   "sections": {
     "main": {
-      "type": "article",
-      "settings": {}
+      "type": "blog-post",
+      "settings": {
+        "toc_title": "Spis treści",
+        "breadcrumbs": true,
+        "static_tag": "Artykuł"
+      }
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main"]
 }

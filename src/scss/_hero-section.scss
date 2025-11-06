@@ -27,8 +27,8 @@
   // Box z tłem
   &__content-box {
     width: 100%;
-    border-radius: 16px;
-    padding: 32px;
+    border-radius: 24px;
+    padding: 24px;
     position: relative;
     background-size: cover;
     background-position: center;
@@ -36,7 +36,7 @@
     overflow: hidden;
     
     @include respond-to(desktop-lg) {
-      padding: 80px;
+      padding: 40px;
       min-height: auto;
       display: flex;
       align-items: center;
@@ -54,6 +54,7 @@
     
     @include respond-to(desktop-lg) {
       max-width: 650px;
+      margin-bottom: 0;
     }
   }
   
@@ -120,7 +121,7 @@
     
     @include respond-to(desktop-lg) {
       position: absolute;
-      right: -20px;
+      right: 0;
       bottom: 0;
       transform: none;
       max-width: 1000px;
