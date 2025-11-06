@@ -107,10 +107,6 @@
     // Lewa kolumna z produktami
     &__products {
       width: 100%;
-      
-      @include respond-to(desktop) {
-        width: 60%;
-      }
     }
     
     // Lista produktów
@@ -122,9 +118,10 @@
     // Pojedynczy produkt
     &__product {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       margin-bottom: 32px;
       position: relative;
+      gap: 16px;
       
       @include respond-to(tablet) {
         flex-direction: row;
@@ -143,6 +140,8 @@
       margin-bottom: 24px;
       border-radius: 12px;
       overflow: hidden;
+      width: 80px;
+      height: 80px;
       
       @include respond-to(tablet) {
         width: 150px;

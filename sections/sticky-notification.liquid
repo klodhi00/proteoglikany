@@ -1,259 +1,254 @@
 {% comment %}
   Sekcja: Pływający przycisk zakupu
-  Przeznaczenie: Przycisk przyklejony do dołu ekranu, który śledzi użytkownika podczas przewijania na stronach produktów
-  Wyświetla: Zdjęcie produktu, nazwę i przycisk zakupu przymocowany do dołu ekranu
+  Sticky z tytułem, typem zakupu (jednorazowy/subskrypcja) i ceną zgodną z wyborem (Appstle OK)
 {% endcomment %}
 
 {%- if section.settings.enabled -%}
-    <style>
-      .floating-buy-button {
-        --button-bg-color: {{ section.settings.button_bg_color }};
-        --button-text-color: {{ section.settings.button_text_color }};
-        --button-bg-hover-color: {{ section.settings.button_bg_color | color_modify: 'darken', 10 }};
-      }
-    </style>
-  
-    <section class="floating-buy-button" id="FloatingBuyButton-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="floating-buy-button" aria-label="Pływający przycisk zakupu">
-      <div class="container">
-        <div class="floating-buy-button__wrapper">
-          {% if product %}
-            <div class="floating-buy-button__product">
-              <div class="floating-buy-button__image">
-                {% if product.featured_image %}
-                  <img 
-                    src="{{ product.featured_image | img_url: '80x80', crop: 'center' }}" 
-                    alt="{{ product.featured_image.alt | escape }}"
-                    width="80"
-                    height="80"
-                    loading="lazy"
-                  >
+  <style>
+    .floating-buy-button{
+      --button-bg-color: {{ section.settings.button_bg_color }};
+      --button-text-color: {{ section.settings.button_text_color }};
+      --button-bg-hover-color: {{ section.settings.button_bg_color | color_modify: 'darken', 10 }};
+    }
+  </style>
+
+  <section class="floating-buy-button" id="FloatingBuyButton-{{ section.id }}" data-section-id="{{ section.id }}" aria-label="Pływający przycisk zakupu">
+    <div class="container">
+      <div class="floating-buy-button__wrapper">
+        {% if product %}
+          <div class="floating-buy-button__product">
+            <div class="floating-buy-button__image">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | img_url: '80x80', crop: 'center' }}" alt="{{ product.featured_image.alt | escape }}" width="80" height="80" loading="lazy">
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </div>
+            <div class="floating-buy-button__info">
+              <h3 class="floating-buy-button__title">{{ product.title }}</h3>
+              <div class="floating-buy-button__purchase-type" data-purchase-type>Zakup jednorazowy</div>
+              <div class="floating-buy-button__price" data-fbb-price>
+                {% if product.compare_at_price_max > product.price %}
+                  <s class="floating-buy-button__price-compare">{{ product.compare_at_price_min | money }}</s>
+                  <span class="floating-buy-button__price-sale">{{ product.price | money }}</span>
                 {% else %}
-                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {{ product.price | money }}
                 {% endif %}
               </div>
-              <div class="floating-buy-button__info">
-                <h3 class="floating-buy-button__title">{{ product.title }}</h3>
-                <div class="floating-buy-button__price">
-                  {% if product.compare_at_price_max > product.price %}
-                    <span class="floating-buy-button__price-sale">{{ product.price | money }}</span>
-                    <s class="floating-buy-button__price-compare">{{ product.compare_at_price_min | money }}</s>
-                  {% else %}
-                    {{ product.price | money }}
-                  {% endif %}
-                </div>
-              </div>
             </div>
-            
-            <div class="floating-buy-button__action">
-              <button 
-                type="button" 
-                class="button floating-buy-button__button"
-                aria-label="{{ section.settings.button_text | escape }}"
-                {% unless product.available %} disabled {% endunless %}
-                data-product-id="{{ product.id }}"
-              >
-                <span class="button-text">
-                  {% if product.available %}
-                    {{ section.settings.button_text }}
-                  {% else %}
-                    {% comment %}Upewnij się, że teksty są przetłumaczone{% endcomment %}
-                    {% assign sold_out_text = 'products.product.sold_out' | t %}
-                    {% if sold_out_text == 'products.product.sold_out' %}
-                      Wyprzedane
-                    {% else %}
-                      {{ sold_out_text }}
-                    {% endif %}
-                  {% endif %}
-                </span>
-                <span class="button-loading" aria-hidden="true">
-                  <svg class="spinner" viewBox="0 0 50 50">
-                    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                  </svg>
-                </span>
-                <span class="button-success" aria-hidden="true">
-                  <svg class="checkmark" viewBox="0 0 24 24">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                  </svg>
-                </span>
-              </button>
-            </div>
-          {% endif %}
-        </div>
+          </div>
+
+          <div class="floating-buy-button__action">
+            <button
+              type="button"
+              class="button floating-buy-button__button"
+              aria-label="{{ section.settings.button_text | escape }}"
+              {% unless product.available %}disabled{% endunless %}
+              data-product-id="{{ product.id }}"
+            >
+              <span class="button-text">
+                {% if product.available %}{{ section.settings.button_text }}{% else %}
+                  {% assign sold_out_text = 'products.product.sold_out' | t %}
+                  {% if sold_out_text == 'products.product.sold_out' %}Wyprzedane{% else %}{{ sold_out_text }}{% endif %}
+                {% endif %}
+              </span>
+              <span class="button-loading" aria-hidden="true">
+                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              </span>
+              <span class="button-success" aria-hidden="true">
+                <svg class="checkmark" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/></svg>
+              </span>
+            </button>
+          </div>
+        {% endif %}
       </div>
-    </section>
-  
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const floatingBuyButton = document.getElementById('FloatingBuyButton-{{ section.id }}');
-        const scrollThreshold = {{ section.settings.scroll_threshold | default: 400 }};
-        
-        if (floatingBuyButton) {
-          // Obsługa widoczności przy przewijaniu
-          window.addEventListener('scroll', function() {
-            if (window.scrollY > scrollThreshold) {
-              floatingBuyButton.classList.add('floating-buy-button--visible');
-            } else {
-              floatingBuyButton.classList.remove('floating-buy-button--visible');
-            }
-          });
-  
-          // Funkcjonalność dodawania do koszyka
-          const addToCartButton = floatingBuyButton.querySelector('.floating-buy-button__button');
-          
-          if (addToCartButton && !addToCartButton.disabled) {
-            addToCartButton.addEventListener('click', function() {
-              // Pobierz główny formularz produktu, aby uzyskać wybrany wariant
-              const productForm = document.querySelector('form[action*="/cart/add"]');
-              
-              if (!productForm) {
-                console.error('Nie znaleziono formularza produktu');
-                return;
-              }
-              
-              // Pokaż ładowanie
-              addToCartButton.classList.add('is-loading');
-              
-              // Pobierz wybrany wariant i ilość z formularza
-              const variantInput = productForm.querySelector('input[name="id"], select[name="id"]');
-              const quantityInput = productForm.querySelector('input[name="quantity"]');
-              
-              if (!variantInput) {
-                console.error('Nie znaleziono pola wyboru wariantu');
-                addToCartButton.classList.remove('is-loading');
-                return;
-              }
-              
-              const variantId = variantInput.value;
-              const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-              
-              // Dane do dodania produktu
-              const formData = {
-                'items': [{
-                  'id': variantId,
-                  'quantity': quantity
-                }]
-              };
-  
-              // Dodaj produkt do koszyka
-              fetch(window.Shopify.routes.root + 'cart/add.js', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-              })
-              .then(response => {
-                if (!response.ok) {
-                  throw new Error('Błąd dodawania do koszyka');
-                }
-                return response.json();
-              })
-              .then(data => {
-                // Sprawdź czy istnieje drawer koszyka
-                const cartDrawerTrigger = document.querySelector('[data-cart-drawer-trigger]');
-                
-                // Po sukcesie, odśwież koszyk
-                fetch(window.Shopify.routes.root + 'cart.js')
-                  .then(res => res.json())
-                  .then(cart => {
-                    // Zaktualizuj licznik elementów w koszyku, jeśli istnieje
-                    const cartCountElements = document.querySelectorAll('.cart-count-bubble');
-                    if (cartCountElements.length > 0) {
-                      cartCountElements.forEach(el => {
-                        el.textContent = cart.item_count;
-                        el.classList.remove('hidden');
-                      });
-                    }
-                    
-                    // Pokaż potwierdzenie
-                    addToCartButton.classList.remove('is-loading');
-                    addToCartButton.classList.add('success');
-                    setTimeout(() => {
-                      addToCartButton.classList.remove('success');
-                    }, 2000);
-                    
-                    // Otwórz drawer koszyka, jeśli istnieje
-                    if (cartDrawerTrigger) {
-                      cartDrawerTrigger.click();
-                    } else if (window.location.pathname !== '/cart') {
-                      // Jeśli drawer nie istnieje, przekieruj do koszyka
-                      window.location.href = window.Shopify.routes.root + 'cart';
-                    }
-                  });
-              })
-              .catch(error => {
-                console.error('Błąd:', error);
-                addToCartButton.classList.remove('is-loading');
-                
-                // Pokaż komunikat o błędzie
-                const errorMessage = document.createElement('div');
-                errorMessage.className = 'floating-buy-button__error';
-                errorMessage.textContent = 'Nie udało się dodać produktu do koszyka. Spróbuj ponownie.';
-                
-                floatingBuyButton.appendChild(errorMessage);
-                setTimeout(() => {
-                  errorMessage.remove();
-                }, 3000);
-              });
-            });
-          }
+    </div>
+
+    <!-- JSON produktu do policzenia cen (w tym allocations dla planów) -->
+    <script type="application/json" id="ProductData-{{ section.id }}">{{ product | json }}</script>
+  </section>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const fbb = document.getElementById('FloatingBuyButton-{{ section.id }}');
+    const threshold = {{ section.settings.scroll_threshold | default: 400 }};
+    const productForm = document.querySelector('form[action*="/cart/add"]');
+    const priceBox = fbb?.querySelector('[data-fbb-price]');
+    const purchaseTypeEl = fbb?.querySelector('[data-purchase-type]');
+    const productDataEl = document.getElementById('ProductData-{{ section.id }}');
+    const productData = productDataEl ? JSON.parse(productDataEl.textContent) : null;
+
+    // Sticky toggle
+    window.addEventListener('scroll', () => {
+      if (!fbb) return;
+      if (window.scrollY > threshold) fbb.classList.add('floating-buy-button--visible');
+      else fbb.classList.remove('floating-buy-button--visible');
+    });
+
+    // Format pieniądza
+    function formatMoney(cents){
+      try{
+        if (window.Shopify && typeof Shopify.formatMoney === 'function') {
+          return Shopify.formatMoney(cents, "{{ shop.money_format | replace: '"', '\"' }}");
         }
+      }catch(e){}
+      const val = (parseInt(cents||0,10)/100).toFixed(2).replace('.', ',');
+      return val + ' {{ shop.currency }}';
+    }
+
+    // --- Appstle: wyciąganie wybranego selling_plan z różnych źródeł ---
+    function getSellingPlanIdFromDom() {
+      // 1) standard Shopify (hidden/select/radio) W OBRĘBIE FORMULARZA
+      let sel = productForm?.querySelector('input[name="selling_plan"][type="radio"]:checked, select[name="selling_plan"], input[name="selling_plan"][type="hidden"]');
+      if (!sel) {
+        // 2) gdziekolwiek w DOM (Appstle potrafi dodać poza formą)
+        sel = document.querySelector('input[name="selling_plan"][type="radio"]:checked, select[name="selling_plan"], input[name="selling_plan"][type="hidden"]');
+      }
+      if (sel && sel.value) {
+        const v = parseInt(sel.value, 10);
+        return isNaN(v) ? null : v;
+      }
+      // 3) typowe selektory Appstle – hidden z wybranym planem
+      const appstleHidden =
+        document.querySelector('input.appstle_selected_selling_plan_id') ||
+        document.querySelector('input[name="appstle_selected_selling_plan_id"]') ||
+        document.querySelector('[data-appstle-selected-selling-plan-id]');
+      if (appstleHidden) {
+        const val = appstleHidden.value || appstleHidden.getAttribute('data-appstle-selected-selling-plan-id');
+        const v = parseInt(val, 10);
+        if (!isNaN(v)) return v;
+      }
+      // 4) globalne obiekty (jeśli Appstle je wystawia)
+      try {
+        const g = window.Appstle || window.AppstleSubscription || window.AppstleThemesPlus || {};
+        const id = g.selectedSellingPlanId || g.sellingPlanId || (g.status && g.status.sellingPlanId);
+        if (id) {
+          const v = parseInt(id, 10);
+          if (!isNaN(v)) return v;
+        }
+      } catch(e){}
+      return null;
+    }
+
+    function getState() {
+      const variantInput = productForm?.querySelector('input[name="id"], select[name="id"]');
+      const quantityInput = productForm?.querySelector('input[name="quantity"]');
+      return {
+        variantId: variantInput ? parseInt(variantInput.value, 10) : null,
+        quantity: quantityInput ? parseInt(quantityInput.value, 10) : 1,
+        sellingPlanId: getSellingPlanIdFromDom()
+      };
+    }
+
+    function computePrice(state){
+      if (!productData || !state.variantId) return null;
+      const variant = productData.variants.find(v => v.id === state.variantId);
+      if (!variant) return null;
+
+      let priceCents = variant.price;
+      let compareAtCents = variant.compare_at_price || null;
+
+      if (state.sellingPlanId && Array.isArray(variant.selling_plan_allocations)) {
+        const alloc = variant.selling_plan_allocations.find(a => a.selling_plan_id === state.sellingPlanId);
+        if (alloc && typeof alloc.price === 'number') {
+          priceCents = alloc.price;
+          compareAtCents = alloc.compare_at_price || compareAtCents || null;
+        }
+      }
+      return { priceCents, compareAtCents };
+    }
+
+    function updateUI(){
+      if (!priceBox || !purchaseTypeEl) return;
+      const state = getState();
+
+      purchaseTypeEl.textContent = state.sellingPlanId ? 'Subskrypcja' : 'Zakup jednorazowy';
+
+      const p = computePrice(state);
+      if (!p) return;
+      if (p.compareAtCents && p.compareAtCents > p.priceCents){
+        priceBox.innerHTML =
+          '<s class="floating-buy-button__price-compare">'+formatMoney(p.compareAtCents)+'</s>' +
+          '<span class="floating-buy-button__price-sale">'+formatMoney(p.priceCents)+'</span>';
+      } else {
+        priceBox.innerHTML = formatMoney(p.priceCents);
+      }
+    }
+
+    // Nasłuch zmian – standard + Appstle
+    if (productForm) productForm.addEventListener('change', updateUI);
+    document.addEventListener('click', function(e){
+      // Appstle widget – radio/optiony często mają klasy/nazwy jak poniżej
+      if (
+        e.target.matches('[name="selling_plan"], .appstle_subscription_widget input, .appstle_subscription_widget select, .appstle-radio, .appstle-select')
+      ) {
+        setTimeout(updateUI, 0);
+      }
+    });
+    // MutationObserver (Appstle potrafi podmieniać inputy dynamicznie)
+    if (productForm) {
+      const mo = new MutationObserver(() => updateUI());
+      mo.observe(productForm, { childList: true, subtree: true, attributes: true, attributeFilter: ['value', 'checked'] });
+    }
+    // Krótkie odpytywanie po załadowaniu (żeby złapać inicjalny stan Appstle)
+    let ticks = 0;
+    const iv = setInterval(function(){
+      updateUI();
+      if (++ticks > 20) clearInterval(iv); // ~6s (co 300ms)
+    }, 300);
+
+    // Add to cart (z selling_plan gdy wybrano subskrypcję)
+    const btn = fbb?.querySelector('.floating-buy-button__button');
+    if (btn && !btn.disabled) {
+      btn.addEventListener('click', function(){
+        if (!productForm){ console.error('Nie znaleziono formularza produktu'); return; }
+        btn.classList.add('is-loading');
+
+        const s = getState();
+        if (!s.variantId){ btn.classList.remove('is-loading'); return; }
+
+        const item = { id: s.variantId, quantity: s.quantity || 1 };
+        if (s.sellingPlanId) item.selling_plan = s.sellingPlanId;
+
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ items:[item] })
+        })
+        .then(r => { if(!r.ok) throw new Error('Błąd dodawania'); return r.json(); })
+        .then(() => fetch(window.Shopify.routes.root + 'cart.js'))
+        .then(res => res.json())
+        .then(cart => {
+          document.querySelectorAll('.cart-count-bubble').forEach(el => { el.textContent = cart.item_count; el.classList.remove('hidden'); });
+          btn.classList.remove('is-loading'); btn.classList.add('success');
+          setTimeout(() => btn.classList.remove('success'), 2000);
+          const trigger = document.querySelector('[data-cart-drawer-trigger]');
+          if (trigger) trigger.click(); else if (window.location.pathname !== '/cart') window.location.href = window.Shopify.routes.root + 'cart';
+        })
+        .catch(() => {
+          btn.classList.remove('is-loading');
+          const err = document.createElement('div');
+          err.className = 'floating-buy-button__error';
+          err.textContent = 'Nie udało się dodać produktu do koszyka. Spróbuj ponownie.';
+          fbb.appendChild(err); setTimeout(() => err.remove(), 3000);
+        });
       });
-    </script>
-  {%- endif -%}
-  
-  {% schema %}
-  {
-    "name": "Pływający przycisk zakupu",
-    "class": "floating-buy-button-section",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "enabled",
-        "label": "Włącz pływający przycisk zakupu",
-        "default": true
-      },
-      {
-        "type": "header",
-        "content": "Ustawienia przycisku"
-      },
-      {
-        "type": "text",
-        "id": "button_text",
-        "label": "Tekst przycisku",
-        "default": "Kup teraz"
-      },
-      {
-        "type": "color",
-        "id": "button_bg_color",
-        "label": "Kolor tła przycisku",
-        "default": "#16B4EF"
-      },
-      {
-        "type": "color",
-        "id": "button_text_color",
-        "label": "Kolor tekstu przycisku",
-        "default": "#FFFFFF"
-      },
-      {
-        "type": "header",
-        "content": "Widoczność"
-      },
-      {
-        "type": "range",
-        "id": "scroll_threshold",
-        "label": "Pokaż po przewinięciu (piksele)",
-        "min": 0,
-        "max": 1000,
-        "step": 10,
-        "default": 400
-      }
-    ],
-    "presets": [
-      {
-        "name": "Pływający przycisk zakupu",
-        "category": "Produkt"
-      }
-    ]
-  }
-  {% endschema %}
+    }
+  });
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Pływający przycisk zakupu",
+  "class": "floating-buy-button-section",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Włącz pływający przycisk zakupu", "default": true },
+    { "type": "header", "content": "Ustawienia przycisku" },
+    { "type": "text", "id": "button_text", "label": "Tekst przycisku", "default": "Kup teraz" },
+    { "type": "color", "id": "button_bg_color", "label": "Kolor tła przycisku", "default": "#16B4EF" },
+    { "type": "color", "id": "button_text_color", "label": "Kolor tekstu przycisku", "default": "#FFFFFF" },
+    { "type": "header", "content": "Widoczność" },
+    { "type": "range", "id": "scroll_threshold", "label": "Pokaż po przewinięciu (piksele)", "min": 0, "max": 1000, "step": 10, "default": 400 }
+  ],
+  "presets": [{ "name": "Pływający przycisk zakupu", "category": "Produkt" }]
+}
+{% endschema %}
